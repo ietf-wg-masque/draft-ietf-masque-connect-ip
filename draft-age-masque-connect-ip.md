@@ -170,7 +170,7 @@ IP Protocol:
 : The Internet Protocol Number for traffic that can be sent from this address.
 If the value is 0, all protocols are allowed.
 
-## ADDRESS_REQUEST Capsule
+### ADDRESS_REQUEST Capsule
 
 The ADDRESS_REQUEST capsule allows an endpoint to request assignment of an IP
 address from its peer. This capsule is not required for simple client/proxy
@@ -212,6 +212,49 @@ address. If the value is 0, all protocols are requested.
 Upon receiving the ADDRESS_REQUEST capsule, an endpoint SHOULD assign an IP
 address to its peer, and then respond with an ADDRESS_ASSIGN capsule to inform
 the peer of the assignment.
+
+### ROUTE_ADVERTISEMENT Capsule
+
+The ROUTE_ADVERTISEMENT capsule allows an endpoint to communicate to its peer
+that it is willing to route traffic to a given prefix. This indicates that the
+sender has an existing route to the prefix, and notifies its peer that if the
+receiver of the ROUTE_ADVERTISEMENT capsule sends IP packets for this prefix in
+HTTP Datagrams, the sender of the capsule will forward them along its
+preexisting route. This capsule uses a Capsule Type of 0xfff102. Its value uses
+the following format:
+
+~~~
+ROUTE_ADVERTISEMENT Capsule {
+  IP Version (8),
+  IP Address (32..128),
+  IP Prefix Length (8),
+  IP Protocol (8),
+}
+~~~
+{: #route-adv-format title="ROUTE_ADVERTISEMENT Capsule Format"}
+
+IP Version:
+
+: IP Version of this route advertisement. MUST be either 4 or 6.
+
+IP Address:
+
+: IP address of the advertised route. If the IP Version field has value 4, the
+IP Address field SHALL have a length of 32 bits. If the IP Version field has
+value 6, the IP Address field SHALL have a length of 128 bits.
+
+IP Prefix Length:
+
+: Length of the IP Prefix of the advertised route, in bits. MUST be lesser or
+equal to the length of the IP Address field, in bits.
+
+IP Protocol:
+
+: The Internet Protocol Number for traffic that can be sent to this prefix.
+If the value is 0, all protocols are allowed.
+
+Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY start routing
+IP packets in that prefix to its peer.
 
 # Transmitting IP Packets using HTTP Datagrams {#packet-handling}
 
@@ -279,6 +322,13 @@ Context Extension = {}
                                         IP Prefix Length = 64
                                         IP Protocol = 0 // Any
                                         
+                                        STREAM(44): CAPSULE
+                                        Capsule Type = ROUTE_ADVERTISEMENT
+                                        IP Version = 6
+                                        IP Address = ::
+                                        IP Prefix Length = 0
+                                        IP Protocol = 0 // Any
+                                        
 DATAGRAM
 Quarter Stream ID = 11
 Context ID = 0
@@ -327,6 +377,13 @@ Context Extension = {}
                                         IP Prefix Length = 128
                                         IP Protocol = 1
                                         
+                                        STREAM(52): CAPSULE
+                                        Capsule Type = ROUTE_ADVERTISEMENT
+                                        IP Version = 6
+                                        IP Address = 2001:db8::3456
+                                        IP Prefix Length = 128
+                                        IP Protocol = 1
+                                        
 DATAGRAM
 Quarter Stream ID = 11
 Context ID = 0
@@ -338,6 +395,58 @@ Payload = Encapsulated IP Packet, ICMP ping
                                         Payload = Encapsulated IP Packet, ICMP
 ~~~
 {: #fig-sockets title="Proxied ICMP Flow Example"}
+
+The following example shows a proxied UDP listen flow, where a client
+receives can receive UDP packets via the proxy, and can send to any
+UDP server through the proxy.
+
+~~~
+[[ From Client ]]                       [[ From Server ]]
+
+SETTINGS
+H3_DATAGRAM = 1
+
+                                        SETTINGS
+                                        SETTINGS_ENABLE_CONNECT_[..] = 1
+                                        H3_DATAGRAM = 1
+
+STREAM(44): HEADERS
+:method = CONNECT
+:protocol = connect-ip
+:scheme = https
+:path = /proxy?ipproto=17
+:authority = server.example.com
+
+STREAM(44): CAPSULE
+Capsule Type = REGISTER_DATAGRAM_CONTEXT
+Context ID = 0
+Context Extension = {}
+
+                                        STREAM(44): HEADERS
+                                        :status = 200
+                                        
+                                        STREAM(44): CAPSULE
+                                        Capsule Type = ADDRESS_ASSIGN
+                                        IP Version = 6
+                                        IP Address = 2001:db8::1234:1234
+                                        IP Prefix Length = 128
+                                        IP Protocol = 17
+                                        
+                                        STREAM(44): CAPSULE
+                                        Capsule Type = ROUTE_ADVERTISEMENT
+                                        IP Version = 6
+                                        IP Address = ::
+                                        IP Prefix Length = 0
+                                        IP Protocol = 17
+                                        
+...
+
+                                        DATAGRAM
+                                        Quarter Stream ID = 11
+                                        Context ID = 0
+                                        Payload = Encapsulated IP Packet
+~~~
+{: #fig-sockets title="UDP Listen Flow Example"}
 
 # Security Considerations
 
@@ -363,6 +472,21 @@ Value: connect-ip
 Description: The CONNECT-IP Protocol
 Expected Version Tokens:
 References: This document
+
+## Capsule Type Registrations {#iana-capsule-types}
+
+This document will request IANA to add the following values to the "HTTP
+Capsule Types" registry created by {{HTTP-DGRAM}}:
+
+~~~
++----------+---------------------+---------------------+---------------+
+|   Value  |        Type         |      Description    |   Reference   |
++----------+---------------------+---------------------+---------------+
+| 0xfff100 |   ADDRESS_ASSIGN    | Address Assignment  | This document |
+| 0xfff101 |   ADDRESS_REQUEST   | Address Request     | This document |
+| 0xfff102 | ROUTE_ADVERTISEMENT | Route Advertisement | This document |
++----------+---------------------+---------------------+---------------+
+~~~
       
 --- back
 
