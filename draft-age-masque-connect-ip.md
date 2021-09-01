@@ -17,7 +17,7 @@ author:
  -
     ins: T. Pauly
     name: Tommy Pauly
-    role: Editor
+    role: editor
     organization: Apple Inc.
     email: tpauly@apple.com
  -
