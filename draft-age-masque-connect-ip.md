@@ -62,6 +62,9 @@ include general-purpose packet tunnelling, such as for a point-to-point or
 point-to-network VPN, or for limited forwarding of packets to specific
 hosts.
 
+Forwarded IP packets can be sent efficiently via the proxy using HTTP
+Datagram support {{!I-D.ietf-masque-h3-datagram}}.
+
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
@@ -76,12 +79,19 @@ those are referred to as "intermediaries" in this document.
 CONNECT-IP is defined as a protocol that can be used with the Extended CONNECT
 method, where the value of the ":protocol" pseudo-header is "connect-ip".
 
+The ":method" pseudo-header field will be set to CONNECT and the ":scheme"
+pseudo-header field will be set to "https".
+
 The ":authority" pseudo-header field contains the host and port of the proxy,
 not an individual endpoint with which a connection is desired.
 
-CONNECT-IP uses variables in the path to determine the scope of the request
-for packet proxying. The optional variable "target" contains a hostname or
-IP address of a specific host to which the client wants to proxy packets. 
+Variables specified via the path query parameter (sent in the ":path" pseudo-header
+field) are used to determine the scope of the request, such as requesting full-tunnel
+IP packet forwarding, or a specific proxied flow {{scope}}.
+
+Along with a request, the client can send a REGISTER_DATAGRAM_CONTEXT capsule
+{{!I-D.ietf-masque-h3-datagram}} to negotiate support for sending IP packets
+in HTTP Datagrams {{packet-handling}}.
 
 Any 2xx (Successful) response indicates that the proxy is willing to open an IP
 forwarding path between it and the client. Any response other than a successful
@@ -92,9 +102,145 @@ a 2xx (Successful) response to the Extended CONNECT request. A client MUST treat
 a successful response containing any Content-Length or Transfer-Encoding
 header fields as malformed.
 
-The lifetime of the tunnel is tied to the CONNECT stream. Closing the stream
+The lifetime of the forwarding path is tied to the CONNECT stream. Closing the stream
 (in HTTP/3 via the FIN bit on a QUIC STREAM frame, or a QUIC RESET_STREAM frame)
 closes the associated forwarding path.
+
+Along with a successful response, the proxy can send capsules to assign addresses
+and routes to the client {{capsules}}. The client can also assign addresses and
+routes to the proxy for network-to-network routing.
+
+## Limiting Request Scope {#scope}
+
+CONNECT-IP uses variables in the URL path to determine the scope of the request
+for packet proxying. All variables defined here are optional, and have default
+values if not included.
+
+The defined variables are:
+
+target:
+: The variable "target" contains a hostname or IP address of a specific
+host to which the client wants to proxy packets. If the "target" variable
+is not specified, the client is requesting to communicate with any allowable
+host. If the target is an IP address, the request will only support a single
+IP version.
+
+ipproto:
+: The variable "ipproto" contains an IP protocol number, as defined in the
+"Assigned Internet Protocol Numbers" IANA registry. If present, it specifies
+that a client only wants to proxy a specific IP protocol for this request.
+If the value is 0, or the variable is not included, the client is requesting
+to use any IP protocol.
+
+## Capsules
+
+### ADDRESS_ASSIGN Capsule
+
+The ADDRESS_ASSIGN capsule allows an endpoint to inform its peer that it has
+assigned an IP address to it. It allows assigning a prefix which can contain
+multiple addresses. This capsule uses a Capsule Type of 0xfff100. Its value
+uses the following format:
+
+~~~
+ADDRESS_ASSIGN Capsule {
+  IP Version (8),
+  IP Address (32..128),
+  IP Prefix Length (8),
+  IP Protocol (8),
+}
+~~~
+{: #addr-assign-format title="ADDRESS_ASSIGN Capsule Format"}
+
+IP Version:
+
+: IP Version of this address assignment. MUST be either 4 or 6.
+
+IP Address:
+
+: Assigned IP address. If the IP Version field has value 4, the IP Address
+field SHALL have a length of 32 bits. If the IP Version field has value 6, the
+IP Address field SHALL have a length of 128 bits.
+
+IP Prefix Length:
+
+: Length of the IP Prefix assigned, in bits. MUST be lesser or equal to the
+length of the IP Address field, in bits.
+
+IP Protocol:
+
+: The Internet Protocol Number for traffic that can be sent from this address.
+If the value is 0, all protocols are allowed.
+
+## ADDRESS_REQUEST Capsule
+
+The ADDRESS_REQUEST capsule allows an endpoint to request assignment of an IP
+address from its peer. This capsule is not required for simple client/proxy
+communication where the client only expects to receive one address from the proxy.
+The capsule allows the endpoint to optionally indicate a preference for which
+address it would get assigned. This capsule uses a Capsule Type of 0xfff101.
+Its value uses the following format:
+
+~~~
+ADDRESS_REQUEST Capsule {
+  IP Version (8),
+  IP Address (32..128),
+  IP Prefix Length (8),
+  IP Protocol (8),
+}
+~~~
+{: #addr-req-format title="ADDRESS_REQUEST Capsule Format"}
+
+IP Version:
+
+: IP Version of this address request. MUST be either 4 or 6.
+
+IP Address:
+
+: Requested IP address. If the IP Version field has value 4, the IP Address
+field SHALL have a length of 32 bits. If the IP Version field has value 6, the
+IP Address field SHALL have a length of 128 bits.
+
+IP Prefix Length:
+
+: Length of the IP Prefix requested, in bits. MUST be lesser or equal to the
+length of the IP Address field, in bits.
+
+IP Protocol:
+
+: The Internet Protocol Number for traffic that is desired to be sent from this
+address. If the value is 0, all protocols are requested.
+
+Upon receiving the ADDRESS_REQUEST capsule, an endpoint SHOULD assign an IP
+address to its peer, and then respond with an ADDRESS_ASSIGN capsule to inform
+the peer of the assignment.
+
+# Transmitting IP Packets using HTTP Datagrams {#packet-handling}
+
+IP packets are sent using HTTP Datagrams {{!I-D.ietf-masque-h3-datagram}}.
+The HTTP Datagram Payload contains a full IP packet, from the IP Version field
+until the last byte of the IP Payload. In order to use HTTP Datagrams, the client
+first decides whether or not to use HTTP Datagram Contexts and then register its
+context ID (or lack thereof) using the corresponding registration capsule, see
+{{HTTP-DGRAM}}.
+
+When a CONNECT-IP endpoint receives an HTTP Datagram containing an IP packet,
+it will parse the packet's IP header, perform any local policy checks (e.g., source
+address validation), check their routing table to pick an outbound interface, and
+then send the IP packet on that interface.
+
+In the other direction, when a CONNECT-IP endpoint receives an IP packet, it
+checks to see if the packet matches the routes mapped for a CONNECT-IP forwarding
+path, and performs the same forwarding checks as above before transmitting the
+packet over HTTP Datagrams.
+
+Note that CONNECT-IP endpoints will decrement the IP Hop Count (or TTL) upon
+encapsulation but not decapsulation. In other words, the Hop Count is
+decremented right before an IP packet is transmitted in an HTTP Datagram. This
+prevents infinite loops in the presence of routing loops, and matches the
+choices in IPsec {{?IPSEC=RFC4301}}.
+
+Endpoints MAY implement additional filtering policies on the IP packets they
+forward.
 
 # Examples
 
@@ -105,45 +251,107 @@ through the proxy.
 ~~~
 [[ From Client ]]                       [[ From Server ]]
 
+SETTINGS
+H3_DATAGRAM = 1
+
                                         SETTINGS
                                         SETTINGS_ENABLE_CONNECT_[..] = 1
+                                        H3_DATAGRAM = 1
 
-HEADERS + END_HEADERS
+STREAM(44): HEADERS
 :method = CONNECT
 :protocol = connect-ip
 :scheme = https
 :path = /vpn
 :authority = server.example.com
 
-                                        HEADERS + END_HEADERS
+STREAM(44): CAPSULE
+Capsule Type = REGISTER_DATAGRAM_CONTEXT
+Context ID = 0
+Context Extension = {}
+
+                                        STREAM(44): HEADERS
                                         :status = 200
+                                        
+                                        STREAM(44): CAPSULE
+                                        Capsule Type = ADDRESS_ASSIGN
+                                        IP Version = 6
+                                        IP Address = 2001:db8::
+                                        IP Prefix Length = 64
+                                        IP Protocol = 0 // Any
+                                        
+DATAGRAM
+Quarter Stream ID = 11
+Context ID = 0
+Payload = Encapsulated IP Packet
+
+                                        DATAGRAM
+                                        Quarter Stream ID = 11
+                                        Context ID = 0
+                                        Payload = Encapsulated IP Packet
 ~~~
+{: #fig-sockets title="VPN Tunnel Example"}
 
 The following example shows an IP flow forwarding setup, where a client
-receives a single local address and remote address it can use for sending
-packets.
+requests to establish a forwarding path to target.example.com using ICMP
+(IP protocol 1), and receives a single local address and remote address
+it can use for transmitting packets.
 
 ~~~
 [[ From Client ]]                       [[ From Server ]]
 
+SETTINGS
+H3_DATAGRAM = 1
                                         SETTINGS
                                         SETTINGS_ENABLE_CONNECT_[..] = 1
+                                        H3_DATAGRAM = 1
 
-HEADERS + END_HEADERS
+STREAM(52): HEADERS
 :method = CONNECT
 :protocol = connect-ip
 :scheme = https
-:path = /proxy?target=target.example.com
+:path = /proxy?target=target.example.com&ipproto=1
 :authority = server.example.com
 
-                                        HEADERS + END_HEADERS
+STREAM(52): CAPSULE
+Capsule Type = REGISTER_DATAGRAM_CONTEXT
+Context ID = 0
+Context Extension = {}
+
+                                        STREAM(52): HEADERS
                                         :status = 200
+                                        
+                                        STREAM(52): CAPSULE
+                                        Capsule Type = ADDRESS_ASSIGN
+                                        IP Version = 6
+                                        IP Address = 2001:db8::1234:1234
+                                        IP Prefix Length = 128
+                                        IP Protocol = 1
+                                        
+DATAGRAM
+Quarter Stream ID = 11
+Context ID = 0
+Payload = Encapsulated IP Packet, ICMP ping
+
+                                        DATAGRAM
+                                        Quarter Stream ID = 11
+                                        Context ID = 0
+                                        Payload = Encapsulated IP Packet, ICMP
 ~~~
+{: #fig-sockets title="Proxied ICMP Flow Example"}
 
 # Security Considerations
 
-TODO Security
+There are significant risks in allowing arbitrary clients to establish a tunnel
+to arbitrary servers, as that could allow bad actors to send traffic and have
+it attributed to the proxy. Proxies that support CONNECT-IP SHOULD restrict its
+use to authenticated users. The HTTP Authorization header {{?AUTH=RFC7235}} MAY
+be used to authenticate clients. More complex authentication schemes are out of
+scope for this document but can be implemented using CONNECT-IP extensions.
 
+Since CONNECT-IP endpoints can proxy IP packets send by their peer, they SHOULD
+follow the guidance in {{!BCP38=RFC2827}} to help prevent denial of service
+attacks.
 
 # IANA Considerations
 
