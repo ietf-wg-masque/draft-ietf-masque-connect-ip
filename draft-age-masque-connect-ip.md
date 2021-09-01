@@ -339,7 +339,7 @@ Payload = Encapsulated IP Packet
                                         Context ID = 0
                                         Payload = Encapsulated IP Packet
 ~~~
-{: #fig-sockets title="VPN Tunnel Example"}
+{: #fig-tunnel title="VPN Tunnel Example"}
 
 The following example shows an IP flow forwarding setup, where a client
 requests to establish a forwarding path to target.example.com using ICMP
@@ -394,7 +394,7 @@ Payload = Encapsulated IP Packet, ICMP ping
                                         Context ID = 0
                                         Payload = Encapsulated IP Packet, ICMP
 ~~~
-{: #fig-sockets title="Proxied ICMP Flow Example"}
+{: #fig-flow title="Proxied ICMP Flow Example"}
 
 The following example shows a proxied UDP listen flow, where a client
 receives can receive UDP packets via the proxy, and can send to any
@@ -446,7 +446,7 @@ Context Extension = {}
                                         Context ID = 0
                                         Payload = Encapsulated IP Packet
 ~~~
-{: #fig-sockets title="UDP Listen Flow Example"}
+{: #fig-listen title="UDP Listen Flow Example"}
 
 # Security Considerations
 
