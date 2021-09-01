@@ -5,9 +5,8 @@ docname: draft-age-masque-connect-ip-latest
 category: std
 
 ipr: trust200902
-area: TODO
-workgroup: TODO Working Group
-keyword: Internet-Draft
+area: TSV
+workgroup: MASQUE
 
 stand_alone: yes
 smart_quotes: no
