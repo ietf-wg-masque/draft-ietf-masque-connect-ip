@@ -1,0 +1,7 @@
+<note title="Discussion Venues" removeInRFC="true">
+<t>Discussion of this document takes place on the
+    Multiplexed Application Substrate over QUIC Encryption Working Group mailing list (masque@ietf.org),
+    which is archived at <eref target="https://mailarchive.ietf.org/arch/browse/masque/"/>.</t>
+<t>Source for this draft and an issue tracker can be found at
+    <eref target="https://github.com/tfpauly/draft-age-masque-connect-ip"/>.</t>
+</note>
