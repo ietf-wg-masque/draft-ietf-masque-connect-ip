@@ -263,7 +263,7 @@ The HTTP Datagram Payload contains a full IP packet, from the IP Version field
 until the last byte of the IP Payload. In order to use HTTP Datagrams, the client
 first decides whether or not to use HTTP Datagram Contexts and then register its
 context ID (or lack thereof) using the corresponding registration capsule, see
-{{HTTP-DGRAM}}.
+{{!I-D.ietf-masque-h3-datagram}}.
 
 When a CONNECT-IP endpoint receives an HTTP Datagram containing an IP packet,
 it will parse the packet's IP header, perform any local policy checks (e.g., source
@@ -476,7 +476,7 @@ References: This document
 ## Capsule Type Registrations {#iana-capsule-types}
 
 This document will request IANA to add the following values to the "HTTP
-Capsule Types" registry created by {{HTTP-DGRAM}}:
+Capsule Types" registry created by {{!I-D.ietf-masque-h3-datagram}}:
 
 ~~~
 +----------+---------------------+---------------------+---------------+
