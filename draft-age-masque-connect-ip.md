@@ -34,6 +34,11 @@ author:
     name: Mirja Kuehlewind
     organization: Ericsson
     email: mirja.kuehlewind@ericsson.com
+ -
+    ins: M. Westerlund
+    name: Magnus Westerlund
+    organization: Ericsson
+    email: magnus.westerlund@ericsson.com
 
 --- abstract
 
