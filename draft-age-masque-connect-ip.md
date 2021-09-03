@@ -91,11 +91,11 @@ not an individual endpoint with which a connection is desired.
 
 Variables specified via the path query parameter (sent in the ":path" pseudo-header
 field) are used to determine the scope of the request, such as requesting full-tunnel
-IP packet forwarding, or a specific proxied flow {{scope}}.
+IP packet forwarding, or a specific proxied flow ({{scope}}).
 
 Along with a request, the client can send a REGISTER_DATAGRAM_CONTEXT capsule
 {{!I-D.ietf-masque-h3-datagram}} to negotiate support for sending IP packets
-in HTTP Datagrams {{packet-handling}}.
+in HTTP Datagrams ({{packet-handling}}).
 
 Any 2xx (Successful) response indicates that the proxy is willing to open an IP
 forwarding path between it and the client. Any response other than a successful
@@ -111,7 +111,7 @@ The lifetime of the forwarding path is tied to the CONNECT stream. Closing the s
 closes the associated forwarding path.
 
 Along with a successful response, the proxy can send capsules to assign addresses
-and routes to the client {{capsules}}. The client can also assign addresses and
+and routes to the client ({{capsules}}). The client can also assign addresses and
 routes to the proxy for network-to-network routing.
 
 ## Limiting Request Scope {#scope}
