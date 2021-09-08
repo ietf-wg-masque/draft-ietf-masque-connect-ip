@@ -302,7 +302,7 @@ SETTINGS
 H3_DATAGRAM = 1
 
                                         SETTINGS
-                                        SETTINGS_ENABLE_CONNECT_[..] = 1
+                                        SETTINGS_ENABLE_CONNECT_PROTOCOL = 1
                                         H3_DATAGRAM = 1
 
 STREAM(44): HEADERS
@@ -357,7 +357,7 @@ it can use for transmitting packets.
 SETTINGS
 H3_DATAGRAM = 1
                                         SETTINGS
-                                        SETTINGS_ENABLE_CONNECT_[..] = 1
+                                        SETTINGS_ENABLE_CONNECT_PROTOCOL = 1
                                         H3_DATAGRAM = 1
 
 STREAM(52): HEADERS
@@ -412,7 +412,7 @@ SETTINGS
 H3_DATAGRAM = 1
 
                                         SETTINGS
-                                        SETTINGS_ENABLE_CONNECT_[..] = 1
+                                        SETTINGS_ENABLE_CONNECT_PROTOCOL = 1
                                         H3_DATAGRAM = 1
 
 STREAM(44): HEADERS
