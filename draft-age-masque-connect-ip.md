@@ -60,7 +60,7 @@ arbitrary IP packets, without being limited to just TCP like CONNECT
 The Extended CONNECT protocol defined for this mechanism is "connect-ip",
 which is also referred to as CONNECT-IP in this document.
 
-The CONNECT-IP protocol allows endpoints to set up a path for proxying IP
+The CONNECT-IP protocol allows endpoints to set up a tunnel for proxying IP
 packets using an HTTP proxy. This can be used for various solutions that
 include general-purpose packet tunnelling, such as for a point-to-point or
 point-to-network VPN, or for limited forwarding of packets to specific
@@ -98,17 +98,17 @@ Along with a request, the client can send a REGISTER_DATAGRAM_CONTEXT capsule
 in HTTP Datagrams ({{packet-handling}}).
 
 Any 2xx (Successful) response indicates that the proxy is willing to open an IP
-forwarding path between it and the client. Any response other than a successful
-response indicates that the tunnel has not been formed.
+forwarding tunnel between it and the client. Any response other than a
+successful response indicates that the tunnel has not been formed.
 
 A proxy MUST NOT send any Transfer-Encoding or Content-Length header fields in
 a 2xx (Successful) response to the Extended CONNECT request. A client MUST treat
 a successful response containing any Content-Length or Transfer-Encoding
 header fields as malformed.
 
-The lifetime of the forwarding path is tied to the CONNECT stream. Closing the stream
-(in HTTP/3 via the FIN bit on a QUIC STREAM frame, or a QUIC RESET_STREAM frame)
-closes the associated forwarding path.
+The lifetime of the forwarding tunnel is tied to the CONNECT stream. Closing
+the stream (in HTTP/3 via the FIN bit on a QUIC STREAM frame, or a QUIC
+RESET_STREAM frame) closes the associated forwarding tunnel.
 
 Along with a successful response, the proxy can send capsules to assign addresses
 and routes to the client ({{capsules}}). The client can also assign addresses and
@@ -277,7 +277,7 @@ then send the IP packet on that interface.
 
 In the other direction, when a CONNECT-IP endpoint receives an IP packet, it
 checks to see if the packet matches the routes mapped for a CONNECT-IP forwarding
-path, and performs the same forwarding checks as above before transmitting the
+tunnel, and performs the same forwarding checks as above before transmitting the
 packet over HTTP Datagrams.
 
 Note that CONNECT-IP endpoints will decrement the IP Hop Count (or TTL) upon
@@ -347,7 +347,7 @@ Payload = Encapsulated IP Packet
 {: #fig-tunnel title="VPN Tunnel Example"}
 
 The following example shows an IP flow forwarding setup, where a client
-requests to establish a forwarding path to target.example.com using ICMP
+requests to establish a forwarding tunnel to target.example.com using ICMP
 (IP protocol 1), and receives a single local address and remote address
 it can use for transmitting packets.
 
