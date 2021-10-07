@@ -71,7 +71,10 @@ Datagram support {{!I-D.ietf-masque-h3-datagram}}.
 
 # Conventions and Definitions
 
-{::boilerplate bcp14-tagged}
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in BCP 14 {{!RFC2119}} {{!RFC8174}}
+when, and only when, they appear in all capitals, as shown here.
 
 In this document, we use the term "proxy" to refer to the HTTP server that
 responds to the CONNECT-IP request. If there are HTTP intermediaries
@@ -284,14 +287,14 @@ receives a set of local addresses, and can send to any remote server
 through the proxy.
 
 ~~~
-[[ From Client ]]                       [[ From Server ]]
+[[ From Client ]]             [[ From Server ]]
 
 SETTINGS
 H3_DATAGRAM = 1
 
-                                        SETTINGS
-                                        SETTINGS_ENABLE_CONNECT_PROTOCOL = 1
-                                        H3_DATAGRAM = 1
+                              SETTINGS
+                              SETTINGS_ENABLE_CONNECT_PROTOCOL = 1
+                              H3_DATAGRAM = 1
 
 STREAM(44): HEADERS
 :method = CONNECT
@@ -305,32 +308,32 @@ Capsule Type = REGISTER_DATAGRAM_CONTEXT
 Context ID = 0
 Context Extension = {}
 
-                                        STREAM(44): HEADERS
-                                        :status = 200
-                                        
-                                        STREAM(44): CAPSULE
-                                        Capsule Type = ADDRESS_ASSIGN
-                                        IP Version = 6
-                                        IP Address = 2001:db8::
-                                        IP Prefix Length = 64
-                                        IP Protocol = 0 // Any
-                                        
-                                        STREAM(44): CAPSULE
-                                        Capsule Type = ROUTE_ADVERTISEMENT
-                                        IP Version = 6
-                                        IP Address = ::
-                                        IP Prefix Length = 0
-                                        IP Protocol = 0 // Any
-                                        
+                              STREAM(44): HEADERS
+                              :status = 200
+
+                              STREAM(44): CAPSULE
+                              Capsule Type = ADDRESS_ASSIGN
+                              IP Version = 6
+                              IP Address = 2001:db8::
+                              IP Prefix Length = 64
+                              IP Protocol = 0 // Any
+
+                              STREAM(44): CAPSULE
+                              Capsule Type = ROUTE_ADVERTISEMENT
+                              IP Version = 6
+                              IP Address = ::
+                              IP Prefix Length = 0
+                              IP Protocol = 0 // Any
+
 DATAGRAM
 Quarter Stream ID = 11
 Context ID = 0
 Payload = Encapsulated IP Packet
 
-                                        DATAGRAM
-                                        Quarter Stream ID = 11
-                                        Context ID = 0
-                                        Payload = Encapsulated IP Packet
+                              DATAGRAM
+                              Quarter Stream ID = 11
+                              Context ID = 0
+                              Payload = Encapsulated IP Packet
 ~~~
 {: #fig-tunnel title="VPN Tunnel Example"}
 
@@ -340,13 +343,13 @@ requests to establish a forwarding tunnel to target.example.com using ICMP
 it can use for transmitting packets.
 
 ~~~
-[[ From Client ]]                       [[ From Server ]]
+[[ From Client ]]             [[ From Server ]]
 
 SETTINGS
 H3_DATAGRAM = 1
-                                        SETTINGS
-                                        SETTINGS_ENABLE_CONNECT_PROTOCOL = 1
-                                        H3_DATAGRAM = 1
+                              SETTINGS
+                              SETTINGS_ENABLE_CONNECT_PROTOCOL = 1
+                              H3_DATAGRAM = 1
 
 STREAM(52): HEADERS
 :method = CONNECT
@@ -360,32 +363,32 @@ Capsule Type = REGISTER_DATAGRAM_CONTEXT
 Context ID = 0
 Context Extension = {}
 
-                                        STREAM(52): HEADERS
-                                        :status = 200
-                                        
-                                        STREAM(52): CAPSULE
-                                        Capsule Type = ADDRESS_ASSIGN
-                                        IP Version = 6
-                                        IP Address = 2001:db8::1234:1234
-                                        IP Prefix Length = 128
-                                        IP Protocol = 1
-                                        
-                                        STREAM(52): CAPSULE
-                                        Capsule Type = ROUTE_ADVERTISEMENT
-                                        IP Version = 6
-                                        IP Address = 2001:db8::3456
-                                        IP Prefix Length = 128
-                                        IP Protocol = 1
-                                        
+                              STREAM(52): HEADERS
+                              :status = 200
+
+                              STREAM(52): CAPSULE
+                              Capsule Type = ADDRESS_ASSIGN
+                              IP Version = 6
+                              IP Address = 2001:db8::1234:1234
+                              IP Prefix Length = 128
+                              IP Protocol = 1
+
+                              STREAM(52): CAPSULE
+                              Capsule Type = ROUTE_ADVERTISEMENT
+                              IP Version = 6
+                              IP Address = 2001:db8::3456
+                              IP Prefix Length = 128
+                              IP Protocol = 1
+
 DATAGRAM
 Quarter Stream ID = 11
 Context ID = 0
 Payload = Encapsulated IP Packet, ICMP ping
 
-                                        DATAGRAM
-                                        Quarter Stream ID = 11
-                                        Context ID = 0
-                                        Payload = Encapsulated IP Packet, ICMP
+                              DATAGRAM
+                              Quarter Stream ID = 11
+                              Context ID = 0
+                              Payload = Encapsulated IP Packet, ICMP
 ~~~
 {: #fig-flow title="Proxied ICMP Flow Example"}
 
@@ -394,14 +397,14 @@ receives can receive UDP packets via the proxy, and can send to any
 UDP server through the proxy.
 
 ~~~
-[[ From Client ]]                       [[ From Server ]]
+[[ From Client ]]             [[ From Server ]]
 
 SETTINGS
 H3_DATAGRAM = 1
 
-                                        SETTINGS
-                                        SETTINGS_ENABLE_CONNECT_PROTOCOL = 1
-                                        H3_DATAGRAM = 1
+                              SETTINGS
+                              SETTINGS_ENABLE_CONNECT_PROTOCOL = 1
+                              H3_DATAGRAM = 1
 
 STREAM(44): HEADERS
 :method = CONNECT
@@ -415,29 +418,28 @@ Capsule Type = REGISTER_DATAGRAM_CONTEXT
 Context ID = 0
 Context Extension = {}
 
-                                        STREAM(44): HEADERS
-                                        :status = 200
-                                        
-                                        STREAM(44): CAPSULE
-                                        Capsule Type = ADDRESS_ASSIGN
-                                        IP Version = 6
-                                        IP Address = 2001:db8::1234:1234
-                                        IP Prefix Length = 128
-                                        IP Protocol = 17
-                                        
-                                        STREAM(44): CAPSULE
-                                        Capsule Type = ROUTE_ADVERTISEMENT
-                                        IP Version = 6
-                                        IP Address = ::
-                                        IP Prefix Length = 0
-                                        IP Protocol = 17
-                                        
+                              STREAM(44): HEADERS
+                              :status = 200
+
+                              STREAM(44): CAPSULE
+                              Capsule Type = ADDRESS_ASSIGN
+                              IP Version = 6
+                              IP Address = 2001:db8::1234:1234
+                              IP Prefix Length = 128
+                              IP Protocol = 17
+
+                              STREAM(44): CAPSULE
+                              Capsule Type = ROUTE_ADVERTISEMENT
+                              IP Version = 6
+                              IP Address = ::
+                              IP Prefix Length = 0
+                              IP Protocol = 17
 ...
 
-                                        DATAGRAM
-                                        Quarter Stream ID = 11
-                                        Context ID = 0
-                                        Payload = Encapsulated IP Packet
+                              DATAGRAM
+                              Quarter Stream ID = 11
+                              Context ID = 0
+                              Payload = Encapsulated IP Packet
 ~~~
 {: #fig-listen title="UDP Listen Flow Example"}
 
@@ -471,16 +473,13 @@ References: This document
 This document will request IANA to add the following values to the "HTTP
 Capsule Types" registry created by {{!I-D.ietf-masque-h3-datagram}}:
 
-~~~
-+----------+---------------------+---------------------+---------------+
-|   Value  |        Type         |      Description    |   Reference   |
-+----------+---------------------+---------------------+---------------+
-| 0xfff100 |   ADDRESS_ASSIGN    | Address Assignment  | This document |
-| 0xfff101 |   ADDRESS_REQUEST   | Address Request     | This document |
-| 0xfff102 | ROUTE_ADVERTISEMENT | Route Advertisement | This document |
-+----------+---------------------+---------------------+---------------+
-~~~
-      
+|  Value   |        Type         |     Description     |   Reference   |
+|:---------|---------------------|:--------------------|:--------------|
+| 0xfff100 |   ADDRESS_ASSIGN    | Address Assignment  | This Document |
+| 0xfff101 |   ADDRESS_REQUEST   | Address Request     | This Document |
+| 0xfff102 | ROUTE_ADVERTISEMENT | Route Advertisement | This Document |
+{: #iana-capsules-table title="New Capsules"}
+
 --- back
 
 # Acknowledgments
