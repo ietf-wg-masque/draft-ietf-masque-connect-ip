@@ -252,6 +252,48 @@ If the value is 0, all protocols are allowed.
 Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY start routing
 IP packets in that prefix to its peer.
 
+### ROUTE_WITHDRAWAL Capsule
+
+The ROUTE_WITHDRAWAL capsule allows an endpoint to communicate to its peer that
+it is not willing to route traffic to a given prefix. This capsule uses a
+Capsule Type of 0xfff103. Its value uses the following format:
+
+~~~
+ROUTE_WITHDRAWAL Capsule {
+  IP Version (8),
+  IP Address (32..128),
+  IP Prefix Length (8),
+  IP Protocol (8),
+}
+~~~
+{: #route-withdraw-format title="ROUTE_WITHDRAWAL Capsule Format"}
+
+IP Version:
+
+: IP Version of this route withdrawal. MUST be either 4 or 6.
+
+IP Address:
+
+: IP address of the withdrawn route. If the IP Version field has value 4, the
+IP Address field SHALL have a length of 32 bits. If the IP Version field has
+value 6, the IP Address field SHALL have a length of 128 bits.
+
+IP Prefix Length:
+
+: The number of bits in the IP Address that are used to define the prefix of
+the withdrawn route. This MUST be lesser or equal to the length of the IP
+Address field, in bits.
+
+IP Protocol:
+
+: The Internet Protocol Number for traffic for this route. If the value is 0,
+all protocols are withdrawn for this prefix.
+
+Upon receiving the ROUTE_WITHDRAWAL capsule, an endpoint MUST stop routing IP
+packets in that prefix to its peer. Note that this capsule can be reordered
+with DATAGRAM frames, and therefore an endpoint that receives packets for
+routes it has rejected MUST NOT treat that as an error.
+
 # Transmitting IP Packets using HTTP Datagrams {#packet-handling}
 
 IP packets are sent using HTTP Datagrams {{!I-D.ietf-masque-h3-datagram}}.
@@ -478,6 +520,7 @@ Capsule Types" registry created by {{!I-D.ietf-masque-h3-datagram}}:
 | 0xfff100 |   ADDRESS_ASSIGN    | Address Assignment  | This Document |
 | 0xfff101 |   ADDRESS_REQUEST   | Address Request     | This Document |
 | 0xfff102 | ROUTE_ADVERTISEMENT | Route Advertisement | This Document |
+| 0xfff103 |  ROUTE_WITHDRAWAL   | Route Withdrawal    | This Document |
 {: #iana-capsules-table title="New Capsules"}
 
 --- back
