@@ -150,7 +150,6 @@ ADDRESS_ASSIGN Capsule {
   IP Version (8),
   IP Address (32..128),
   IP Prefix Length (8),
-  IP Protocol (8),
 }
 ~~~
 {: #addr-assign-format title="ADDRESS_ASSIGN Capsule Format"}
@@ -170,11 +169,6 @@ IP Prefix Length:
 : Length of the IP Prefix assigned, in bits. MUST be lesser or equal to the
 length of the IP Address field, in bits.
 
-IP Protocol:
-
-: The Internet Protocol Number for traffic that can be sent from this address.
-If the value is 0, all protocols are allowed.
-
 ### ADDRESS_REQUEST Capsule
 
 The ADDRESS_REQUEST capsule allows an endpoint to request assignment of an IP
@@ -189,7 +183,6 @@ ADDRESS_REQUEST Capsule {
   IP Version (8),
   IP Address (32..128),
   IP Prefix Length (8),
-  IP Protocol (8),
 }
 ~~~
 {: #addr-req-format title="ADDRESS_REQUEST Capsule Format"}
@@ -208,11 +201,6 @@ IP Prefix Length:
 
 : Length of the IP Prefix requested, in bits. MUST be lesser or equal to the
 length of the IP Address field, in bits.
-
-IP Protocol:
-
-: The Internet Protocol Number for traffic that is desired to be sent from this
-address. If the value is 0, all protocols are requested.
 
 Upon receiving the ADDRESS_REQUEST capsule, an endpoint SHOULD assign an IP
 address to its peer, and then respond with an ADDRESS_ASSIGN capsule to inform
