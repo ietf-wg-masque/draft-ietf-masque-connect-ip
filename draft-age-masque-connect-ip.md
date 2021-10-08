@@ -166,7 +166,7 @@ IP Address field SHALL have a length of 128 bits.
 
 IP Prefix Length:
 
-: The number of bits in the IP Address that are used to define the prefix of
+: The number of bits in the IP Address that are used to define the prefix
 that is assigned. This MUST be lesser or equal to the length of the IP Address
 field, in bits. If the prefix length is equal to the length of the IP Address,
 the endpoint is only allowed to send packets from a single source address. If
