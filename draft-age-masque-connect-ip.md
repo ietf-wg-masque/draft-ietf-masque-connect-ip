@@ -372,8 +372,8 @@ through the proxy.
 {: #diagram-tunnel title="VPN Tunnel Setup"}
 
 
-In this case, the client does not specify any scope in its request,
-but is asking to open up a generic IP tunnel. The server assigns
+In this case, the client does not specify any scope in its request.
+The server assigns
 the client an IPv6 address prefix to the client (2001:db8::/64) and
 a full-tunnel route of all IPv6 addresses (::/0). The client
 can then send to any IPv6 host using a source address in its assigned
