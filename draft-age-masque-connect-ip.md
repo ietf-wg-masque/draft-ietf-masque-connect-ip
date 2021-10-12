@@ -436,7 +436,7 @@ Payload = Encapsulated IP Packet
                               Context ID = 0
                               Payload = Encapsulated IP Packet
 ~~~
-{: #fig-tunnel title="VPN Full-Tunnel Example"}
+{: #fig-full-tunnel title="VPN Full-Tunnel Example"}
 
 A setup for a split-tunnel VPN (the case where the client can only
 access a specific set of private subnets) is quite similar. In this
@@ -459,7 +459,7 @@ than ::/0.
                               IP Prefix Length = 32
                               IP Protocol = 0 // Any
 ~~~
-{: #fig-tunnel title="VPN Split-Tunnel Capsule Example"}
+{: #fig-split-tunnel title="VPN Split-Tunnel Capsule Example"}
 
 ## IP Flow Forwarding
 
