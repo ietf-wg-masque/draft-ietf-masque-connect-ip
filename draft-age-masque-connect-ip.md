@@ -140,9 +140,11 @@ routes to the proxy for network-to-network routing.
 Unlike CONNECT-UDP requests, which require specifying a target host, CONNECT-IP
 requests can allow endpoints to send arbitrary IP packets to any host.
 The client can choose to restrict a given request to a specific host or IP
-protocol by adding parameters to its request. The server uses these parameters
-to determine what routes to advertise, and can advertise a default set of
-routes if no parameters were specified.
+protocol by adding parameters to its request. When the server knows that a request
+is scoped to a target host or protocol, it can leverage this information to optimize
+its resource allocation; for example, the server can assign the same public IP
+address to two CONNECT-IP requests that are scoped to different hosts and/or different
+protocols.
 
 CONNECT-IP uses URI template variables ({{client-config}}) to determine the
 scope of the request for packet proxying. All variables defined here are
