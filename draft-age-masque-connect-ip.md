@@ -81,23 +81,41 @@ responds to the CONNECT-IP request. If there are HTTP intermediaries
 (as defined in Section 2.3 of {{!RFC7230}}) between the client and the proxy,
 those are referred to as "intermediaries" in this document.
 
+# Configuration of Clients {#client-config}
+
+Clients are configured to use IP Proxying over HTTP via an URI Template
+{{!TEMPLATE=RFC6570}}. The URI template MAY contain two variables:
+"target" and "ip_proto". Examples are shown below:
+
+~~~
+https://masque.example.org/{target}/{target_port}/
+https://proxy.example.org:4443/masque?t={target}&p={ip_proto}
+https://proxy.example.org:4443/masque{?target,ip_proto}
+https://masque.example.org/?user=bob
+~~~
+{: #fig-template-examples title="URI Template Examples"}
+
 # The CONNECT-IP Protocol
 
-CONNECT-IP is defined as a protocol that can be used with the Extended CONNECT
-method, where the value of the ":protocol" pseudo-header is "connect-ip".
+This document defines the "connect-ip" HTTP Upgrade Token. "connect-ip" uses
+the Capsule Protocol as defined in {{!HTTP-DGRAM=I-D.ietf-masque-h3-datagram}}.
 
-The ":method" pseudo-header field will be set to CONNECT and the ":scheme"
-pseudo-header field will be set to "https".
+When sending its IP proxying request, the client SHALL perform URI template
+expansion to determine the path and query of its request, see {{client-config}}.
 
-The ":authority" pseudo-header field contains the host and port of the proxy,
-not an individual endpoint with which a connection is desired.
+When using HTTP/2 or HTTP/3, the following requirements apply to requests:
 
-Variables specified via the path query parameter (sent in the ":path" pseudo-header
-field) are used to determine the scope of the request, such as requesting full-tunnel
-IP packet forwarding, or a specific proxied flow ({{scope}}).
+* The ":method" pseudo-header field SHALL be set to "CONNECT".
+* The ":protocol" pseudo-header field SHALL be set to "connect-ip".
+* The ":authority" pseudo-header field SHALL contain the host and port of the
+  proxy, not an individual endpoint with which a connection is desired.
+* The contents of the ":path" pseudo-header SHALL be determined by the URI
+  template expansion, see {{client-config}}. Variables in the URI template can
+  determine the scope of the request, such as requesting full-tunnel IP packet
+  forwarding, or a specific proxied flow, see {{scope}}.
 
 Along with a request, the client can send a REGISTER_DATAGRAM_CONTEXT capsule
-{{!I-D.ietf-masque-h3-datagram}} to negotiate support for sending IP packets
+{{HTTP-DGRAM}} to negotiate support for sending IP packets
 in HTTP Datagrams ({{packet-handling}}).
 
 Any 2xx (Successful) response indicates that the proxy is willing to open an IP
@@ -119,9 +137,9 @@ routes to the proxy for network-to-network routing.
 
 ## Limiting Request Scope {#scope}
 
-CONNECT-IP uses variables in the URL path to determine the scope of the request
-for packet proxying. All variables defined here are optional, and have default
-values if not included.
+CONNECT-IP uses URI template variables ({{client-config}}) to determine the
+scope of the request for packet proxying. All variables defined here are
+optional, and have default values if not included.
 
 The defined variables are:
 
