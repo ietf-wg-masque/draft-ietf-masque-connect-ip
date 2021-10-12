@@ -162,9 +162,10 @@ to use any IP protocol.
 ### ADDRESS_ASSIGN Capsule
 
 The ADDRESS_ASSIGN capsule allows an endpoint to inform its peer that it has
-assigned an IP address to it. It allows assigning a prefix which can contain
-multiple addresses. This capsule uses a Capsule Type of 0xfff100. Its value
-uses the following format:
+assigned an IP address to it. The ADDRESS_ASSIGN capsule allows assigning a
+prefix which can contain multiple addresses. Any of these addresses can be used
+as the source address on IP packets originated by this endpoint. This capsule
+uses a Capsule Type of 0xfff100. Its value uses the following format:
 
 ~~~
 ADDRESS_ASSIGN Capsule {
@@ -238,8 +239,9 @@ that it is willing to route traffic to a given prefix. This indicates that the
 sender has an existing route to the prefix, and notifies its peer that if the
 receiver of the ROUTE_ADVERTISEMENT capsule sends IP packets for this prefix in
 HTTP Datagrams, the sender of the capsule will forward them along its
-preexisting route. This capsule uses a Capsule Type of 0xfff102. Its value uses
-the following format:
+preexisting route. Any of these addresses can be used as the destination address
+on IP packets originated by this endpoint. This capsule uses a Capsule Type of
+0xfff102. Its value uses the following format:
 
 ~~~
 ROUTE_ADVERTISEMENT Capsule {
