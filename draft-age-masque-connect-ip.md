@@ -137,6 +137,13 @@ routes to the proxy for network-to-network routing.
 
 ## Limiting Request Scope {#scope}
 
+Unlike CONNECT-UDP requests, which require specifying a target host, CONNECT-IP
+requests can allow endpoints to send arbitrary IP packets to any host.
+The client can choose to restrict a given request to a specific host or IP
+protocol by adding parameters to its request. The server uses these parameters
+to determine what routes to advertise, and can advertise a default set of
+routes if no parameters were specified.
+
 CONNECT-IP uses URI template variables ({{client-config}}) to determine the
 scope of the request for packet proxying. All variables defined here are
 optional, and have default values if not included.
@@ -148,7 +155,8 @@ target:
 host to which the client wants to proxy packets. If the "target" variable
 is not specified, the client is requesting to communicate with any allowable
 host. If the target is an IP address, the request will only support a single
-IP version.
+IP version. If the target is a hostname, the server is expected to perform
+DNS resolution to determine which route(s) to advertise to the client.
 
 ipproto:
 : The variable "ipproto" contains an IP protocol number, as defined in the
@@ -358,7 +366,8 @@ illustrate some of the ways in which CONNECT-IP can be used.
 
 The following example shows a point-to-network VPN setup, where a client
 receives a set of local addresses, and can send to any remote server
-through the proxy.
+through the proxy. Such VPN setups can be either full-tunnel or
+split-tunnel.
 
 ~~~
 
@@ -371,13 +380,11 @@ through the proxy.
 ~~~
 {: #diagram-tunnel title="VPN Tunnel Setup"}
 
-
 In this case, the client does not specify any scope in its request.
-The server assigns
-the client an IPv6 address prefix to the client (2001:db8::/64) and
-a full-tunnel route of all IPv6 addresses (::/0). The client
-can then send to any IPv6 host using a source address in its assigned
-prefix.
+The server assigns the client an IPv6 address prefix to the client
+(2001:db8::/64) and a full-tunnel route of all IPv6 addresses (::/0).
+The client can then send to any IPv6 host using a source address in
+its assigned prefix.
 
 ~~~
 [[ From Client ]]             [[ From Server ]]
@@ -427,16 +434,39 @@ Payload = Encapsulated IP Packet
                               Context ID = 0
                               Payload = Encapsulated IP Packet
 ~~~
-{: #fig-tunnel title="VPN Tunnel Example"}
+{: #fig-tunnel title="VPN Full-Tunnel Example"}
+
+A setup for a split-tunnel VPN (the case where the client can only
+access a specific set of private subnets) is quite similar. In this
+case, the advertised route is restricted to 2001:db8::/32, rather
+than ::/0.
+
+~~~
+[[ From Client ]]             [[ From Server ]]
+
+                              STREAM(44): CAPSULE
+                              Capsule Type = ADDRESS_ASSIGN
+                              IP Version = 6
+                              IP Address = 2001:db8:1:1::
+                              IP Prefix Length = 64
+
+                              STREAM(44): CAPSULE
+                              Capsule Type = ROUTE_ADVERTISEMENT
+                              IP Version = 6
+                              IP Address = 2001:db8::
+                              IP Prefix Length = 32
+                              IP Protocol = 0 // Any
+~~~
+{: #fig-tunnel title="VPN Split-Tunnel Capsule Example"}
 
 ## IP Flow Forwarding
 
 The following example shows an IP flow forwarding setup, where a client
-requests to establish a forwarding tunnel to target.example.com using ICMP
-(IP protocol 1), and receives a single local address and remote address
+requests to establish a forwarding tunnel to target.example.com using SCTP
+(IP protocol 132), and receives a single local address and remote address
 it can use for transmitting packets. A similar approach could be used for
 any other IP protocol that isn't easily proxied with existing HTTP methods,
-such as SCTP, ESP, etc.
+such as ICMP, ESP, etc.
 
 ~~~
 
@@ -459,7 +489,7 @@ CONNECT proxy request.
 
 The server assigns a single IPv6 address to the client
 (2001:db8::1234:1234) and a route to a single IPv6 host (2001:db8::3456),
-scoped to ICMP. The client can send and recieve ICMP IP packets to the
+scoped to SCTP. The client can send and recieve SCTP IP packets to the
 remote host.
 
 ~~~
@@ -475,7 +505,7 @@ STREAM(52): HEADERS
 :method = CONNECT
 :protocol = connect-ip
 :scheme = https
-:path = /proxy?target=target.example.com&ipproto=1
+:path = /proxy?target=target.example.com&ipproto=132
 :authority = server.example.com
 
 STREAM(52): CAPSULE
@@ -497,19 +527,19 @@ Context Extension = {}
                               IP Version = 6
                               IP Address = 2001:db8::3456
                               IP Prefix Length = 128
-                              IP Protocol = 1
+                              IP Protocol = 132
 
 DATAGRAM
 Quarter Stream ID = 11
 Context ID = 0
-Payload = Encapsulated IP Packet, ICMP ping
+Payload = Encapsulated SCTP/IP Packet
 
                               DATAGRAM
                               Quarter Stream ID = 11
                               Context ID = 0
-                              Payload = Encapsulated IP Packet, ICMP
+                              Payload = Encapsulated SCTP/IP Packet
 ~~~
-{: #fig-flow title="Proxied ICMP Flow Example"}
+{: #fig-flow title="Proxied SCTP Flow Example"}
 
 ## Proxied Connection Racing
 
