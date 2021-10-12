@@ -350,9 +350,34 @@ forward.
 
 # Examples
 
+CONNECT-IP enables many different use cases that can benefit from IP
+packet proxying and tunnelling. These examples are provided to help
+illustrate some of the ways in which CONNECT-IP can be used.
+
+## Remote Access VPN
+
 The following example shows a point-to-network VPN setup, where a client
 receives a set of local addresses, and can send to any remote server
 through the proxy.
+
+~~~
+
++--------+ IP A         IP B +--------+              +---> IP D
+|        |-------------------|        | IP C         |
+| Client | IP Subnet C <-> * | Server |--------------+---> IP E
+|        |-------------------|        |              |
++--------+                   +--------+              +---> IP ...
+
+~~~
+{: #diagram-tunnel title="VPN Tunnel Setup"}
+
+
+In this case, the client does not specify any scope in its request,
+but is asking to open up a generic IP tunnel. The server assigns
+the client an IPv6 address prefix to client (2001:db8::/64) and
+a full-tunnel route of all IPv6 addresses (::/0). The client
+can then send to any IPv6 host using a source address in its assigned
+prefix.
 
 ~~~
 [[ From Client ]]             [[ From Server ]]
@@ -384,7 +409,6 @@ Context Extension = {}
                               IP Version = 6
                               IP Address = 2001:db8::
                               IP Prefix Length = 64
-                              IP Protocol = 0 // Any
 
                               STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
@@ -405,10 +429,38 @@ Payload = Encapsulated IP Packet
 ~~~
 {: #fig-tunnel title="VPN Tunnel Example"}
 
+## IP Flow Proxying
+
 The following example shows an IP flow forwarding setup, where a client
 requests to establish a forwarding tunnel to target.example.com using ICMP
 (IP protocol 1), and receives a single local address and remote address
-it can use for transmitting packets.
+it can use for transmitting packets. A similar approach could be used for
+any other IP protocol that isn't easily proxied with existing HTTP methods,
+such as SCTP, ESP, etc.
+
+~~~
+
++--------+ IP A         IP B +--------+
+|        |-------------------|        | IP C 
+| Client |    IP C <-> D     | Server |---------> IP D
+|        |-------------------|        |
++--------+                   +--------+
+
+~~~
+{: #diagram-flow title="Proxied Flow Setup"}
+
+In this case, the client specfies both a target hostname and an IP protocol
+number in the scope of its request, indicating that it only needs to
+communicate with a single host. The proxy server is able to perform
+DNS resolution on behalf of the client and allocate a specific outbound
+socket for the client instead of allocating an entire IP address to
+the client. In this regard, the request is equivalent to a traditional
+CONNECT proxy request.
+
+The server assigns the client single IPv6 address to the client
+(2001:db8::1234:1234) and a route to a single IPv6 host (2001:db8::3456),
+scoped to ICMP. The client can send and recieve ICMP IP packets to the
+remote host.
 
 ~~~
 [[ From Client ]]             [[ From Server ]]
@@ -439,7 +491,6 @@ Context Extension = {}
                               IP Version = 6
                               IP Address = 2001:db8::1234:1234
                               IP Prefix Length = 128
-                              IP Protocol = 1
 
                               STREAM(52): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
@@ -460,9 +511,39 @@ Payload = Encapsulated IP Packet, ICMP ping
 ~~~
 {: #fig-flow title="Proxied ICMP Flow Example"}
 
-The following example shows a proxied UDP listen flow, where a client
-receives can receive UDP packets via the proxy, and can send to any
-UDP server through the proxy.
+## Proxied Connection Racing
+
+The following example shows a setup where a client is proxying UDP
+packets through a CONNECT-IP proxy in order to control connection
+establishement racing through a proxy, as defined in Happy Eyeballs
+{{?RFC8305}}. This example is a variant of the proxied flow, but
+highlights how IP-level proxying can enable new capabilities even
+for TCP and UDP.
+
+~~~
+
++--------+ IP A         IP B +--------+         +---> IP E
+|        |-------------------|        | IP C    |
+| Client |  IP C<->E, D<->F  | Server |---------+
+|        |-------------------|        | IP D    |
++--------+                   +--------+         +---> IP F
+
+~~~
+{: #diagram-racing title="Proxied Connection Racing Setup"}
+
+As with proxied flows, the client specfies both a target hostname
+and an IP protocol number in the scope of its request. When the proxy
+server performs DNS resolution on behalf of the client, it can send
+the various remote address options to the client as separate routes.
+It can also ensure that the client has both IPv4 and IPv6 addresses
+assigned.
+
+The server assigns the client both an IPv4 address (192.0.2.3) and an
+IPv6 address (2001:db8::1234:1234) to the client, as well as an IPv4
+route (198.51.100.2) and an IPv6 route (2001:db8::3456), which represent
+the resolved addresses of the target hostname, scoped to UDP.
+The client can send and recieve UDP IP packets to the either of the server
+addresses to enable Happy Eyeballs through the proxy.
 
 ~~~
 [[ From Client ]]             [[ From Server ]]
@@ -491,25 +572,43 @@ Context Extension = {}
 
                               STREAM(44): CAPSULE
                               Capsule Type = ADDRESS_ASSIGN
+                              IP Version = 4
+                              IP Address = 192.0.2.3
+                              IP Prefix Length = 32
+
+                              STREAM(44): CAPSULE
+                              Capsule Type = ADDRESS_ASSIGN
                               IP Version = 6
                               IP Address = 2001:db8::1234:1234
                               IP Prefix Length = 128
-                              IP Protocol = 17
 
                               STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
+                              IP Version = 4
+                              IP Address = 198.51.100.2
+                              IP Prefix Length = 32
+                              IP Protocol = 17
+                              
+                              STREAM(44): CAPSULE
+                              Capsule Type = ROUTE_ADVERTISEMENT
                               IP Version = 6
-                              IP Address = ::
-                              IP Prefix Length = 0
+                              IP Address = 2001:db8::3456
+                              IP Prefix Length = 128
                               IP Protocol = 17
 ...
 
-                              DATAGRAM
-                              Quarter Stream ID = 11
-                              Context ID = 0
-                              Payload = Encapsulated IP Packet
+DATAGRAM
+Quarter Stream ID = 11
+Context ID = 0
+Payload = Encapsulated IPv6 Packet
+
+DATAGRAM
+Quarter Stream ID = 11
+Context ID = 0
+Payload = Encapsulated IPv4 Packet
+
 ~~~
-{: #fig-listen title="UDP Listen Flow Example"}
+{: #fig-listen title="Proxied Connection Racing Example"}
 
 # Security Considerations
 
