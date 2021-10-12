@@ -374,7 +374,7 @@ through the proxy.
 
 In this case, the client does not specify any scope in its request,
 but is asking to open up a generic IP tunnel. The server assigns
-the client an IPv6 address prefix to client (2001:db8::/64) and
+the client an IPv6 address prefix to the client (2001:db8::/64) and
 a full-tunnel route of all IPv6 addresses (::/0). The client
 can then send to any IPv6 host using a source address in its assigned
 prefix.
@@ -429,7 +429,7 @@ Payload = Encapsulated IP Packet
 ~~~
 {: #fig-tunnel title="VPN Tunnel Example"}
 
-## IP Flow Proxying
+## IP Flow Forwarding
 
 The following example shows an IP flow forwarding setup, where a client
 requests to establish a forwarding tunnel to target.example.com using ICMP
@@ -454,10 +454,10 @@ number in the scope of its request, indicating that it only needs to
 communicate with a single host. The proxy server is able to perform
 DNS resolution on behalf of the client and allocate a specific outbound
 socket for the client instead of allocating an entire IP address to
-the client. In this regard, the request is equivalent to a traditional
+the client. In this regard, the request is similar to a traditional
 CONNECT proxy request.
 
-The server assigns the client single IPv6 address to the client
+The server assigns a single IPv6 address to the client
 (2001:db8::1234:1234) and a route to a single IPv6 host (2001:db8::3456),
 scoped to ICMP. The client can send and recieve ICMP IP packets to the
 remote host.
@@ -522,11 +522,11 @@ for TCP and UDP.
 
 ~~~
 
-+--------+ IP A         IP B +--------+         +---> IP E
-|        |-------------------|        | IP C    |
-| Client |  IP C<->E, D<->F  | Server |---------+
-|        |-------------------|        | IP D    |
-+--------+                   +--------+         +---> IP F
++--------+ IP A         IP B +--------+ IP C
+|        |-------------------|        |<------------> IP E
+| Client |  IP C<->E, D<->F  | Server |
+|        |-------------------|        |<------------> IP F
++--------+                   +--------+ IP D
 
 ~~~
 {: #diagram-racing title="Proxied Connection Racing Setup"}
