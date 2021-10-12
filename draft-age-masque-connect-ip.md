@@ -169,8 +169,12 @@ IP Address field SHALL have a length of 128 bits.
 
 IP Prefix Length:
 
-: Length of the IP Prefix assigned, in bits. MUST be lesser or equal to the
-length of the IP Address field, in bits.
+: The number of bits in the IP Address that are used to define the prefix
+that is being assigned. This MUST be less than or equal to the length of the IP Address
+field, in bits. If the prefix length is equal to the length of the IP Address,
+the endpoint is only allowed to send packets from a single source address. If
+the prefix length is less than the length of the IP address, the endpoint is
+allowed to send packets from any source address that falls within the prefix.
 
 ### ADDRESS_REQUEST Capsule
 
@@ -241,8 +245,12 @@ value 6, the IP Address field SHALL have a length of 128 bits.
 
 IP Prefix Length:
 
-: Length of the IP Prefix of the advertised route, in bits. MUST be lesser or
-equal to the length of the IP Address field, in bits.
+: The number of bits in the IP Address that are used to define the prefix of
+the advertised route. This MUST be lesser or equal to the length of the IP Address
+field, in bits. If the prefix length is equal to the length of the IP Address,
+this route only allows sending packets to a single destination address. If
+the prefix length is less than the length of the IP address, this route allows
+sending packets to any destination address that falls within the prefix.
 
 IP Protocol:
 
