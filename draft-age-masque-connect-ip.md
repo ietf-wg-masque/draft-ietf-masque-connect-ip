@@ -169,6 +169,10 @@ to use any IP protocol.
 
 ## Capsules
 
+This document defines multiple new capsule types that allow endpoints to
+exchange IP configuration information. Both endpoints MAY send any number of
+these new capsules.
+
 ### ADDRESS_ASSIGN Capsule
 
 The ADDRESS_ASSIGN capsule allows an endpoint to inform its peer that it has
