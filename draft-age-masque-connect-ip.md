@@ -169,6 +169,10 @@ to use any IP protocol.
 
 ## Capsules
 
+This document defines multiple new capsule types that allow endpoints to
+exchange IP configuration information. Both endpoints MAY send any number of
+these new capsules.
+
 ### ADDRESS_ASSIGN Capsule
 
 The ADDRESS_ASSIGN capsule allows an endpoint to inform its peer that it has
@@ -203,6 +207,10 @@ field, in bits. If the prefix length is equal to the length of the IP Address,
 the endpoint is only allowed to send packets from a single source address. If
 the prefix length is less than the length of the IP address, the endpoint is
 allowed to send packets from any source address that falls within the prefix.
+
+If an endpoint receives multiple ADDRESS_ASSIGN capsules, all of the assigned
+addresses or prefixes can be used. For example, multiple ADDRESS_ASSIGN
+capsules are necessary to assign both IPv4 and IPv6 addresses.
 
 ### ADDRESS_REQUEST Capsule
 
@@ -288,6 +296,11 @@ If the value is 0, all protocols are allowed.
 Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY start routing
 IP packets in that prefix to its peer.
 
+If an endpoint receives multiple ROUTE_ADVERTISEMENT capsules, all of the
+advertised routes can be used. For example, multiple ROUTE_ADVERTISEMENT
+capsules are necessary to provide routing to both IPv4 and IPv6 hosts. Routes
+are removed using ROUTE_WITHDRAWAL capsules.
+
 ### ROUTE_WITHDRAWAL Capsule
 
 The ROUTE_WITHDRAWAL capsule allows an endpoint to communicate to its peer that
@@ -329,6 +342,12 @@ Upon receiving the ROUTE_WITHDRAWAL capsule, an endpoint MUST stop routing IP
 packets in that prefix to its peer. Note that this capsule can be reordered
 with DATAGRAM frames, and therefore an endpoint that receives packets for
 routes it has rejected MUST NOT treat that as an error.
+
+ROUTE_ADVERTISEMENT and ROUTE_WITHDRAWAL capsules are applied in order of
+receipt: if a prefix is covered by multiple received ROUTE_ADVERTISEMENT and/or
+ROUTE_WITHDRAWAL capsules, only the last received capsule applies as it
+supersedes prior ROUTE_ADVERTISEMENT and ROUTE_WITHDRAWAL capsules for this
+prefix.
 
 # Transmitting IP Packets using HTTP Datagrams {#packet-handling}
 
