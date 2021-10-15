@@ -259,8 +259,10 @@ that it is willing to route traffic to a set of IP address ranges. This
 indicates that the sender has an existing route to each address range, and
 notifies its peer that if the receiver of the ROUTE_ADVERTISEMENT capsule sends
 IP packets for one of these ranges in HTTP Datagrams, the sender of the capsule
-will forward them along its preexisting route. This capsule uses a Capsule Type
-of 0xfff102. Its value uses the following format:
+will forward them along its preexisting route. Any address which is in one of
+the address ranges can be used as the destination address on IP packets
+originated by the receiver of this capsule. This capsule uses a Capsule Type of
+0xfff102. Its value uses the following format:
 
 ~~~
 ROUTE_ADVERTISEMENT Capsule {
