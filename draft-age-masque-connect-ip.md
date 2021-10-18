@@ -178,9 +178,11 @@ these new capsules.
 ### ADDRESS_ASSIGN Capsule
 
 The ADDRESS_ASSIGN capsule allows an endpoint to inform its peer that it has
-assigned an IP address to it. It allows assigning a prefix which can contain
-multiple addresses. This capsule uses a Capsule Type of 0xfff100. Its value
-uses the following format:
+assigned an IP address or prefix to it. The ADDRESS_ASSIGN capsule allows assigning a
+prefix which can contain multiple addresses. Any of these addresses can be used
+as the source address on IP packets originated by the receiver of this
+capsule. This capsule uses a Capsule Type of 0xfff100. Its value uses the
+following format:
 
 ~~~
 ADDRESS_ASSIGN Capsule {
@@ -206,10 +208,10 @@ IP Prefix Length:
 : The number of bits in the IP Address that are used to define the prefix that
 is being assigned. This MUST be less than or equal to the length of the IP
 Address field, in bits. If the prefix length is equal to the length of the IP
-Address, the endpoint is only allowed to send packets from a single source
-address. If the prefix length is less than the length of the IP address, the
-endpoint is allowed to send packets from any source address that falls within
-the prefix.
+Address, the receiver of this capsule is only allowed to send packets from a
+single source address. If the prefix length is less than the length of the IP
+address, the receiver of this capsule is allowed to send packets from any source
+address that falls within the prefix.
 
 If an endpoint receives multiple ADDRESS_ASSIGN capsules, all of the assigned
 addresses or prefixes can be used. For example, multiple ADDRESS_ASSIGN
