@@ -327,6 +327,9 @@ requirements:
 * If the IP Version and IP Protocol of A and B are both equal, the End IP
   Address of A MUST be strictly lesser than the Start IP Address of B.
 
+If an endpoint received a ROUTE_ADVERTISEMENT capsule that does not meet these
+requirements, it MUST abort the stream.
+
 # Transmitting IP Packets using HTTP Datagrams {#packet-handling}
 
 IP packets are sent using HTTP Datagrams {{!I-D.ietf-masque-h3-datagram}}. The
