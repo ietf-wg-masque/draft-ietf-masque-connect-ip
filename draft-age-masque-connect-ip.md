@@ -177,7 +177,7 @@ these new capsules.
 ### ADDRESS_ASSIGN Capsule
 
 The ADDRESS_ASSIGN capsule allows an endpoint to inform its peer that it has
-assigned an IP address to it. The ADDRESS_ASSIGN capsule allows assigning a
+assigned an IP address or prefix to it. The ADDRESS_ASSIGN capsule allows assigning a
 prefix which can contain multiple addresses. Any of these addresses can be used
 as the source address on IP packets originated by the receiver of this
 capsule. This capsule uses a Capsule Type of 0xfff100. Its value uses the
