@@ -177,15 +177,16 @@ these new capsules.
 
 ### ADDRESS_ASSIGN Capsule
 
-The ADDRESS_ASSIGN capsule allows an endpoint to inform its peer that it has
-assigned an IP address or prefix to it. The ADDRESS_ASSIGN capsule allows assigning a
-prefix which can contain multiple addresses. Any of these addresses can be used
-as the source address on IP packets originated by the receiver of this
-capsule. This capsule uses a Capsule Type of 0xfff100. Its value uses the
-following format:
+The ADDRESS_ASSIGN capsule (see {{iana-types}} for the value of the capsule
+type) allows an endpoint to inform its peer that it has assigned an IP address
+or prefix to it. The ADDRESS_ASSIGN capsule allows assigning a prefix which can
+contain multiple addresses. Any of these addresses can be used as the source
+address on IP packets originated by the receiver of this capsule.
 
 ~~~
 ADDRESS_ASSIGN Capsule {
+  Type (i) = ADDRESS_ASSIGN,
+  Length (i),
   IP Version (8),
   IP Address (32..128),
   IP Prefix Length (8),
@@ -219,15 +220,17 @@ capsules are necessary to assign both IPv4 and IPv6 addresses.
 
 ### ADDRESS_REQUEST Capsule
 
-The ADDRESS_REQUEST capsule allows an endpoint to request assignment of an IP
-address from its peer. This capsule is not required for simple client/proxy
-communication where the client only expects to receive one address from the
-proxy. The capsule allows the endpoint to optionally indicate a preference for
-which address it would get assigned. This capsule uses a Capsule Type of
-0xfff101. Its value uses the following format:
+The ADDRESS_REQUEST capsule (see {{iana-types}} for the value of the capsule
+type) allows an endpoint to request assignment of an IP address from its peer.
+This capsule is not required for simple client/proxy communication where the
+client only expects to receive one address from the proxy. The capsule allows
+the endpoint to optionally indicate a preference for which address it would get
+assigned.
 
 ~~~
 ADDRESS_REQUEST Capsule {
+  Type (i) = ADDRESS_REQUEST,
+  Length (i),
   IP Version (8),
   IP Address (32..128),
   IP Prefix Length (8),
@@ -256,18 +259,20 @@ the peer of the assignment.
 
 ### ROUTE_ADVERTISEMENT Capsule
 
-The ROUTE_ADVERTISEMENT capsule allows an endpoint to communicate to its peer
-that it is willing to route traffic to a set of IP address ranges. This
-indicates that the sender has an existing route to each address range, and
-notifies its peer that if the receiver of the ROUTE_ADVERTISEMENT capsule sends
-IP packets for one of these ranges in HTTP Datagrams, the sender of the capsule
-will forward them along its preexisting route. Any address which is in one of
-the address ranges can be used as the destination address on IP packets
-originated by the receiver of this capsule. This capsule uses a Capsule Type of
-0xfff102. Its value uses the following format:
+The ROUTE_ADVERTISEMENT capsule (see {{iana-types}} for the value of the
+capsule type) allows an endpoint to communicate to its peer that it is willing
+to route traffic to a set of IP address ranges. This indicates that the sender
+has an existing route to each address range, and notifies its peer that if the
+receiver of the ROUTE_ADVERTISEMENT capsule sends IP packets for one of these
+ranges in HTTP Datagrams, the sender of the capsule will forward them along its
+preexisting route. Any address which is in one of the address ranges can be
+used as the destination address on IP packets originated by the receiver of
+this capsule.
 
 ~~~
 ROUTE_ADVERTISEMENT Capsule {
+  Type (i) = ROUTE_ADVERTISEMENT,
+  Length (i),
   IP Address Range (..),
 }
 ~~~
@@ -281,7 +286,7 @@ IP Address Range {
   IP Protocol (8),
 }
 ~~~
-{: #addr-range-format title="IP Address Range"}
+{: #addr-range-format title="IP Address Range Format"}
 
 IP Version:
 
@@ -663,7 +668,7 @@ References:
 
 : This document
 
-## Capsule Type Registrations {#iana-capsule-types}
+## Capsule Type Registrations {#iana-types}
 
 This document will request IANA to add the following values to the "HTTP
 Capsule Types" registry created by {{!I-D.ietf-masque-h3-datagram}}:
