@@ -273,7 +273,7 @@ this capsule.
 ROUTE_ADVERTISEMENT Capsule {
   Type (i) = ROUTE_ADVERTISEMENT,
   Length (i),
-  IP Address Range (..),
+  IP Address Range (..) ...,
 }
 ~~~
 {: #route-adv-format title="ROUTE_ADVERTISEMENT Capsule Format"}
