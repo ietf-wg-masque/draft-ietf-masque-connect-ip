@@ -314,10 +314,11 @@ address range was present in a prior capsule but the most recently received
 ROUTE_ADVERTISEMENT capsule does not contain it, the receiver will consider
 that range withdrawn.
 
-In order to guarantee the absence of overlap between ranges using the same IP
-Protocol, the ranges are ordered. If an IP Address Range A precedes an IP
-address range B in the same ROUTE_ADVERTISEMENT capsule, they MUST follow these
-requirements:
+If multiple ranges using the same IP protocol were to overlap, some routing
+table implementations might reject them. To prevent overlap, the ranges are
+ordered; this places the burden on the sender and makes verification by the
+receiver much simpler. If an IP Address Range A precedes an IP address range B
+in the same ROUTE_ADVERTISEMENT capsule, they MUST follow these requirements:
 
 * IP Version of A MUST be lesser or equal than IP Version of B
 
