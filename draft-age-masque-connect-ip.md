@@ -278,6 +278,8 @@ ROUTE_ADVERTISEMENT Capsule {
 ~~~
 {: #route-adv-format title="ROUTE_ADVERTISEMENT Capsule Format"}
 
+The ROUTE_ADVERTISEMENT capsule contains a sequence of IP Address Ranges.
+
 ~~~
 IP Address Range {
   IP Version (8),
