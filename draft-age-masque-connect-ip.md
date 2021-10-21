@@ -131,8 +131,9 @@ the stream (in HTTP/3 via the FIN bit on a QUIC STREAM frame, or a QUIC
 RESET_STREAM frame) closes the associated forwarding tunnel.
 
 Along with a successful response, the proxy can send capsules to assign
-addresses and routes to the client ({{capsules}}). The client can also assign
-addresses and routes to the proxy for network-to-network routing.
+addresses and advertise routes to the client ({{capsules}}). The client can
+also assign addresses and advertise routes to the proxy for network-to-network
+routing.
 
 ## Limiting Request Scope {#scope}
 
@@ -260,107 +261,77 @@ the peer of the assignment.
 
 The ROUTE_ADVERTISEMENT capsule (see {{iana-types}} for the value of the
 capsule type) allows an endpoint to communicate to its peer that it is willing
-to route traffic to a given prefix. This indicates that the sender has an
-existing route to the prefix, and notifies its peer that if the receiver of the
-ROUTE_ADVERTISEMENT capsule sends IP packets for this prefix in HTTP Datagrams,
-the sender of the capsule will forward them along its preexisting route. Any of
-these addresses can be used as the destination address on IP packets originated
-by the receiver of this capsule.
+to route traffic to a set of IP address ranges. This indicates that the sender
+has an existing route to each address range, and notifies its peer that if the
+receiver of the ROUTE_ADVERTISEMENT capsule sends IP packets for one of these
+ranges in HTTP Datagrams, the sender of the capsule will forward them along its
+preexisting route. Any address which is in one of the address ranges can be
+used as the destination address on IP packets originated by the receiver of
+this capsule.
 
 ~~~
 ROUTE_ADVERTISEMENT Capsule {
   Type (i) = ROUTE_ADVERTISEMENT,
   Length (i),
-  IP Version (8),
-  IP Address (32..128),
-  IP Prefix Length (8),
-  IP Protocol (8),
+  IP Address Range (..) ...,
 }
 ~~~
 {: #route-adv-format title="ROUTE_ADVERTISEMENT Capsule Format"}
 
-IP Version:
-
-: IP Version of this route advertisement. MUST be either 4 or 6.
-
-IP Address:
-
-: IP address of the advertised route. If the IP Version field has value 4, the
-IP Address field SHALL have a length of 32 bits. If the IP Version field has
-value 6, the IP Address field SHALL have a length of 128 bits.
-
-IP Prefix Length:
-
-: The number of bits in the IP Address that are used to define the prefix of
-the advertised route. This MUST be lesser or equal to the length of the IP
-Address field, in bits. If the prefix length is equal to the length of the IP
-Address, this route only allows sending packets to a single destination
-address. If the prefix length is less than the length of the IP address, this
-route allows sending packets to any destination address that falls within the
-prefix.
-
-IP Protocol:
-
-: The Internet Protocol Number for traffic that can be sent to this prefix. If
-the value is 0, all protocols are allowed.
-
-Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY start routing
-IP packets in that prefix to its peer.
-
-If an endpoint receives multiple ROUTE_ADVERTISEMENT capsules, all of the
-advertised routes can be used. For example, multiple ROUTE_ADVERTISEMENT
-capsules are necessary to provide routing to both IPv4 and IPv6 hosts. Routes
-are removed using ROUTE_WITHDRAWAL capsules.
-
-### ROUTE_WITHDRAWAL Capsule
-
-The ROUTE_WITHDRAWAL capsule (see {{iana-types}} for the value of the capsule
-type) allows an endpoint to communicate to its peer that it is not willing to
-route traffic to a given prefix.
+The ROUTE_ADVERTISEMENT capsule contains a sequence of IP Address Ranges.
 
 ~~~
-ROUTE_WITHDRAWAL Capsule {
-  Type (i) = ROUTE_WITHDRAWAL,
-  Length (i),
+IP Address Range {
   IP Version (8),
-  IP Address (32..128),
-  IP Prefix Length (8),
+  Start IP Address (32..128),
+  End IP Address (32..128),
   IP Protocol (8),
 }
 ~~~
-{: #route-withdraw-format title="ROUTE_WITHDRAWAL Capsule Format"}
+{: #addr-range-format title="IP Address Range Format"}
 
 IP Version:
 
-: IP Version of this route withdrawal. MUST be either 4 or 6.
+: IP Version of this range. MUST be either 4 or 6.
 
-IP Address:
+Start IP Address and End IP Address:
 
-: IP address of the withdrawn route. If the IP Version field has value 4, the
-IP Address field SHALL have a length of 32 bits. If the IP Version field has
-value 6, the IP Address field SHALL have a length of 128 bits.
-
-IP Prefix Length:
-
-: The number of bits in the IP Address that are used to define the prefix of
-the withdrawn route. This MUST be lesser or equal to the length of the IP
-Address field, in bits.
+: Inclusive start and end IP address of the advertised range. If the IP Version
+field has value 4, these fields SHALL have a length of 32 bits. If the IP
+Version field has value 6, these fields SHALL have a length of 128 bits. The
+Start IP Address MUST be strictly lesser than the End IP Address.
 
 IP Protocol:
 
-: The Internet Protocol Number for traffic for this route. If the value is 0,
-all protocols are withdrawn for this prefix.
+: The Internet Protocol Number for traffic that can be sent to this range. If
+the value is 0, all protocols are allowed.
 
-Upon receiving the ROUTE_WITHDRAWAL capsule, an endpoint MUST stop routing IP
-packets in that prefix to its peer. Note that this capsule can be reordered
-with DATAGRAM frames, and therefore an endpoint that receives packets for
-routes it has rejected MUST NOT treat that as an error.
+Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY start routing
+IP packets in these ranges to its peer.
 
-ROUTE_ADVERTISEMENT and ROUTE_WITHDRAWAL capsules are applied in order of
-receipt: if a prefix is covered by multiple received ROUTE_ADVERTISEMENT and/or
-ROUTE_WITHDRAWAL capsules, only the last received capsule applies as it
-supersedes prior ROUTE_ADVERTISEMENT and ROUTE_WITHDRAWAL capsules for this
-prefix.
+Each ROUTE_ADVERTISEMENT contains the full list of address ranges. If multiple
+ROUTE_ADVERTISEMENT capsules are sent in one direction, each
+ROUTE_ADVERTISEMENT capsule supersedes prior ones. In other words, if a given
+address range was present in a prior capsule but the most recently received
+ROUTE_ADVERTISEMENT capsule does not contain it, the receiver will consider
+that range withdrawn.
+
+If multiple ranges using the same IP protocol were to overlap, some routing
+table implementations might reject them. To prevent overlap, the ranges are
+ordered; this places the burden on the sender and makes verification by the
+receiver much simpler. If an IP Address Range A precedes an IP address range B
+in the same ROUTE_ADVERTISEMENT capsule, they MUST follow these requirements:
+
+* IP Version of A MUST be lesser or equal than IP Version of B
+
+* If the IP Version of A and B are equal, the IP Protocol of A MUST be lesser
+  or equal than IP Protocol of B.
+
+* If the IP Version and IP Protocol of A and B are both equal, the End IP
+  Address of A MUST be strictly lesser than the Start IP Address of B.
+
+If an endpoint received a ROUTE_ADVERTISEMENT capsule that does not meet these
+requirements, it MUST abort the stream.
 
 # Transmitting IP Packets using HTTP Datagrams {#packet-handling}
 
@@ -414,9 +385,9 @@ the proxy. Such VPN setups can be either full-tunnel or split-tunnel.
 {: #diagram-tunnel title="VPN Tunnel Setup"}
 
 In this case, the client does not specify any scope in its request. The server
-assigns the client an IPv6 address prefix to the client (2001:db8::/64) and a
-full-tunnel route of all IPv6 addresses (::/0). The client can then send to any
-IPv6 host using a source address in its assigned prefix.
+assigns the client an IPv4 address to the client (192.0.2.11) and a full-tunnel
+route of all IPv4 addresses (0.0.0.0/0). The client can then send to any IPv4
+host using a source address in its assigned prefix.
 
 ~~~
 [[ From Client ]]             [[ From Server ]]
@@ -445,15 +416,15 @@ Context Extension = {}
 
                               STREAM(44): CAPSULE
                               Capsule Type = ADDRESS_ASSIGN
-                              IP Version = 6
-                              IP Address = 2001:db8::
-                              IP Prefix Length = 64
+                              IP Version = 4
+                              IP Address = 192.0.2.11
+                              IP Prefix Length = 32
 
                               STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
-                              IP Version = 6
-                              IP Address = ::
-                              IP Prefix Length = 0
+                              IP Version = 4
+                              Start IP Address = 0.0.0.0
+                              End IP Address = 255.255.255.255
                               IP Protocol = 0 // Any
 
 DATAGRAM
@@ -470,22 +441,22 @@ Payload = Encapsulated IP Packet
 
 A setup for a split-tunnel VPN (the case where the client can only access a
 specific set of private subnets) is quite similar. In this case, the advertised
-route is restricted to 2001:db8::/32, rather than ::/0.
+route is restricted to 192.0.2.0/24, rather than 0.0.0.0/0.
 
 ~~~
 [[ From Client ]]             [[ From Server ]]
 
                               STREAM(44): CAPSULE
                               Capsule Type = ADDRESS_ASSIGN
-                              IP Version = 6
-                              IP Address = 2001:db8:1:1::
-                              IP Prefix Length = 64
+                              IP Version = 4
+                              IP Address = 192.0.2.42
+                              IP Prefix Length = 32
 
                               STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
-                              IP Version = 6
-                              IP Address = 2001:db8::
-                              IP Prefix Length = 32
+                              IP Version = 4
+                              Start IP Address = 192.0.2.0
+                              End IP Address = 192.0.2.255
                               IP Protocol = 0 // Any
 ~~~
 {: #fig-split-tunnel title="VPN Split-Tunnel Capsule Example"}
@@ -554,8 +525,8 @@ Context Extension = {}
                               STREAM(52): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
                               IP Version = 6
-                              IP Address = 2001:db8::3456
-                              IP Prefix Length = 128
+                              Start IP Address = 2001:db8::3456
+                              End IP Address = 2001:db8::3456
                               IP Protocol = 132
 
 DATAGRAM
@@ -642,15 +613,15 @@ Context Extension = {}
                               STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
                               IP Version = 4
-                              IP Address = 198.51.100.2
-                              IP Prefix Length = 32
+                              Start IP Address = 198.51.100.2
+                              End IP Address = 198.51.100.2
                               IP Protocol = 17
 
                               STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
                               IP Version = 6
-                              IP Address = 2001:db8::3456
-                              IP Prefix Length = 128
+                              Start IP Address = 2001:db8::3456
+                              End IP Address = 2001:db8::3456
                               IP Protocol = 17
 ...
 
@@ -713,7 +684,6 @@ Capsule Types" registry created by {{!I-D.ietf-masque-h3-datagram}}:
 | 0xfff100 |   ADDRESS_ASSIGN    | Address Assignment  | This Document |
 | 0xfff101 |   ADDRESS_REQUEST   | Address Request     | This Document |
 | 0xfff102 | ROUTE_ADVERTISEMENT | Route Advertisement | This Document |
-| 0xfff103 |  ROUTE_WITHDRAWAL   | Route Withdrawal    | This Document |
 {: #iana-capsules-table title="New Capsules"}
 
 --- back
