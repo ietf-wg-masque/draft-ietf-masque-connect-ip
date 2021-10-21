@@ -340,12 +340,33 @@ requirements, it MUST abort the stream.
 
 # Transmitting IP Packets using HTTP Datagrams {#packet-handling}
 
-IP packets are sent using HTTP Datagrams {{HTTP-DGRAM}}. The HTTP Datagram
-Payload contains a full IP packet, from the IP Version field until the last
-byte of the IP Payload. In order to use HTTP Datagrams, the client first
-decides whether or not to use HTTP Datagram Contexts and then register its
-context ID (or lack thereof) using the corresponding registration capsule, see
-{{HTTP-DGRAM}}.
+IP packets are encoded using HTTP Datagrams {{HTTP-DGRAM}} with the IP_PACKET
+HTTP Datagram Format Type (see value in {{iana-format-type}}). When using the
+IP_PACKET HTTP Datagram Format Type, full IP packets (from the IP Version field
+until the last byte of the IP Payload) are sent unmodified in the "HTTP
+Datagram Payload" field of an HTTP Datagram.
+
+In order to use HTTP Datagrams, the client will first decide whether or not it
+will attempt to use HTTP Datagram Contexts and then register its context ID (or
+lack thereof) using the corresponding registration capsule, see {{HTTP-DGRAM}}.
+
+When sending a registration capsule using the "Datagram Format Type" set to
+IP_PACKET, the "Datagram Format Additional Data" field SHALL be empty. Servers
+MUST NOT register contexts using the IP_PACKET HTTP Datagram Format Type.
+Clients MUST NOT register more than one context using the IP_PACKET HTTP
+Datagram Format Type. Endpoints MUST NOT close contexts using the IP_PACKET
+HTTP Datagram Format Type. If an endpoint detects a violation of any of these
+requirements, it MUST abort the stream.
+
+Clients MAY optimistically start sending proxied IP packets before receiving
+the response to its IP proxying request, noting however that those may not be
+processed by the proxy if it responds to the request with a failure, or if the
+datagrams are received by the proxy before the request.
+
+Extensions to this mechanism MAY define new HTTP Datagram Format Types in order
+to use different semantics or encodings for IP payloads. For example, an
+extension could define a new HTTP Datagram Format Type which enables
+compression of IP header fields.
 
 When a CONNECT-IP endpoint receives an HTTP Datagram containing an IP packet,
 it will parse the packet's IP header, perform any local policy checks (e.g.,
@@ -679,6 +700,17 @@ Expected Version Tokens:
 References:
 
 : This document
+
+
+## Datagram Format Type {#iana-format-type}
+
+This document will request IANA to register IP_PACKET in the "HTTP Datagram
+Format Types" registry established by {{HTTP-DGRAM}}.
+
+|    Type   |   Value   | Specification |
+|:----------|:----------|:--------------|
+| IP_PACKET | 0xff8b00  | This Document |
+{: #iana-format-type-table title="Registered Datagram Format Type"}
 
 ## Capsule Type Registrations {#iana-types}
 
