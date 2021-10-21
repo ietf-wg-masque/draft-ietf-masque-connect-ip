@@ -304,7 +304,7 @@ Start IP Address and End IP Address:
 : Inclusive start and end IP address of the advertised range. If the IP Version
 field has value 4, these fields SHALL have a length of 32 bits. If the IP
 Version field has value 6, these fields SHALL have a length of 128 bits. The
-Start IP Address MUST be strictly lesser than the End IP Address.
+Start IP Address MUST be lesser or equal to the End IP Address.
 
 IP Protocol:
 
