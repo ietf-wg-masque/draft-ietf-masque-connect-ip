@@ -92,7 +92,7 @@ Clients are configured to use IP Proxying over HTTP via an URI Template
 "ip_proto". Examples are shown below:
 
 ~~~
-https://masque.example.org/{target}/{target_port}/
+https://masque.example.org/{target}/{ip_proto}/
 https://proxy.example.org:4443/masque?t={target}&p={ip_proto}
 https://proxy.example.org:4443/masque{?target,ip_proto}
 https://masque.example.org/?user=bob
