@@ -453,7 +453,7 @@ Context Extension = {}
                               (IP Version = 4
                                Start IP Address = 0.0.0.0
                                End IP Address = 255.255.255.255
-                               IP Protocol = 0 // Any)
+                               IP Protocol = 0) // Any
 
 DATAGRAM
 Quarter Stream ID = 11
@@ -485,7 +485,7 @@ route is restricted to 192.0.2.0/24, rather than 0.0.0.0/0.
                               (IP Version = 4
                                Start IP Address = 192.0.2.0
                                End IP Address = 192.0.2.255
-                               IP Protocol = 0 // Any)
+                               IP Protocol = 0) // Any
 ~~~
 {: #fig-split-tunnel title="VPN Split-Tunnel Capsule Example"}
 
