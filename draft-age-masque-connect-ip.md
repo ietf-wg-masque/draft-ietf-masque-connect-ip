@@ -450,10 +450,10 @@ Context Extension = {}
 
                               STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
-                              IP Version = 4
-                              Start IP Address = 0.0.0.0
-                              End IP Address = 255.255.255.255
-                              IP Protocol = 0 // Any
+                              (IP Version = 4
+                               Start IP Address = 0.0.0.0
+                               End IP Address = 255.255.255.255
+                               IP Protocol = 0) // Any
 
 DATAGRAM
 Quarter Stream ID = 11
@@ -482,10 +482,10 @@ route is restricted to 192.0.2.0/24, rather than 0.0.0.0/0.
 
                               STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
-                              IP Version = 4
-                              Start IP Address = 192.0.2.0
-                              End IP Address = 192.0.2.255
-                              IP Protocol = 0 // Any
+                              (IP Version = 4
+                               Start IP Address = 192.0.2.0
+                               End IP Address = 192.0.2.255
+                               IP Protocol = 0) // Any
 ~~~
 {: #fig-split-tunnel title="VPN Split-Tunnel Capsule Example"}
 
@@ -552,10 +552,10 @@ Context Extension = {}
 
                               STREAM(52): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
-                              IP Version = 6
-                              Start IP Address = 2001:db8::3456
-                              End IP Address = 2001:db8::3456
-                              IP Protocol = 132
+                              (IP Version = 6
+                               Start IP Address = 2001:db8::3456
+                               End IP Address = 2001:db8::3456
+                               IP Protocol = 132)
 
 DATAGRAM
 Quarter Stream ID = 13
@@ -640,17 +640,14 @@ Context Extension = {}
 
                               STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
-                              IP Version = 4
-                              Start IP Address = 198.51.100.2
-                              End IP Address = 198.51.100.2
-                              IP Protocol = 17
-
-                              STREAM(44): CAPSULE
-                              Capsule Type = ROUTE_ADVERTISEMENT
-                              IP Version = 6
-                              Start IP Address = 2001:db8::3456
-                              End IP Address = 2001:db8::3456
-                              IP Protocol = 17
+                              (IP Version = 4
+                               Start IP Address = 198.51.100.2
+                               End IP Address = 198.51.100.2
+                               IP Protocol = 17),
+                              (IP Version = 6
+                               Start IP Address = 2001:db8::3456
+                               End IP Address = 2001:db8::3456
+                               IP Protocol = 17)
 ...
 
 DATAGRAM
