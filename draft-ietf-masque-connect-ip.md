@@ -1,7 +1,7 @@
 ---
 title: "IP Proxying Support for HTTP"
 abbrev: "HTTP IP Proxy"
-docname: draft-age-masque-connect-ip-latest
+docname: draft-ietf-masque-connect-ip-latest
 category: std
 
 ipr: trust200902
