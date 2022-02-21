@@ -118,9 +118,8 @@ When using HTTP/2 or HTTP/3, the following requirements apply to requests:
   determine the scope of the request, such as requesting full-tunnel IP packet
   forwarding, or a specific proxied flow, see {{scope}}.
 
-Along with a request, the client can send a REGISTER_DATAGRAM_CONTEXT capsule
-{{HTTP-DGRAM}} to negotiate support for sending IP packets in HTTP Datagrams
-({{packet-handling}}).
+The client also includes the "Capsule-Protocol" header with a value of "?1"
+to negotiate support for sending and receiving HTTP capsules ({{HTTP-DGRAM}}).
 
 Any 2xx (Successful) response indicates that the proxy is willing to open an IP
 forwarding tunnel between it and the client. Any response other than a
@@ -340,35 +339,69 @@ in the same ROUTE_ADVERTISEMENT capsule, they MUST follow these requirements:
 If an endpoint received a ROUTE_ADVERTISEMENT capsule that does not meet these
 requirements, it MUST abort the stream.
 
-# Transmitting IP Packets using HTTP Datagrams {#packet-handling}
+# Context Identifiers
 
-IP packets are encoded using HTTP Datagrams {{HTTP-DGRAM}} with the IP_PACKET
-HTTP Datagram Format Type (see value in {{iana-format-type}}). When using the
-IP_PACKET HTTP Datagram Format Type, full IP packets (from the IP Version field
-until the last byte of the IP Payload) are sent unmodified in the "HTTP
-Datagram Payload" field of an HTTP Datagram.
+This protocol allows future extensions to exchange HTTP Datagrams which carry
+different semantics from IP packets. For example, an extension could define
+a way to send compressed IP header fields. In order to allow for this
+extensibility, all HTTP Datagrams associated with IP proxying request streams
+start with a context ID, see {{payload-format}}.
 
-In order to use HTTP Datagrams, the client will first decide whether or not it
-will attempt to use HTTP Datagram Contexts and then register its context ID (or
-lack thereof) using the corresponding registration capsule, see {{HTTP-DGRAM}}.
+Context IDs are 62-bit integers (0 to 2<sup>62</sup>-1). Context IDs are encoded
+as variable-length integers, see {{Section 16 of !QUIC=RFC9000}}. The context ID
+value of 0 is reserved for IP packets, while non-zero values are dynamically
+allocated: non-zero even-numbered context IDs are client-allocated, and odd-numbered
+context IDs are server-allocated. The context ID namespace is tied to a given
+HTTP request: it is possible for a context ID with the same numeric value to be
+simultaneously assigned different semantics in distinct requests, potentially
+with different semantics. Context IDs MUST NOT be re-allocated within a given
+HTTP namespace but MAY be allocated in any order. Once allocated, any context ID
+can be used by both client and server - only allocation carries separate
+namespaces to avoid requiring synchronization.
 
-When sending a registration capsule using the "Datagram Format Type" set to
-IP_PACKET, the "Datagram Format Additional Data" field SHALL be empty. Servers
-MUST NOT register contexts using the IP_PACKET HTTP Datagram Format Type.
-Clients MUST NOT register more than one context using the IP_PACKET HTTP
-Datagram Format Type. Endpoints MUST NOT close contexts using the IP_PACKET
-HTTP Datagram Format Type. If an endpoint detects a violation of any of these
-requirements, it MUST abort the stream.
+Registration is the action by which an endpoint informs its peer of the
+semantics and format of a given context ID. This document does not define how
+registration occurs. Depending on the method being used, it is possible for
+datagrams to be received with Context IDs which have not yet been registered,
+for instance due to reordering of the datagram and the registration packets
+during transmission.
+
+# HTTP Datagram Payload Format {#payload-format}
+
+When associated with IP proxying request streams, the HTTP Datagram Payload
+field of HTTP Datagrams (see {{HTTP-DGRAM}}) has the format defined in
+{{dgram-format}}. Note that when HTTP Datagrams are encoded using QUIC DATAGRAM
+frames, the Context ID field defined below directly follows the Quarter Stream
+ID field which is at the start of the QUIC DATAGRAM frame payload:
+
+~~~
+IP Proxying HTTP Datagram Payload {
+  Context ID (i),
+  Payload (..),
+}
+~~~
+{: #dgram-format title="IP Proxying HTTP Datagram Format"}
+
+Context ID:
+
+: A variable-length integer that contains the value of the Context ID. If an
+HTTP/3 datagram which carries an unknown Context ID is received, the receiver
+SHALL either drop that datagram silently or buffer it temporarily (on the order
+of a round trip) while awaiting the registration of the corresponding Context ID.
+
+Payload:
+
+: The payload of the datagram, whose semantics depend on value of the previous
+field. Note that this field can be empty.
+
+IP packets are encoded using HTTP Datagrams with the Context ID set to zero.
+When the Context ID is set to zero, the Payload field contains a full IP
+packet (from the IP Version field until the last byte of the IP Payload).
 
 Clients MAY optimistically start sending proxied IP packets before receiving
 the response to its IP proxying request, noting however that those may not be
 processed by the proxy if it responds to the request with a failure, or if the
 datagrams are received by the proxy before the request.
-
-Extensions to this mechanism MAY define new HTTP Datagram Format Types in order
-to use different semantics or encodings for IP payloads. For example, an
-extension could define a new HTTP Datagram Format Type which enables
-compression of IP header fields.
 
 When a CONNECT-IP endpoint receives an HTTP Datagram containing an IP packet,
 it will parse the packet's IP header, perform any local policy checks (e.g.,
@@ -433,14 +466,11 @@ STREAM(44): HEADERS
 :scheme = https
 :path = /vpn
 :authority = server.example.com
-
-STREAM(44): CAPSULE
-Capsule Type = REGISTER_DATAGRAM_CONTEXT
-Context ID = 0
-Context Extension = {}
+capsule-protocol = ?1
 
                               STREAM(44): HEADERS
                               :status = 200
+                              capsule-protocol = ?1
 
                               STREAM(44): CAPSULE
                               Capsule Type = ADDRESS_ASSIGN
@@ -535,14 +565,11 @@ STREAM(52): HEADERS
 :scheme = https
 :path = /proxy?target=target.example.com&ipproto=132
 :authority = server.example.com
-
-STREAM(52): CAPSULE
-Capsule Type = REGISTER_DATAGRAM_CONTEXT
-Context ID = 0
-Context Extension = {}
+capsule-protocol = ?1
 
                               STREAM(52): HEADERS
                               :status = 200
+                              capsule-protocol = ?1
 
                               STREAM(52): CAPSULE
                               Capsule Type = ADDRESS_ASSIGN
@@ -617,14 +644,11 @@ STREAM(44): HEADERS
 :scheme = https
 :path = /proxy?ipproto=17
 :authority = server.example.com
-
-STREAM(44): CAPSULE
-Capsule Type = REGISTER_DATAGRAM_CONTEXT
-Context ID = 0
-Context Extension = {}
+capsule-protocol = ?1
 
                               STREAM(44): HEADERS
                               :status = 200
+                              capsule-protocol = ?1
 
                               STREAM(44): CAPSULE
                               Capsule Type = ADDRESS_ASSIGN
@@ -699,17 +723,6 @@ Expected Version Tokens:
 References:
 
 : This document
-
-
-## Datagram Format Type {#iana-format-type}
-
-This document will request IANA to register IP_PACKET in the "HTTP Datagram
-Format Types" registry established by {{HTTP-DGRAM}}.
-
-|    Type   |   Value   | Specification |
-|:----------|:----------|:--------------|
-| IP_PACKET | 0xff8b00  | This Document |
-{: #iana-format-type-table title="Registered Datagram Format Type"}
 
 ## Capsule Type Registrations {#iana-types}
 
