@@ -118,7 +118,7 @@ When using HTTP/2 or HTTP/3, the following requirements apply to requests:
   determine the scope of the request, such as requesting full-tunnel IP packet
   forwarding, or a specific proxied flow, see {{scope}}.
 
-The client also includes the "Capsule-Protocol" header with a value of "?1"
+The client SHOULD also include the "Capsule-Protocol" header with a value of "?1"
 to negotiate support for sending and receiving HTTP capsules ({{HTTP-DGRAM}}).
 
 Any 2xx (Successful) response indicates that the proxy is willing to open an IP
