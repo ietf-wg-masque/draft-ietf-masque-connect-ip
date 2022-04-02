@@ -2,46 +2,66 @@
 title: "IP Proxying Support for HTTP"
 abbrev: "HTTP IP Proxy"
 docname: draft-ietf-masque-connect-ip-latest
-category: std
-
+submissiontype: IETF
 ipr: trust200902
-area: TSV
-workgroup: MASQUE
-
+category: std
 stand_alone: yes
-smart_quotes: no
 pi: [toc, sortrefs, symrefs]
-
+area: Transport
+wg: MASQUE
+number:
+date:
+consensus:
+venue:
+  group: "MASQUE"
+  type: "Working Group"
+  mail: "masque@ietf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/masque/"
+  github: "ietf-wg-masque/draft-ietf-masque-connect-ip"
+  latest: "https://ietf-wg-masque.github.io/draft-ietf-masque-connect-ip/draft-ietf-masque-connect-ip.html"
+keyword:
+  - quic
+  - http
+  - datagram
+  - VPN
+  - proxy
+  - tunnels
+  - quic in udp in IP in quic
+  - turtles all the way down
+  - masque
+  - http-ng
 author:
- -
+  -
     ins: T. Pauly
     name: Tommy Pauly
     role: editor
     organization: Apple Inc.
     email: tpauly@apple.com
- -
+  -
     ins: D. Schinazi
     name: David Schinazi
-    organization: Google LLC
+    org: Google LLC
+    street: 1600 Amphitheatre Parkway
+    city: Mountain View
+    region: CA
+    code: 94043
+    country: United States of America
     email: dschinazi.ietf@gmail.com
- -
+  -
     ins: A. Chernyakhovsky
     name: Alex Chernyakhovsky
     organization: Google LLC
     email: achernya@google.com
- -
+  -
     ins: M. Kuehlewind
     name: Mirja Kuehlewind
     organization: Ericsson
     email: mirja.kuehlewind@ericsson.com
- -
+  -
     ins: M. Westerlund
     name: Magnus Westerlund
     organization: Ericsson
     email: magnus.westerlund@ericsson.com
-
-normative:
-  SEMANTICS: I-D.ietf-httpbis-semantics
 
 --- abstract
 
@@ -57,10 +77,10 @@ This document describes a method of proxying IP packets over HTTP. When using
 HTTP/2 or HTTP/3, IP proxying uses HTTP Extended CONNECT as described in
 {{!EXT-CONNECT2=RFC8441}} and {{!EXT-CONNECT3=I-D.ietf-httpbis-h3-websockets}}.
 When using HTTP/1.x, IP proxying uses HTTP Upgrade as defined in {{Section 7.8
-of SEMANTICS}}. This protocol is similar to CONNECT-UDP
-{{?CONNECT-UDP=I-D.ietf-masque-connect-udp}}, but allows transmitting arbitrary
-IP packets, without being limited to just TCP like CONNECT {{SEMANTICS}} or UDP
-like CONNECT-UDP.
+of !SEMANTICS=I-D.ietf-httpbis-semantics}}. This protocol is similar to
+CONNECT-UDP {{?CONNECT-UDP=I-D.ietf-masque-connect-udp}}, but allows
+transmitting arbitrary IP packets, without being limited to just TCP like
+CONNECT {{SEMANTICS}} or UDP like CONNECT-UDP.
 
 The HTTP Upgrade Token defined for this mechanism is "connect-ip", which is
 also referred to as CONNECT-IP in this document.
@@ -75,10 +95,7 @@ support {{!HTTP-DGRAM=I-D.ietf-masque-h3-datagram}}.
 
 # Conventions and Definitions
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
-document are to be interpreted as described in BCP 14 {{!RFC2119}} {{!RFC8174}}
-when, and only when, they appear in all capitals, as shown here.
+{::boilerplate bcp14-tagged}
 
 In this document, we use the term "proxy" to refer to the HTTP server that
 responds to the CONNECT-IP request. If there are HTTP intermediaries (as
@@ -157,7 +174,6 @@ optional, and have default values if not included.
 The defined variables are:
 
 target:
-
 : The variable "target" contains a hostname or IP address of a specific host to
 which the client wants to proxy packets. If the "target" variable is not
 specified, the client is requesting to communicate with any allowable host. If
@@ -168,12 +184,12 @@ send a ROUTE_ADVERTISEMENT capsule that includes routes for all usable
 resolved addresses for the requested hostname.
 
 ipproto:
-
 : The variable "ipproto" contains an IP protocol number, as defined in the
 "Assigned Internet Protocol Numbers" IANA registry. If present, it specifies
 that a client only wants to proxy a specific IP protocol for this request. If
 the value is 0, or the variable is not included, the client is requesting to
 use any IP protocol.
+{: spacing="compact"}
 
 ## Capsules
 
@@ -201,17 +217,14 @@ ADDRESS_ASSIGN Capsule {
 {: #addr-assign-format title="ADDRESS_ASSIGN Capsule Format"}
 
 IP Version:
-
 : IP Version of this address assignment. MUST be either 4 or 6.
 
 IP Address:
-
 : Assigned IP address. If the IP Version field has value 4, the IP Address
 field SHALL have a length of 32 bits. If the IP Version field has value 6, the
 IP Address field SHALL have a length of 128 bits.
 
 IP Prefix Length:
-
 : The number of bits in the IP Address that are used to define the prefix that
 is being assigned. This MUST be less than or equal to the length of the IP
 Address field, in bits. If the prefix length is equal to the length of the IP
@@ -219,6 +232,7 @@ Address, the receiver of this capsule is only allowed to send packets from a
 single source address. If the prefix length is less than the length of the IP
 address, the receiver of this capsule is allowed to send packets from any source
 address that falls within the prefix.
+{: spacing="compact"}
 
 If an endpoint receives multiple ADDRESS_ASSIGN capsules, all of the assigned
 addresses or prefixes can be used. For example, multiple ADDRESS_ASSIGN
@@ -245,19 +259,17 @@ ADDRESS_REQUEST Capsule {
 {: #addr-req-format title="ADDRESS_REQUEST Capsule Format"}
 
 IP Version:
-
 : IP Version of this address request. MUST be either 4 or 6.
 
 IP Address:
-
 : Requested IP address. If the IP Version field has value 4, the IP Address
 field SHALL have a length of 32 bits. If the IP Version field has value 6, the
 IP Address field SHALL have a length of 128 bits.
 
 IP Prefix Length:
-
 : Length of the IP Prefix requested, in bits. MUST be lesser or equal to the
 length of the IP Address field, in bits.
+{: spacing="compact"}
 
 Upon receiving the ADDRESS_REQUEST capsule, an endpoint SHOULD assign an IP
 address to its peer, and then respond with an ADDRESS_ASSIGN capsule to inform
@@ -297,20 +309,18 @@ IP Address Range {
 {: #addr-range-format title="IP Address Range Format"}
 
 IP Version:
-
 : IP Version of this range. MUST be either 4 or 6.
 
 Start IP Address and End IP Address:
-
 : Inclusive start and end IP address of the advertised range. If the IP Version
 field has value 4, these fields SHALL have a length of 32 bits. If the IP
 Version field has value 6, these fields SHALL have a length of 128 bits. The
 Start IP Address MUST be lesser or equal to the End IP Address.
 
 IP Protocol:
-
 : The Internet Protocol Number for traffic that can be sent to this range. If
 the value is 0, all protocols are allowed.
+{: spacing="compact"}
 
 Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY start routing
 IP packets in these ranges to its peer.
@@ -383,16 +393,15 @@ IP Proxying HTTP Datagram Payload {
 {: #dgram-format title="IP Proxying HTTP Datagram Format"}
 
 Context ID:
-
 : A variable-length integer that contains the value of the Context ID. If an
 HTTP/3 datagram which carries an unknown Context ID is received, the receiver
 SHALL either drop that datagram silently or buffer it temporarily (on the order
 of a round trip) while awaiting the registration of the corresponding Context ID.
 
 Payload:
-
 : The payload of the datagram, whose semantics depend on value of the previous
 field. Note that this field can be empty.
+{: spacing="compact"}
 
 IP packets are encoded using HTTP Datagrams with the Context ID set to zero.
 When the Context ID is set to zero, the Payload field contains a full IP
@@ -709,20 +718,17 @@ Token Registry maintained at
 <[](https://www.iana.org/assignments/http-upgrade-tokens)>.
 
 Value:
-
 : connect-ip
 
 Description:
-
 : The CONNECT-IP Protocol
 
 Expected Version Tokens:
-
 : None
 
 References:
-
 : This document
+{: spacing="compact"}
 
 ## Capsule Type Registrations {#iana-types}
 
