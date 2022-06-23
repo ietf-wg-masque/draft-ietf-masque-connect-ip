@@ -455,9 +455,9 @@ the proxy. Such VPN setups can be either full-tunnel or split-tunnel.
 {: #diagram-tunnel title="VPN Tunnel Setup"}
 
 In this case, the client does not specify any scope in its request. The server
-assigns the client an IPv4 address to the client (192.0.2.11) and a full-tunnel
-route of all IPv4 addresses (0.0.0.0/0). The client can then send to any IPv4
-host using a source address in its assigned prefix.
+assigns the client an IPv4 address (192.0.2.11) and a full-tunnel route of all
+IPv4 addresses (0.0.0.0/0). The client can then send to any IPv4 host using a
+source address in its assigned prefix.
 
 ~~~
 [[ From Client ]]             [[ From Server ]]
