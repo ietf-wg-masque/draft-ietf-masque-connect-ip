@@ -344,7 +344,7 @@ in the same ROUTE_ADVERTISEMENT capsule, they MUST follow these requirements:
   or equal than IP Protocol of B.
 
 * If the IP Version and IP Protocol of A and B are both equal, the End IP
-  Address of A MUST be strictly lesser than the Start IP Address of B.
+  Address of A MUST be strictly less than the Start IP Address of B.
 
 If an endpoint received a ROUTE_ADVERTISEMENT capsule that does not meet these
 requirements, it MUST abort the stream.
