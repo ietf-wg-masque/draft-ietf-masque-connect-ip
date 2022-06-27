@@ -109,12 +109,56 @@ Clients are configured to use IP Proxying over HTTP via an URI Template
 "ip_proto". Examples are shown below:
 
 ~~~
-https://masque.example.org/{target}/{ip_proto}/
-https://proxy.example.org:4443/masque?t={target}&p={ip_proto}
+https://masque.example.org/.well-known/masque/ip/{target}/{ip_proto}/
+https://proxy.example.org:4443/masque?t={target}&i={ip_proto}
 https://proxy.example.org:4443/masque{?target,ip_proto}
 https://masque.example.org/?user=bob
 ~~~
 {: #fig-template-examples title="URI Template Examples"}
+
+The following requirements apply to the URI Template:
+
+   *  The URI Template MUST be a level 3 template or lower.
+
+   *  The URI Template MUST be in absolute form, and MUST include non-
+      empty scheme, authority and path components.
+
+   *  The path component of the URI Template MUST start with a slash
+      "/".
+
+   *  All template variables MUST be within the path or query components
+      of the URI.
+
+   *  The URI template MAY contain the two variables "target" and
+      "ip_proto" and MAY contain other variables.
+
+   *  The URI Template MUST NOT contain any non-ASCII unicode characters
+      and MUST only contain ASCII characters in the range 0x21-0x7E
+      inclusive (note that percent-encoding is allowed; see Section 2.1
+      of [URI]).
+
+   *  The URI Template MUST NOT use Reserved Expansion ("+" operator),
+      Fragment Expansion ("#" operator), Label Expansion with Dot-
+      Prefix, Path Segment Expansion with Slash-Prefix, nor Path-Style
+      Parameter Expansion with Semicolon-Prefix.
+
+Clients SHOULD validate the requirements above; however, clients MAY use a
+general-purpose URI Template implementation that lacks this specific validation.
+If a client detects that any of the requirements above are not met by a URI
+Template, the client MUST reject its configuration and abort the request without
+sending it to the IP proxy.
+
+Since the original HTTP CONNECT method allowed conveying the target host and
+port but not the scheme, proxy authority, path, nor query, there exist clients
+with proxy configuration interfaces that only allow the user to configure the
+proxy host and the proxy port.  Client implementations of this specification
+that are constrained by such limitations MAY attempt to access IP proxying
+capabilities using the default template, which is defined as:
+"https://$PROXY_HOST:$PROXY_PORT/.well-known/masque/ ip/{target}/{ip_proto}/"
+where $PROXY_HOST and $PROXY_PORT are the configured host and port of the IP
+proxy respectively.  IP proxy deployments SHOULD offer service at this location
+if they need to interoperate with such clients. The well known suffic masque has
+been registreed by {{CONNECT-UDP}}.
 
 # The CONNECT-IP Protocol
 
@@ -742,6 +786,7 @@ Capsule Types" registry created by {{HTTP-DGRAM}}:
 | 0xfff102 | ROUTE_ADVERTISEMENT | Route Advertisement | This Document |
 {: #iana-capsules-table title="New Capsules"}
 
+
 --- back
 
 # Acknowledgments
@@ -750,3 +795,7 @@ Capsule Types" registry created by {{HTTP-DGRAM}}:
 The design of this method was inspired by discussions in the MASQUE working
 group around {{?PROXY-REQS=I-D.ietf-masque-ip-proxy-reqs}}. The authors would
 like to thank participants in those discussions for their feedback.
+
+Most of the text on client configuration is based on the corresponding text in
+{{CONNECT-UDP}}.
+
