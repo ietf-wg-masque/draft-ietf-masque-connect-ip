@@ -106,12 +106,12 @@ those are referred to as "intermediaries" in this document.
 
 Clients are configured to use IP Proxying over HTTP via an URI Template
 {{!TEMPLATE=RFC6570}}. The URI template MAY contain two variables: "target" and
-"ip_proto". Examples are shown below:
+"ipproto". Examples are shown below:
 
 ~~~
-https://masque.example.org/.well-known/masque/ip/{target}/{ip_proto}/
-https://proxy.example.org:4443/masque?t={target}&i={ip_proto}
-https://proxy.example.org:4443/masque{?target,ip_proto}
+https://masque.example.org/.well-known/masque/ip/{target}/{ipproto}/
+https://proxy.example.org:4443/masque/ip?t={target}&i={ipproto}
+https://proxy.example.org:4443/masque/ip{?target,ipproto}
 https://masque.example.org/?user=bob
 ~~~
 {: #fig-template-examples title="URI Template Examples"}
@@ -130,12 +130,12 @@ The following requirements apply to the URI Template:
       of the URI.
 
    *  The URI template MAY contain the two variables "target" and
-      "ip_proto" and MAY contain other variables.
+      "ipproto" and MAY contain other variables.
 
    *  The URI Template MUST NOT contain any non-ASCII unicode characters
       and MUST only contain ASCII characters in the range 0x21-0x7E
       inclusive (note that percent-encoding is allowed; see Section 2.1
-      of [URI]).
+      of {{!URI=RFC3986}}.
 
    *  The URI Template MUST NOT use Reserved Expansion ("+" operator),
       Fragment Expansion ("#" operator), Label Expansion with Dot-
@@ -154,7 +154,7 @@ with proxy configuration interfaces that only allow the user to configure the
 proxy host and the proxy port.  Client implementations of this specification
 that are constrained by such limitations MAY attempt to access IP proxying
 capabilities using the default template, which is defined as:
-"https://$PROXY_HOST:$PROXY_PORT/.well-known/masque/ ip/{target}/{ip_proto}/"
+"https://$PROXY_HOST:$PROXY_PORT/.well-known/masque/ ip/{target}/{ipproto}/"
 where $PROXY_HOST and $PROXY_PORT are the configured host and port of the IP
 proxy respectively.  IP proxy deployments SHOULD offer service at this location
 if they need to interoperate with such clients. The well known suffic masque has
