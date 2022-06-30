@@ -179,9 +179,11 @@ which the client wants to proxy packets. If the "target" variable is not
 specified, the client is requesting to communicate with any allowable host. If
 the target is an IP address, the request will only support a single IP version.
 If the target is a hostname, the server is expected to perform DNS resolution
-to determine which route(s) to advertise to the client. The server SHOULD
-send a ROUTE_ADVERTISEMENT capsule that includes routes for all usable
-resolved addresses for the requested hostname.
+to determine which route(s) to advertise to the client. The server SHOULD send
+a ROUTE_ADVERTISEMENT capsule that includes routes for all addresses that were
+resolved for the requested hostname, that are accessible to the server, and
+belong to an address family for which the server also sends an ADDRESS_ASSIGN
+capsule.
 
 ipproto:
 : The variable "ipproto" contains an IP protocol number, as defined in the
