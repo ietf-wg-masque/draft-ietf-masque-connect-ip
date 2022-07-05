@@ -106,10 +106,14 @@ those are referred to as "intermediaries" in this document.
 
 Clients are configured to use IP Proxying over HTTP via an URI Template
 {{!TEMPLATE=RFC6570}}. The URI template MAY contain two variables: "target" and
-"ipproto". Examples are shown below:
+"ipproto" ({{scope}}). The optionality of the variables needs to be considered
+when defining the template so that either the variable is self identfying or it
+works to exclude it in the syntax. For example first path segment in absolute
+URIs can not be empty.
+
+Examples are shown below:
 
 ~~~
-https://masque.example.org/.well-known/masque/ip/{target}/{ipproto}/
 https://proxy.example.org:4443/masque/ip?t={target}&i={ipproto}
 https://proxy.example.org:4443/masque/ip{?target,ipproto}
 https://masque.example.org/?user=bob
@@ -147,18 +151,6 @@ general-purpose URI Template implementation that lacks this specific validation.
 If a client detects that any of the requirements above are not met by a URI
 Template, the client MUST reject its configuration and abort the request without
 sending it to the IP proxy.
-
-Since the original HTTP CONNECT method allowed conveying the target host and
-port but not the scheme, proxy authority, path, nor query, there exist clients
-with proxy configuration interfaces that only allow the user to configure the
-proxy host and the proxy port.  Client implementations of this specification
-that are constrained by such limitations MAY attempt to access IP proxying
-capabilities using the default template, which is defined as:
-"https://$PROXY_HOST:$PROXY_PORT/.well-known/masque/ ip/{target}/{ipproto}/"
-where $PROXY_HOST and $PROXY_PORT are the configured host and port of the IP
-proxy respectively.  IP proxy deployments SHOULD offer service at this location
-if they need to interoperate with such clients. The well known suffic masque has
-been registreed by {{CONNECT-UDP}}.
 
 # The CONNECT-IP Protocol
 
@@ -218,22 +210,28 @@ optional, and have default values if not included.
 The defined variables are:
 
 target:
-: The variable "target" contains a hostname or IP address of a specific host to
-which the client wants to proxy packets. If the "target" variable is not
-specified, the client is requesting to communicate with any allowable host. If
-the target is an IP address, the request will only support a single IP version.
-If the target is a hostname, the server is expected to perform DNS resolution
-to determine which route(s) to advertise to the client. The server SHOULD
-send a ROUTE_ADVERTISEMENT capsule that includes routes for all usable
-resolved addresses for the requested hostname.
+: The variable "target" contains a DNS hostname (reg-name), IPv6 literal
+(IPv6address) or IPv4 literal (IPv4address) address ({{URI}} syntax elements
+within parenthis) of a specific host to which the client wants to proxy
+packets. If the "target" variable is not specified or its value is "\*", the
+client is requesting to communicate with any allowable host. If the target is an
+IP address, the request will only support a single IP version.  If the target is
+a hostname, the server is expected to perform DNS resolution to determine which
+route(s) to advertise to the client. The server SHOULD send a
+ROUTE_ADVERTISEMENT capsule that includes routes for all usable resolved
+addresses for the requested hostname. Note that IPv6 scoped addressing zone
+identifiers are not supported.
 
 ipproto:
-: The variable "ipproto" contains an IP protocol number, as defined in the
-"Assigned Internet Protocol Numbers" IANA registry. If present, it specifies
+: The variable "ipproto" contains an IP protocol number, as defined in
+the "Assigned Internet Protocol Numbers" IANA registry. If present, it specifies
 that a client only wants to proxy a specific IP protocol for this request. If
-the value is 0, or the variable is not included, the client is requesting to
-use any IP protocol.
-{: spacing="compact"}
+the value is "\*", or the variable is not included, the client is requesting to
+use any IP protocol.  {: spacing="compact"}
+
+Also note that this URI Template expansion requires using
+percent-encoding,e.g. of ":" and "*", so for example if the target_host is
+"2001:db8::42", it will be encoded in the URI as "2001%3Adb8%3A%3A42".
 
 ## Capsules
 
