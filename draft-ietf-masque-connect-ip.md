@@ -109,7 +109,7 @@ Clients are configured to use IP Proxying over HTTP via an URI Template
 "ipproto" ({{scope}}). The optionality of the variables needs to be considered
 when defining the template so that either the variable is self identfying or it
 works to exclude it in the syntax. For example first path segment in absolute
-URIs can not be empty.
+URIs cannot be empty.
 
 Examples are shown below:
 
