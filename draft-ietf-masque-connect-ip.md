@@ -231,7 +231,7 @@ the value is "\*", or the variable is not included, the client is requesting to
 use any IP protocol.  {: spacing="compact"}
 
 Also note that this URI Template expansion requires using
-percent-encoding,e.g. of ":" and "*", so for example if the target_host is
+percent-encoding,e.g. of ":" and "\*", so for example if the target_host is
 "2001:db8::42", it will be encoded in the URI as "2001%3Adb8%3A%3A42".
 
 ## Capsules
