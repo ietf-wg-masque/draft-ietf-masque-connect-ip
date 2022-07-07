@@ -707,9 +707,14 @@ use to authenticated users. The HTTP Authorization header {{?AUTH=RFC7235}} MAY
 be used to authenticate clients. More complex authentication schemes are out of
 scope for this document but can be implemented using CONNECT-IP extensions.
 
-Since CONNECT-IP endpoints can proxy IP packets send by their peer, they SHOULD
-follow the guidance in {{!BCP38=RFC2827}} to help prevent denial of service
-attacks.
+Falsifying IP source addresses in sent traffic has been common for denial of
+service attacks. Implementations of this mechanism need to ensure that they do
+not facilitate such attacks. In particular, there are scenarios where an
+endpoint knows that its peer is only allowed to send IP packets from a given
+prefix. For example, that can happen through out of band configuration
+information, or when allowed prefixes are shared via ADDRESS_ASSIGN capsules. In
+such scenarios, endpoints MUST follow the recommendations from
+{{!BCP38=RFC2827}} to prevent source address spoofing.
 
 # IANA Considerations
 
