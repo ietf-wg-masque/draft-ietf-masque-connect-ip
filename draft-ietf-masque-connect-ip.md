@@ -433,6 +433,16 @@ choices in IPsec {{?IPSEC=RFC4301}}.
 Endpoints MAY implement additional filtering policies on the IP packets they
 forward.
 
+# Error Signalling
+
+Since CONNECT-IP endpoints often forward IP packets onwards to other network
+interfaces, they need to handle errors in the forwarding process. For example,
+forwarding can fail if the endpoint doesn't have a route for the destination
+address, or if it is configured to reject a destination prefix by policy, or if
+the MTU of the outgoing link is lower than the size of the packet to be
+forwarded. In such scenarios, CONNECT-IP endpoints SHOULD use ICMP
+{{!ICMP=RFC4443}} to signal the forwarding error to its peer.
+
 # Examples
 
 CONNECT-IP enables many different use cases that can benefit from IP packet
