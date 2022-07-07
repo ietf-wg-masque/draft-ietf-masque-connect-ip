@@ -240,6 +240,12 @@ If an endpoint receives multiple ADDRESS_ASSIGN capsules, all of the assigned
 addresses or prefixes can be used. For example, multiple ADDRESS_ASSIGN
 capsules are necessary to assign both IPv4 and IPv6 addresses.
 
+In some deployments of CONNECT-IP, an endpoint needs to be assigned an address
+by its peer before it knows what source address to set on its own packets. For
+example, in the Remote Access case ({{example-remote}}) the client cannot send
+IP packets until it knows what address to use. In these deployments, endpoints
+need to send ADDRESS_ASSIGN capsules to allow their peers to send traffic.
+
 ### ADDRESS_REQUEST Capsule
 
 The ADDRESS_REQUEST capsule (see {{iana-types}} for the value of the capsule
@@ -439,7 +445,7 @@ CONNECT-IP enables many different use cases that can benefit from IP packet
 proxying and tunnelling. These examples are provided to help illustrate some of
 the ways in which CONNECT-IP can be used.
 
-## Remote Access VPN
+## Remote Access VPN {#example-remote}
 
 The following example shows a point-to-network VPN setup, where a client
 receives a set of local addresses, and can send to any remote server through
