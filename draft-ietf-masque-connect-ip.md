@@ -430,6 +430,26 @@ decremented right before an IP packet is transmitted in an HTTP Datagram. This
 prevents infinite loops in the presence of routing loops, and matches the
 choices in IPsec {{?IPSEC=RFC4301}}.
 
+IPv6 requires that every link have an MTU of at least 1280 bytes
+{{!IPv6=RFC8200}}. Since CONNECT-IP conveys IP packets in HTTP Datagrams and
+those can in turn be sent in QUIC DATAGRAM frames which cannot be fragmented
+{{!DGRAM=RFC8221}}, the MTU of a CONNECT-IP link can be limited by the MTU of
+the QUIC connection that CONNECT-IP is operating over. This can lead to
+situations where the IPv6 minimum link MTU is violated. CONNECT-IP endpoints
+that support IPv6 MUST ensure that the link MTU is at least 1280. This can be
+accomplished using various techniques:
+
+* if HTTP intermediaries are not in use, CONNECT-IP endpoints can pad QUIC
+  INITIAL packets.
+
+* if HTTP intermediaries are in use, CONNECT-IP endpoints can enter in an out of
+  band agreement with the intermediaries to ensure that endpoints and
+  intermediaries pad QUIC INITIAL packets.
+
+* CONNECT-IP endpoints can also send ICMPv6 echo requests with 1232 bytes of
+  data to ascertain the link MTU and tear down the tunnel if they do not receive
+  a response.
+
 Endpoints MAY implement additional filtering policies on the IP packets they
 forward.
 
