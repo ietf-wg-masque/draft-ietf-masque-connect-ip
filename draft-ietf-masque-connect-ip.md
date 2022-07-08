@@ -65,9 +65,9 @@ author:
 
 --- abstract
 
-This document describes a method of proxying IP packets over HTTP. This
-protocol is similar to CONNECT-UDP, but allows transmitting arbitrary IP
-packets, without being limited to just TCP like CONNECT or UDP like CONNECT-UDP.
+This document describes a method of proxying IP packets over HTTP. This protocol
+is similar to CONNECT-UDP, but allows transmitting arbitrary IP packets, without
+being limited to just TCP like CONNECT or UDP like CONNECT-UDP.
 
 --- middle
 
@@ -82,12 +82,12 @@ CONNECT-UDP {{?CONNECT-UDP=I-D.ietf-masque-connect-udp}}, but allows
 transmitting arbitrary IP packets, without being limited to just TCP like
 CONNECT {{SEMANTICS}} or UDP like CONNECT-UDP.
 
-The HTTP Upgrade Token defined for this mechanism is "connect-ip", which is
-also referred to as CONNECT-IP in this document.
+The HTTP Upgrade Token defined for this mechanism is "connect-ip", which is also
+referred to as CONNECT-IP in this document.
 
 The CONNECT-IP protocol allows endpoints to set up a tunnel for proxying IP
-packets using an HTTP proxy. This can be used for various solutions that
-include general-purpose packet tunnelling, such as for a point-to-point or
+packets using an HTTP proxy. This can be used for various solutions that include
+general-purpose packet tunnelling, such as for a point-to-point or
 point-to-network VPN, or for limited forwarding of packets to specific hosts.
 
 Forwarded IP packets can be sent efficiently via the proxy using HTTP Datagram
@@ -98,9 +98,9 @@ support {{!HTTP-DGRAM=I-D.ietf-masque-h3-datagram}}.
 {::boilerplate bcp14-tagged}
 
 In this document, we use the term "proxy" to refer to the HTTP server that
-responds to the CONNECT-IP request. If there are HTTP intermediaries (as
-defined in {{Section 3.7 of SEMANTICS}}) between the client and the proxy,
-those are referred to as "intermediaries" in this document.
+responds to the CONNECT-IP request. If there are HTTP intermediaries (as defined
+in {{Section 3.7 of SEMANTICS}}) between the client and the proxy, those are
+referred to as "intermediaries" in this document.
 
 # Configuration of Clients {#client-config}
 
@@ -121,29 +121,26 @@ https://masque.example.org/?user=bob
 
 The following requirements apply to the URI Template:
 
-   *  The URI Template MUST be a level 3 template or lower.
+* The URI Template MUST be a level 3 template or lower.
 
-   *  The URI Template MUST be in absolute form, and MUST include non-
-      empty scheme, authority and path components.
+* The URI Template MUST be in absolute form, and MUST include non- empty scheme,
+  authority and path components.
 
-   *  The path component of the URI Template MUST start with a slash
-      "/".
+* The path component of the URI Template MUST start with a slash "/".
 
-   *  All template variables MUST be within the path or query components
-      of the URI.
+* All template variables MUST be within the path or query components of the URI.
 
-   *  The URI template MAY contain the two variables "target" and
-      "ipproto" and MAY contain other variables.
+* The URI template MAY contain the two variables "target" and "ipproto" and MAY
+  contain other variables.
 
-   *  The URI Template MUST NOT contain any non-ASCII unicode characters
-      and MUST only contain ASCII characters in the range 0x21-0x7E
-      inclusive (note that percent-encoding is allowed; see Section 2.1
-      of {{!URI=RFC3986}}.
+* The URI Template MUST NOT contain any non-ASCII unicode characters and MUST
+  only contain ASCII characters in the range 0x21-0x7E inclusive (note that
+  percent-encoding is allowed; see Section 2.1 of {{!URI=RFC3986}}.
 
-   *  The URI Template MUST NOT use Reserved Expansion ("+" operator),
-      Fragment Expansion ("#" operator), Label Expansion with Dot-
-      Prefix, Path Segment Expansion with Slash-Prefix, nor Path-Style
-      Parameter Expansion with Semicolon-Prefix.
+* The URI Template MUST NOT use Reserved Expansion ("+" operator), Fragment
+  Expansion ("#" operator), Label Expansion with Dot- Prefix, Path Segment
+  Expansion with Slash-Prefix, nor Path-Style Parameter Expansion with
+  Semicolon-Prefix.
 
 Clients SHOULD validate the requirements above; however, clients MAY use a
 general-purpose URI Template implementation that lacks this specific validation.
@@ -153,8 +150,8 @@ sending it to the IP proxy.
 
 # The CONNECT-IP Protocol
 
-This document defines the "connect-ip" HTTP Upgrade Token. "connect-ip" uses
-the Capsule Protocol as defined in {{HTTP-DGRAM}}.
+This document defines the "connect-ip" HTTP Upgrade Token. "connect-ip" uses the
+Capsule Protocol as defined in {{HTTP-DGRAM}}.
 
 When sending its IP proxying request, the client SHALL perform URI template
 expansion to determine the path and query of its request, see {{client-config}}.
@@ -162,45 +159,49 @@ expansion to determine the path and query of its request, see {{client-config}}.
 When using HTTP/2 or HTTP/3, the following requirements apply to requests:
 
 * The ":method" pseudo-header field SHALL be set to "CONNECT".
+
 * The ":protocol" pseudo-header field SHALL be set to "connect-ip".
+
 * The ":authority" pseudo-header field SHALL contain the host and port of the
   proxy, not an individual endpoint with which a connection is desired.
+
 * The contents of the ":path" pseudo-header SHALL be determined by the URI
   template expansion, see {{client-config}}. Variables in the URI template can
   determine the scope of the request, such as requesting full-tunnel IP packet
   forwarding, or a specific proxied flow, see {{scope}}.
 
-The client SHOULD also include the "Capsule-Protocol" header with a value of "?1"
-to negotiate support for sending and receiving HTTP capsules ({{HTTP-DGRAM}}).
+The client SHOULD also include the "Capsule-Protocol" header with a value of
+"?1" to negotiate support for sending and receiving HTTP capsules
+({{HTTP-DGRAM}}).
 
 Any 2xx (Successful) response indicates that the proxy is willing to open an IP
 forwarding tunnel between it and the client. Any response other than a
 successful response indicates that the tunnel has not been formed.
 
-A proxy MUST NOT send any Transfer-Encoding or Content-Length header fields in
-a 2xx (Successful) response to the IP Proxying request. A client MUST treat a
+A proxy MUST NOT send any Transfer-Encoding or Content-Length header fields in a
+2xx (Successful) response to the IP Proxying request. A client MUST treat a
 successful response containing any Content-Length or Transfer-Encoding header
 fields as malformed.
 
-The lifetime of the forwarding tunnel is tied to the CONNECT stream. Closing
-the stream (in HTTP/3 via the FIN bit on a QUIC STREAM frame, or a QUIC
-RESET_STREAM frame) closes the associated forwarding tunnel.
+The lifetime of the forwarding tunnel is tied to the CONNECT stream. Closing the
+stream (in HTTP/3 via the FIN bit on a QUIC STREAM frame, or a QUIC RESET_STREAM
+frame) closes the associated forwarding tunnel.
 
 Along with a successful response, the proxy can send capsules to assign
-addresses and advertise routes to the client ({{capsules}}). The client can
-also assign addresses and advertise routes to the proxy for network-to-network
+addresses and advertise routes to the client ({{capsules}}). The client can also
+assign addresses and advertise routes to the proxy for network-to-network
 routing.
 
 ## Limiting Request Scope {#scope}
 
 Unlike CONNECT-UDP requests, which require specifying a target host, CONNECT-IP
 requests can allow endpoints to send arbitrary IP packets to any host. The
-client can choose to restrict a given request to a specific prefix or IP protocol
-by adding parameters to its request. When the server knows that a request is
-scoped to a target prefix or protocol, it can leverage this information to
-optimize its resource allocation; for example, the server can assign the same
-public IP address to two CONNECT-IP requests that are scoped to different prefixes
-and/or different protocols.
+client can choose to restrict a given request to a specific prefix or IP
+protocol by adding parameters to its request. When the server knows that a
+request is scoped to a target prefix or protocol, it can leverage this
+information to optimize its resource allocation; for example, the server can
+assign the same public IP address to two CONNECT-IP requests that are scoped to
+different prefixes and/or different protocols.
 
 CONNECT-IP uses URI template variables ({{client-config}}) to determine the
 scope of the request for packet proxying. All variables defined here are
@@ -209,26 +210,29 @@ optional, and have default values if not included.
 The defined variables are:
 
 target:
+
 : The variable "target" contains a DNS hostname (reg-name) or IP prefix
 (IPv6address / IPv4address ["%2F" 1*3DIGIT]) ({{URI}} syntax elements within
 parentheses) of a specific host to which the client wants to proxy packets. If
 the "target" variable is not specified or its value is "\*", the client is
 requesting to communicate with any allowable host. If the target is an IP prefix
 (IP address optionally followed by a percent-encoded slash followed by the
-prefix length in bits), the request will only support a single IP version.
-If the target is a hostname, the server is expected to perform DNS resolution
-to determine which route(s) to advertise to the client. The server SHOULD send
-a ROUTE_ADVERTISEMENT capsule that includes routes for all addresses that were
+prefix length in bits), the request will only support a single IP version. If
+the target is a hostname, the server is expected to perform DNS resolution to
+determine which route(s) to advertise to the client. The server SHOULD send a
+ROUTE_ADVERTISEMENT capsule that includes routes for all addresses that were
 resolved for the requested hostname, that are accessible to the server, and
 belong to an address family for which the server also sends an ADDRESS_ASSIGN
 capsule. Note that IPv6 scoped addressing zone identifiers are not supported.
 
 ipproto:
-: The variable "ipproto" contains an IP protocol number, as defined in
-the "Assigned Internet Protocol Numbers" IANA registry. If present, it specifies
+
+: The variable "ipproto" contains an IP protocol number, as defined in the
+"Assigned Internet Protocol Numbers" IANA registry. If present, it specifies
 that a client only wants to proxy a specific IP protocol for this request. If
 the value is "\*", or the variable is not included, the client is requesting to
-use any IP protocol.  {: spacing="compact"}
+use any IP protocol.
+{: spacing="compact"}
 
 ## Capsules
 
@@ -256,14 +260,17 @@ ADDRESS_ASSIGN Capsule {
 {: #addr-assign-format title="ADDRESS_ASSIGN Capsule Format"}
 
 IP Version:
+
 : IP Version of this address assignment. MUST be either 4 or 6.
 
 IP Address:
+
 : Assigned IP address. If the IP Version field has value 4, the IP Address
 field SHALL have a length of 32 bits. If the IP Version field has value 6, the
 IP Address field SHALL have a length of 128 bits.
 
 IP Prefix Length:
+
 : The number of bits in the IP Address that are used to define the prefix that
 is being assigned. This MUST be less than or equal to the length of the IP
 Address field, in bits. If the prefix length is equal to the length of the IP
@@ -274,8 +281,8 @@ address that falls within the prefix.
 {: spacing="compact"}
 
 If an endpoint receives multiple ADDRESS_ASSIGN capsules, all of the assigned
-addresses or prefixes can be used. For example, multiple ADDRESS_ASSIGN
-capsules are necessary to assign both IPv4 and IPv6 addresses.
+addresses or prefixes can be used. For example, multiple ADDRESS_ASSIGN capsules
+are necessary to assign both IPv4 and IPv6 addresses.
 
 In some deployments of CONNECT-IP, an endpoint needs to be assigned an address
 by its peer before it knows what source address to set on its own packets. For
@@ -304,14 +311,17 @@ ADDRESS_REQUEST Capsule {
 {: #addr-req-format title="ADDRESS_REQUEST Capsule Format"}
 
 IP Version:
+
 : IP Version of this address request. MUST be either 4 or 6.
 
 IP Address:
+
 : Requested IP address. If the IP Version field has value 4, the IP Address
 field SHALL have a length of 32 bits. If the IP Version field has value 6, the
 IP Address field SHALL have a length of 128 bits.
 
 IP Prefix Length:
+
 : Length of the IP Prefix requested, in bits. MUST be lesser or equal to the
 length of the IP Address field, in bits.
 {: spacing="compact"}
@@ -322,15 +332,15 @@ the peer of the assignment.
 
 ### ROUTE_ADVERTISEMENT Capsule
 
-The ROUTE_ADVERTISEMENT capsule (see {{iana-types}} for the value of the
-capsule type) allows an endpoint to communicate to its peer that it is willing
-to route traffic to a set of IP address ranges. This indicates that the sender
-has an existing route to each address range, and notifies its peer that if the
-receiver of the ROUTE_ADVERTISEMENT capsule sends IP packets for one of these
-ranges in HTTP Datagrams, the sender of the capsule will forward them along its
-preexisting route. Any address which is in one of the address ranges can be
-used as the destination address on IP packets originated by the receiver of
-this capsule.
+The ROUTE_ADVERTISEMENT capsule (see {{iana-types}} for the value of the capsule
+type) allows an endpoint to communicate to its peer that it is willing to route
+traffic to a set of IP address ranges. This indicates that the sender has an
+existing route to each address range, and notifies its peer that if the receiver
+of the ROUTE_ADVERTISEMENT capsule sends IP packets for one of these ranges in
+HTTP Datagrams, the sender of the capsule will forward them along its
+preexisting route. Any address which is in one of the address ranges can be used
+as the destination address on IP packets originated by the receiver of this
+capsule.
 
 ~~~
 ROUTE_ADVERTISEMENT Capsule {
@@ -354,28 +364,30 @@ IP Address Range {
 {: #addr-range-format title="IP Address Range Format"}
 
 IP Version:
+
 : IP Version of this range. MUST be either 4 or 6.
 
 Start IP Address and End IP Address:
+
 : Inclusive start and end IP address of the advertised range. If the IP Version
 field has value 4, these fields SHALL have a length of 32 bits. If the IP
 Version field has value 6, these fields SHALL have a length of 128 bits. The
 Start IP Address MUST be lesser or equal to the End IP Address.
 
 IP Protocol:
+
 : The Internet Protocol Number for traffic that can be sent to this range. If
 the value is 0, all protocols are allowed.
 {: spacing="compact"}
 
-Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY start routing
-IP packets in these ranges to its peer.
+Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY start routing IP
+packets in these ranges to its peer.
 
 Each ROUTE_ADVERTISEMENT contains the full list of address ranges. If multiple
-ROUTE_ADVERTISEMENT capsules are sent in one direction, each
-ROUTE_ADVERTISEMENT capsule supersedes prior ones. In other words, if a given
-address range was present in a prior capsule but the most recently received
-ROUTE_ADVERTISEMENT capsule does not contain it, the receiver will consider
-that range withdrawn.
+ROUTE_ADVERTISEMENT capsules are sent in one direction, each ROUTE_ADVERTISEMENT
+capsule supersedes prior ones. In other words, if a given address range was
+present in a prior capsule but the most recently received ROUTE_ADVERTISEMENT
+capsule does not contain it, the receiver will consider that range withdrawn.
 
 If multiple ranges using the same IP protocol were to overlap, some routing
 table implementations might reject them. To prevent overlap, the ranges are
@@ -385,8 +397,8 @@ in the same ROUTE_ADVERTISEMENT capsule, they MUST follow these requirements:
 
 * IP Version of A MUST be lesser or equal than IP Version of B
 
-* If the IP Version of A and B are equal, the IP Protocol of A MUST be lesser
-  or equal than IP Protocol of B.
+* If the IP Version of A and B are equal, the IP Protocol of A MUST be lesser or
+  equal than IP Protocol of B.
 
 * If the IP Version and IP Protocol of A and B are both equal, the End IP
   Address of A MUST be strictly less than the Start IP Address of B.
@@ -397,22 +409,22 @@ requirements, it MUST abort the stream.
 # Context Identifiers
 
 This protocol allows future extensions to exchange HTTP Datagrams which carry
-different semantics from IP packets. For example, an extension could define
-a way to send compressed IP header fields. In order to allow for this
+different semantics from IP packets. For example, an extension could define a
+way to send compressed IP header fields. In order to allow for this
 extensibility, all HTTP Datagrams associated with IP proxying request streams
 start with a context ID, see {{payload-format}}.
 
 Context IDs are 62-bit integers (0 to 2<sup>62</sup>-1). Context IDs are encoded
 as variable-length integers, see {{Section 16 of !QUIC=RFC9000}}. The context ID
 value of 0 is reserved for IP packets, while non-zero values are dynamically
-allocated: non-zero even-numbered context IDs are client-allocated, and odd-numbered
-context IDs are server-allocated. The context ID namespace is tied to a given
-HTTP request: it is possible for a context ID with the same numeric value to be
-simultaneously assigned different semantics in distinct requests, potentially
-with different semantics. Context IDs MUST NOT be re-allocated within a given
-HTTP namespace but MAY be allocated in any order. Once allocated, any context ID
-can be used by both client and server - only allocation carries separate
-namespaces to avoid requiring synchronization.
+allocated: non-zero even-numbered context IDs are client-allocated, and
+odd-numbered context IDs are server-allocated. The context ID namespace is tied
+to a given HTTP request: it is possible for a context ID with the same numeric
+value to be simultaneously assigned different semantics in distinct requests,
+potentially with different semantics. Context IDs MUST NOT be re-allocated
+within a given HTTP namespace but MAY be allocated in any order. Once allocated,
+any context ID can be used by both client and server - only allocation carries
+separate namespaces to avoid requiring synchronization.
 
 Registration is the action by which an endpoint informs its peer of the
 semantics and format of a given context ID. This document does not define how
@@ -438,29 +450,31 @@ IP Proxying HTTP Datagram Payload {
 {: #dgram-format title="IP Proxying HTTP Datagram Format"}
 
 Context ID:
+
 : A variable-length integer that contains the value of the Context ID. If an
 HTTP/3 datagram which carries an unknown Context ID is received, the receiver
 SHALL either drop that datagram silently or buffer it temporarily (on the order
 of a round trip) while awaiting the registration of the corresponding Context ID.
 
 Payload:
+
 : The payload of the datagram, whose semantics depend on value of the previous
 field. Note that this field can be empty.
 {: spacing="compact"}
 
 IP packets are encoded using HTTP Datagrams with the Context ID set to zero.
-When the Context ID is set to zero, the Payload field contains a full IP
-packet (from the IP Version field until the last byte of the IP Payload).
+When the Context ID is set to zero, the Payload field contains a full IP packet
+(from the IP Version field until the last byte of the IP Payload).
 
-Clients MAY optimistically start sending proxied IP packets before receiving
-the response to its IP proxying request, noting however that those may not be
+Clients MAY optimistically start sending proxied IP packets before receiving the
+response to its IP proxying request, noting however that those may not be
 processed by the proxy if it responds to the request with a failure, or if the
 datagrams are received by the proxy before the request.
 
-When a CONNECT-IP endpoint receives an HTTP Datagram containing an IP packet,
-it will parse the packet's IP header, perform any local policy checks (e.g.,
-source address validation), check their routing table to pick an outbound
-interface, and then send the IP packet on that interface.
+When a CONNECT-IP endpoint receives an HTTP Datagram containing an IP packet, it
+will parse the packet's IP header, perform any local policy checks (e.g., source
+address validation), check their routing table to pick an outbound interface,
+and then send the IP packet on that interface.
 
 In the other direction, when a CONNECT-IP endpoint receives an IP packet, it
 checks to see if the packet matches the routes mapped for a CONNECT-IP
@@ -608,12 +622,11 @@ route is restricted to 192.0.2.0/24, rather than 0.0.0.0/0.
 
 ## IP Flow Forwarding
 
-The following example shows an IP flow forwarding setup, where a client
-requests to establish a forwarding tunnel to target.example.com using SCTP (IP
-protocol 132), and receives a single local address and remote address it can
-use for transmitting packets. A similar approach could be used for any other IP
-protocol that isn't easily proxied with existing HTTP methods, such as ICMP,
-ESP, etc.
+The following example shows an IP flow forwarding setup, where a client requests
+to establish a forwarding tunnel to target.example.com using SCTP (IP protocol
+132), and receives a single local address and remote address it can use for
+transmitting packets. A similar approach could be used for any other IP protocol
+that isn't easily proxied with existing HTTP methods, such as ICMP, ESP, etc.
 
 ~~~
 
@@ -627,15 +640,15 @@ ESP, etc.
 {: #diagram-flow title="Proxied Flow Setup"}
 
 In this case, the client specfies both a target hostname and an IP protocol
-number in the scope of its request, indicating that it only needs to
-communicate with a single host. The proxy server is able to perform DNS
-resolution on behalf of the client and allocate a specific outbound socket for
-the client instead of allocating an entire IP address to the client. In this
-regard, the request is similar to a traditional CONNECT proxy request.
+number in the scope of its request, indicating that it only needs to communicate
+with a single host. The proxy server is able to perform DNS resolution on behalf
+of the client and allocate a specific outbound socket for the client instead of
+allocating an entire IP address to the client. In this regard, the request is
+similar to a traditional CONNECT proxy request.
 
-The server assigns a single IPv6 address to the client (2001:db8::1234:1234)
-and a route to a single IPv6 host (2001:db8::3456), scoped to SCTP. The client
-can send and recieve SCTP IP packets to the remote host.
+The server assigns a single IPv6 address to the client (2001:db8::1234:1234) and
+a route to a single IPv6 host (2001:db8::3456), scoped to SCTP. The client can
+send and recieve SCTP IP packets to the remote host.
 
 ~~~
 [[ From Client ]]             [[ From Server ]]
@@ -687,9 +700,9 @@ Payload = Encapsulated SCTP/IP Packet
 
 The following example shows a setup where a client is proxying UDP packets
 through a CONNECT-IP proxy in order to control connection establishement racing
-through a proxy, as defined in Happy Eyeballs {{?HEv2=RFC8305}}. This example
-is a variant of the proxied flow, but highlights how IP-level proxying can
-enable new capabilities even for TCP and UDP.
+through a proxy, as defined in Happy Eyeballs {{?HEv2=RFC8305}}. This example is
+a variant of the proxied flow, but highlights how IP-level proxying can enable
+new capabilities even for TCP and UDP.
 
 ~~~
 
@@ -705,15 +718,15 @@ enable new capabilities even for TCP and UDP.
 As with proxied flows, the client specfies both a target hostname and an IP
 protocol number in the scope of its request. When the proxy server performs DNS
 resolution on behalf of the client, it can send the various remote address
-options to the client as separate routes. It can also ensure that the client
-has both IPv4 and IPv6 addresses assigned.
+options to the client as separate routes. It can also ensure that the client has
+both IPv4 and IPv6 addresses assigned.
 
 The server assigns the client both an IPv4 address (192.0.2.3) and an IPv6
 address (2001:db8::1234:1234) to the client, as well as an IPv4 route
 (198.51.100.2) and an IPv6 route (2001:db8::3456), which represent the resolved
-addresses of the target hostname, scoped to UDP. The client can send and
-recieve UDP IP packets to the either of the server addresses to enable Happy
-Eyeballs through the proxy.
+addresses of the target hostname, scoped to UDP. The client can send and recieve
+UDP IP packets to the either of the server addresses to enable Happy Eyeballs
+through the proxy.
 
 ~~~
 [[ From Client ]]             [[ From Server ]]
@@ -777,10 +790,10 @@ Payload = Encapsulated IPv4 Packet
 # Security Considerations
 
 There are significant risks in allowing arbitrary clients to establish a tunnel
-to arbitrary servers, as that could allow bad actors to send traffic and have
-it attributed to the proxy. Proxies that support CONNECT-IP SHOULD restrict its
-use to authenticated users. The HTTP Authorization header {{?AUTH=RFC7235}} MAY
-be used to authenticate clients. More complex authentication schemes are out of
+to arbitrary servers, as that could allow bad actors to send traffic and have it
+attributed to the proxy. Proxies that support CONNECT-IP SHOULD restrict its use
+to authenticated users. The HTTP Authorization header {{?AUTH=RFC7235}} MAY be
+used to authenticate clients. More complex authentication schemes are out of
 scope for this document but can be implemented using CONNECT-IP extensions.
 
 Falsifying IP source addresses in sent traffic has been common for denial of
