@@ -106,15 +106,50 @@ those are referred to as "intermediaries" in this document.
 
 Clients are configured to use IP Proxying over HTTP via an URI Template
 {{!TEMPLATE=RFC6570}}. The URI template MAY contain two variables: "target" and
-"ip_proto". Examples are shown below:
+"ipproto" ({{scope}}). The optionality of the variables needs to be considered
+when defining the template so that either the variable is self-identifying or it
+works to exclude it in the syntax.
+
+Examples are shown below:
 
 ~~~
-https://masque.example.org/{target}/{ip_proto}/
-https://proxy.example.org:4443/masque?t={target}&p={ip_proto}
-https://proxy.example.org:4443/masque{?target,ip_proto}
+https://proxy.example.org:4443/masque/ip?t={target}&i={ipproto}
+https://proxy.example.org:4443/masque/ip{?target,ipproto}
 https://masque.example.org/?user=bob
 ~~~
 {: #fig-template-examples title="URI Template Examples"}
+
+The following requirements apply to the URI Template:
+
+   *  The URI Template MUST be a level 3 template or lower.
+
+   *  The URI Template MUST be in absolute form, and MUST include non-
+      empty scheme, authority and path components.
+
+   *  The path component of the URI Template MUST start with a slash
+      "/".
+
+   *  All template variables MUST be within the path or query components
+      of the URI.
+
+   *  The URI template MAY contain the two variables "target" and
+      "ipproto" and MAY contain other variables.
+
+   *  The URI Template MUST NOT contain any non-ASCII unicode characters
+      and MUST only contain ASCII characters in the range 0x21-0x7E
+      inclusive (note that percent-encoding is allowed; see Section 2.1
+      of {{!URI=RFC3986}}.
+
+   *  The URI Template MUST NOT use Reserved Expansion ("+" operator),
+      Fragment Expansion ("#" operator), Label Expansion with Dot-
+      Prefix, Path Segment Expansion with Slash-Prefix, nor Path-Style
+      Parameter Expansion with Semicolon-Prefix.
+
+Clients SHOULD validate the requirements above; however, clients MAY use a
+general-purpose URI Template implementation that lacks this specific validation.
+If a client detects that any of the requirements above are not met by a URI
+Template, the client MUST reject its configuration and abort the request without
+sending it to the IP proxy.
 
 # The CONNECT-IP Protocol
 
@@ -174,24 +209,25 @@ optional, and have default values if not included.
 The defined variables are:
 
 target:
-: The variable "target" contains a hostname or IP address of a specific host to
-which the client wants to proxy packets. If the "target" variable is not
-specified, the client is requesting to communicate with any allowable host. If
+: The variable "target" contains a DNS hostname (reg-name), IPv6 literal
+(IPv6address) or IPv4 literal (IPv4address) address ({{URI}} syntax elements
+within parenthis) of a specific host to which the client wants to proxy
+packets. If the "target" variable is not specified or its value is "\*", the
+client is requesting to communicate with any allowable host. If
 the target is an IP address, the request will only support a single IP version.
 If the target is a hostname, the server is expected to perform DNS resolution
 to determine which route(s) to advertise to the client. The server SHOULD send
 a ROUTE_ADVERTISEMENT capsule that includes routes for all addresses that were
 resolved for the requested hostname, that are accessible to the server, and
 belong to an address family for which the server also sends an ADDRESS_ASSIGN
-capsule.
+capsule. Note that IPv6 scoped addressing zone identifiers are not supported.
 
 ipproto:
-: The variable "ipproto" contains an IP protocol number, as defined in the
-"Assigned Internet Protocol Numbers" IANA registry. If present, it specifies
+: The variable "ipproto" contains an IP protocol number, as defined in
+the "Assigned Internet Protocol Numbers" IANA registry. If present, it specifies
 that a client only wants to proxy a specific IP protocol for this request. If
-the value is 0, or the variable is not included, the client is requesting to
-use any IP protocol.
-{: spacing="compact"}
+the value is "\*", or the variable is not included, the client is requesting to
+use any IP protocol.  {: spacing="compact"}
 
 ## Capsules
 
@@ -760,6 +796,7 @@ Capsule Types" registry created by {{HTTP-DGRAM}}:
 | 0xfff102 | ROUTE_ADVERTISEMENT | Route Advertisement | This Document |
 {: #iana-capsules-table title="New Capsules"}
 
+
 --- back
 
 # Acknowledgments
@@ -768,3 +805,7 @@ Capsule Types" registry created by {{HTTP-DGRAM}}:
 The design of this method was inspired by discussions in the MASQUE working
 group around {{?PROXY-REQS=I-D.ietf-masque-ip-proxy-reqs}}. The authors would
 like to thank participants in those discussions for their feedback.
+
+Most of the text on client configuration is based on the corresponding text in
+{{CONNECT-UDP}}.
+
