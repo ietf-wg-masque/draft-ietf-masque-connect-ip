@@ -195,11 +195,11 @@ routing.
 
 Unlike CONNECT-UDP requests, which require specifying a target host, CONNECT-IP
 requests can allow endpoints to send arbitrary IP packets to any host. The
-client can choose to restrict a given request to a specific host or IP protocol
+client can choose to restrict a given request to a specific prefix or IP protocol
 by adding parameters to its request. When the server knows that a request is
-scoped to a target host or protocol, it can leverage this information to
+scoped to a target prefix or protocol, it can leverage this information to
 optimize its resource allocation; for example, the server can assign the same
-public IP address to two CONNECT-IP requests that are scoped to different hosts
+public IP address to two CONNECT-IP requests that are scoped to different prefixes
 and/or different protocols.
 
 CONNECT-IP uses URI template variables ({{client-config}}) to determine the
@@ -209,12 +209,13 @@ optional, and have default values if not included.
 The defined variables are:
 
 target:
-: The variable "target" contains a DNS hostname (reg-name), IPv6 literal
-(IPv6address) or IPv4 literal (IPv4address) address ({{URI}} syntax elements
-within parenthis) of a specific host to which the client wants to proxy
-packets. If the "target" variable is not specified or its value is "\*", the
-client is requesting to communicate with any allowable host. If
-the target is an IP address, the request will only support a single IP version.
+: The variable "target" contains a DNS hostname (reg-name) or IP prefix
+(IPv6address / IPv4address ["%2F" 1*3DIGIT]) ({{URI}} syntax elements within
+parentheses) of a specific host to which the client wants to proxy packets. If
+the "target" variable is not specified or its value is "\*", the client is
+requesting to communicate with any allowable host. If the target is an IP prefix
+(IP address optionally followed by a percent-encoded slash followed by the
+prefix length in bits), the request will only support a single IP version.
 If the target is a hostname, the server is expected to perform DNS resolution
 to determine which route(s) to advertise to the client. The server SHOULD send
 a ROUTE_ADVERTISEMENT capsule that includes routes for all addresses that were
