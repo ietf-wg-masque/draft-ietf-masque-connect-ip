@@ -107,9 +107,8 @@ those are referred to as "intermediaries" in this document.
 Clients are configured to use IP Proxying over HTTP via an URI Template
 {{!TEMPLATE=RFC6570}}. The URI template MAY contain two variables: "target" and
 "ipproto" ({{scope}}). The optionality of the variables needs to be considered
-when defining the template so that either the variable is self identfying or it
-works to exclude it in the syntax. For example first path segment in absolute
-URIs cannot be empty.
+when defining the template so that either the variable is self-identifying or it
+works to exclude it in the syntax.
 
 Examples are shown below:
 
@@ -229,10 +228,6 @@ the "Assigned Internet Protocol Numbers" IANA registry. If present, it specifies
 that a client only wants to proxy a specific IP protocol for this request. If
 the value is "\*", or the variable is not included, the client is requesting to
 use any IP protocol.  {: spacing="compact"}
-
-Also note that this URI Template expansion requires using
-percent-encoding,e.g. of ":" and "\*", so for example if the target_host is
-"2001:db8::42", it will be encoded in the URI as "2001%3Adb8%3A%3A42".
 
 ## Capsules
 
