@@ -75,9 +75,9 @@ being limited to just TCP like CONNECT or UDP like CONNECT-UDP.
 
 This document describes a method of proxying IP packets over HTTP. When using
 HTTP/2 or HTTP/3, IP proxying uses HTTP Extended CONNECT as described in
-{{!EXT-CONNECT2=RFC8441}} and {{!EXT-CONNECT3=I-D.ietf-httpbis-h3-websockets}}.
+{{!EXT-CONNECT2=RFC8441}} and {{!EXT-CONNECT3=RFC9220}}.
 When using HTTP/1.x, IP proxying uses HTTP Upgrade as defined in {{Section 7.8
-of !SEMANTICS=I-D.ietf-httpbis-semantics}}. This protocol is similar to
+of !SEMANTICS=RFC9110}}. This protocol is similar to
 CONNECT-UDP {{?CONNECT-UDP=I-D.ietf-masque-connect-udp}}, but allows
 transmitting arbitrary IP packets, without being limited to just TCP like
 CONNECT {{SEMANTICS}} or UDP like CONNECT-UDP.
@@ -792,7 +792,7 @@ Payload = Encapsulated IPv4 Packet
 There are significant risks in allowing arbitrary clients to establish a tunnel
 to arbitrary servers, as that could allow bad actors to send traffic and have it
 attributed to the proxy. Proxies that support CONNECT-IP SHOULD restrict its use
-to authenticated users. The HTTP Authorization header {{?AUTH=RFC7235}} MAY be
+to authenticated users. The HTTP Authorization header {{SEMANTICS}} MAY be
 used to authenticate clients. More complex authentication schemes are out of
 scope for this document but can be implemented using CONNECT-IP extensions.
 
