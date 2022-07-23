@@ -535,11 +535,11 @@ The following example shows a point-to-network VPN setup, where a client
 receives a set of local addresses, and can send to any remote server through
 the proxy. Such VPN setups can be either full-tunnel or split-tunnel.
 
-~~~
+~~~ aasvg
 
 +--------+ IP A         IP B +--------+              +---> IP D
 |        |-------------------|        | IP C         |
-| Client | IP Subnet C <-> * | Server |--------------+---> IP E
+| Client | IP Subnet C <-> ? | Server |--------------+---> IP E
 |        |-------------------|        |              |
 +--------+                   +--------+              +---> IP ...
 
@@ -628,7 +628,7 @@ to establish a forwarding tunnel to target.example.com using SCTP (IP protocol
 transmitting packets. A similar approach could be used for any other IP protocol
 that isn't easily proxied with existing HTTP methods, such as ICMP, ESP, etc.
 
-~~~
+~~~ aasvg
 
 +--------+ IP A         IP B +--------+
 |        |-------------------|        | IP C
@@ -704,7 +704,7 @@ through a proxy, as defined in Happy Eyeballs {{?HEv2=RFC8305}}. This example is
 a variant of the proxied flow, but highlights how IP-level proxying can enable
 new capabilities even for TCP and UDP.
 
-~~~
+~~~ aasvg
 
 +--------+ IP A         IP B +--------+ IP C
 |        |-------------------|        |<------------> IP E
