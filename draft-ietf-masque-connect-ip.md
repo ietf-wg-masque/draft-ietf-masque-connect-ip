@@ -134,7 +134,7 @@ The following requirements apply to the URI Template:
 * The URI template MAY contain the two variables "target" and "ipproto" and MAY
   contain other variables. If the "target" or "ipproto" variables are included,
   their values MUST NOT be empty. Clients can instead use "\*" to indicate
-  wildcard or no-preference values, see {{scope}}..
+  wildcard or no-preference values, see {{scope}}.
 
 * The URI Template MUST NOT contain any non-ASCII unicode characters and MUST
   only contain ASCII characters in the range 0x21-0x7E inclusive (note that
