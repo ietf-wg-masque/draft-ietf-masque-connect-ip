@@ -13,4 +13,6 @@ archive.json
 report.xml
 venv/
 lib
+package-lock.json
+node_modules
 draft-age-masque-connect-ip.xml
