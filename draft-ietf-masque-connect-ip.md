@@ -497,18 +497,14 @@ that support IPv6 MUST ensure that the CONNECT-IP tunnel link MTU is at least
 1280 (i.e., that they can send HTTP Datagrams with payloads of at least 1280
 bytes). This can be accomplished using various techniques:
 
-* if HTTP intermediaries are not in use, both CONNECT-IP endpoints can pad the
-  QUIC INITIAL packets of the underlying QUIC connection that CONNECT-IP is
-  running over.
-
-* if HTTP intermediaries are in use, CONNECT-IP endpoints can enter in an out of
-  band agreement with the intermediaries to ensure that endpoints and
-  intermediaries pad QUIC INITIAL packets.
+* if both endpoints know for certain that HTTP intermediaries are not in use,
+  the endpoints can pad the QUIC INITIAL packets of the underlying QUIC
+  connection that CONNECT-IP is running over to 1321 bytes or more.
 
 * CONNECT-IP endpoints can also send ICMPv6 echo requests with 1232 bytes of
   data to ascertain the link MTU and tear down the tunnel if they do not receive
   a response. Unless endpoints have an out of band means of guaranteeing that
-  one of the two previous techniques is sufficient, they MUST use this method.
+  the previous techniques is sufficient, they MUST use this method.
 
 Endpoints MAY implement additional filtering policies on the IP packets they
 forward.
