@@ -299,7 +299,7 @@ example, in the Remote Access case ({{example-remote}}) the client cannot send
 IP packets until it knows what address to use. In these deployments, the
 endpoint that is expecting an address assignment MUST send an ADDRESS_ASSIGN
 capsule. This isn't required if the endpoint does not need any address
-assignment, for example when it is configured out of band with static addresses.
+assignment, for example when it is configured out-of-band with static addresses.
 
 While ADDRESS_ASSIGN capsules are commonly sent in response to ADDRESS_REQUEST
 capsules, endpoints MAY send ADDRESS_ASSIGN capsules unprompted.
