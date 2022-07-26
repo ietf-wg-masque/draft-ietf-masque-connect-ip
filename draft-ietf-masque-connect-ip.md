@@ -377,7 +377,8 @@ Start IP Address MUST be lesser or equal to the End IP Address.
 IP Protocol:
 
 : The Internet Protocol Number for traffic that can be sent to this range. If
-the value is 0, all protocols are allowed.
+the value is 0, all protocols are allowed. ICMP traffic is always allowed,
+regardless of the value of this field.
 {: spacing="compact"}
 
 Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY start routing IP
