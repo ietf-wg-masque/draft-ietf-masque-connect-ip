@@ -320,7 +320,7 @@ ADDRESS_REQUEST Capsule {
 ~~~
 {: #addr-req-format title="ADDRESS_REQUEST Capsule Format"}
 
-The ADDRESS_ASSIGN capsule contains a sequence of Requested Addresses.
+The ADDRESS_REQUEST capsule contains a sequence of Requested Addresses.
 
 ~~~
 Requested Address {
