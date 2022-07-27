@@ -297,9 +297,9 @@ In some deployments of CONNECT-IP, an endpoint needs to be assigned an address
 by its peer before it knows what source address to set on its own packets. For
 example, in the Remote Access case ({{example-remote}}) the client cannot send
 IP packets until it knows what address to use. In these deployments, the
-endpoint that is expecting an address assignment MUST send an ADDRESS_ASSIGN
+endpoint that is expecting an address assignment MUST send an ADDRESS_REQUEST
 capsule. This isn't required if the endpoint does not need any address
-assignment, for example when it is configured out of band with static addresses.
+assignment, for example when it is configured out-of-band with static addresses.
 
 While ADDRESS_ASSIGN capsules are commonly sent in response to ADDRESS_REQUEST
 capsules, endpoints MAY send ADDRESS_ASSIGN capsules unprompted.
@@ -320,7 +320,7 @@ ADDRESS_REQUEST Capsule {
 ~~~
 {: #addr-req-format title="ADDRESS_REQUEST Capsule Format"}
 
-The ADDRESS_ASSIGN capsule contains a sequence of Requested Addresses.
+The ADDRESS_REQUEST capsule contains a sequence of Requested Addresses.
 
 ~~~
 Requested Address {
