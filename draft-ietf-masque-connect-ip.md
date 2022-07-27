@@ -871,11 +871,11 @@ References:
 This document will request IANA to add the following values to the "HTTP
 Capsule Types" registry created by {{HTTP-DGRAM}}:
 
-|  Value   |        Type         |     Description     |   Reference   |
-|:---------|---------------------|:--------------------|:--------------|
-| 0xfff200 |   ADDRESS_ASSIGN    | Address Assignment  | This Document |
-| 0xfff201 |   ADDRESS_REQUEST   | Address Request     | This Document |
-| 0xfff202 | ROUTE_ADVERTISEMENT | Route Advertisement | This Document |
+|   Value    |        Type         |     Description     |   Reference   |
+|:-----------|---------------------|:--------------------|:--------------|
+| 0x1ECA6A00 |   ADDRESS_ASSIGN    | Address Assignment  | This Document |
+| 0x1ECA6A01 |   ADDRESS_REQUEST   | Address Request     | This Document |
+| 0x1ECA6A02 | ROUTE_ADVERTISEMENT | Route Advertisement | This Document |
 {: #iana-capsules-table title="New Capsules"}
 
 
