@@ -222,8 +222,8 @@ the target is a hostname, the server is expected to perform DNS resolution to
 determine which route(s) to advertise to the client. The server SHOULD send a
 ROUTE_ADVERTISEMENT capsule that includes routes for all addresses that were
 resolved for the requested hostname, that are accessible to the server, and
-belong to an address family for which the server also sends an ADDRESS_ASSIGN
-capsule. Note that IPv6 scoped addressing zone identifiers are not supported.
+belong to an address family for which the server also sends an Assigned Address.
+Note that IPv6 scoped addressing zone identifiers are not supported.
 
 ipproto:
 
@@ -243,10 +243,11 @@ these new capsules.
 ### ADDRESS_ASSIGN Capsule
 
 The ADDRESS_ASSIGN capsule (see {{iana-types}} for the value of the capsule
-type) allows an endpoint to inform its peer that it has assigned IP addresses or
-prefixes to it. The ADDRESS_ASSIGN capsule allows assigning prefixes which can
-contain multiple addresses. Any of these addresses can be used as the source
-address on IP packets originated by the receiver of this capsule.
+type) allows an endpoint to inform its peer of the list of IP addresses or
+prefixes it has assigned to it. Every capsule contains the full list of IP
+prefixes currently assigned to the receiver. Any of these addresses can be
+used as the source address on IP packets originated by the receiver of this
+capsule.
 
 ~~~
 ADDRESS_ASSIGN Capsule {
@@ -289,9 +290,8 @@ address, the receiver of this capsule is allowed to send packets from any source
 address that falls within the prefix.
 {: spacing="compact"}
 
-If an endpoint receives multiple Assigned Addresses (in one or more capsules),
-all of the assigned addresses or prefixes can be used. For example, multiple
-Assigned Addresses are necessary to assign both IPv4 and IPv6 addresses.
+Note that an ADDRESS_ASSIGN capsule can also indicate that a previously assigned
+address is no longer assigned. An ADDRESS_ASSIGN capsule can also be empty.
 
 In some deployments of CONNECT-IP, an endpoint needs to be assigned an address
 by its peer before it knows what source address to set on its own packets. For
@@ -787,9 +787,6 @@ capsule-protocol = ?1
                               IP Version = 4
                               IP Address = 192.0.2.3
                               IP Prefix Length = 32
-
-                              STREAM(44): CAPSULE
-                              Capsule Type = ADDRESS_ASSIGN
                               IP Version = 6
                               IP Address = 2001:db8::1234:1234
                               IP Prefix Length = 128
