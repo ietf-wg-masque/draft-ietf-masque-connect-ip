@@ -354,7 +354,9 @@ sender's preference for the prefix length it is requesting.
 
 Upon receiving the ADDRESS_REQUEST capsule, an endpoint SHOULD assign an IP
 address to its peer, and then respond with an ADDRESS_ASSIGN capsule to inform
-the peer of the assignment.
+the peer of the assignment. Note that the receiver of the ADDRESS_REQUEST
+capsule is not required to assign the requested address, and that it can also
+assign some requested addresses but not others.
 
 ### ROUTE_ADVERTISEMENT Capsule
 
