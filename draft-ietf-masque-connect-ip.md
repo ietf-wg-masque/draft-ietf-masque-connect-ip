@@ -506,6 +506,10 @@ bytes). This can be accomplished using various techniques:
   a response. Unless endpoints have an out of band means of guaranteeing that
   the previous techniques is sufficient, they MUST use this method.
 
+If an endpoints is using QUIC DATAGRAM frames to convey IPv6 packets and it
+detects that the QUIC MTU is too low to allow sending 1280 bytes, it MUST abort
+the CONNECT-IP stream.
+
 Endpoints MAY implement additional filtering policies on the IP packets they
 forward.
 
