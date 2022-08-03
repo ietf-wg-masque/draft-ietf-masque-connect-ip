@@ -846,7 +846,7 @@ URI suffix in the "Well-Known URIs" registry maintained at
 IANA is requested to update the "Reference" field to include this
 document in addition to previous values from that field.
 
-IANA is request to add the following sentence to the "Related Information"
+IANA is requested to add the following sentence to the "Related Information"
 field:
 : Includes all resources identified with the path prefix "/.well-known/masque/ip/".
 {: spacing="compact"}
