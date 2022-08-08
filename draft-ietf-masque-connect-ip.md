@@ -499,7 +499,12 @@ bytes). This can be accomplished using various techniques:
 
 * if both endpoints know for certain that HTTP intermediaries are not in use,
   the endpoints can pad the QUIC INITIAL packets of the underlying QUIC
-  connection that CONNECT-IP is running over to 1321 bytes or more.
+  connection that CONNECT-IP is running over. (Assuming QUIC version 1 is in
+  use, the overhead is 1 byte type, 20 bytes maximal connection ID length, 4
+  bytes maximal packet number length, 1 byte DATAGRAM frame type, 8 bytes
+  maximal quarter stream ID, one byte for the zero context ID, and 16 bytes for
+  the AEAD authentication tag, for a total of 51 bytes of overhead which
+  corresponds to padding QUIC INITIAL packets to 1331 bytes or more.)
 
 * CONNECT-IP endpoints can also send ICMPv6 echo requests with 1232 bytes of
   data to ascertain the link MTU and tear down the tunnel if they do not receive
