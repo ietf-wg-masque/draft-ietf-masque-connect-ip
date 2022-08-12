@@ -113,6 +113,7 @@ works to exclude it in the syntax.
 Examples are shown below:
 
 ~~~
+https://example.org/.well-known/masque/ip/{target}/{ipproto}/
 https://proxy.example.org:4443/masque/ip?t={target}&i={ipproto}
 https://proxy.example.org:4443/masque/ip{?target,ipproto}
 https://masque.example.org/?user=bob
@@ -131,7 +132,9 @@ The following requirements apply to the URI Template:
 * All template variables MUST be within the path or query components of the URI.
 
 * The URI template MAY contain the two variables "target" and "ipproto" and MAY
-  contain other variables.
+  contain other variables. If the "target" or "ipproto" variables are included,
+  their values MUST NOT be empty. Clients can instead use "\*" to indicate
+  wildcard or no-preference values, see {{scope}}.
 
 * The URI Template MUST NOT contain any non-ASCII unicode characters and MUST
   only contain ASCII characters in the range 0x21-0x7E inclusive (note that
@@ -147,6 +150,14 @@ general-purpose URI Template implementation that lacks this specific validation.
 If a client detects that any of the requirements above are not met by a URI
 Template, the client MUST reject its configuration and abort the request without
 sending it to the IP proxy.
+
+As with CONNECT-UDP, some client configurations for CONNECT-IP proxies will only
+allow the user to configure the proxy host and proxy port. Clients with such limitations
+MAY attempt to access IP proxying capabilities using the default template, which is
+defined as: "https://$PROXY_HOST:$PROXY_PORT/.well-known/masque/ip/{target}/{ipproto}/",
+where $PROXY_HOST and $PROXY_PORT are the configured host and port of the IP proxy,
+respectively. IP proxy deployments SHOULD offer service at this location if they need
+to interoperate with such clients.
 
 # The CONNECT-IP Protocol
 
@@ -824,6 +835,20 @@ Expected Version Tokens:
 
 References:
 : This document
+{: spacing="compact"}
+
+## Updates to masque Well-Known URI {#iana-uri}
+
+This document will request IANA to update the entry for the "masque"
+URI suffix in the "Well-Known URIs" registry maintained at
+<[](https://www.iana.org/assignments/well-known-uris)>.
+
+IANA is requested to update the "Reference" field to include this
+document in addition to previous values from that field.
+
+IANA is requested to add the following sentence to the "Related Information"
+field:
+: Includes all resources identified with the path prefix "/.well-known/masque/ip/".
 {: spacing="compact"}
 
 ## Capsule Type Registrations {#iana-types}
