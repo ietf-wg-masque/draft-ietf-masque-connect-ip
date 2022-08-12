@@ -233,8 +233,8 @@ the target is a hostname, the server is expected to perform DNS resolution to
 determine which route(s) to advertise to the client. The server SHOULD send a
 ROUTE_ADVERTISEMENT capsule that includes routes for all addresses that were
 resolved for the requested hostname, that are accessible to the server, and
-belong to an address family for which the server also sends an ADDRESS_ASSIGN
-capsule. Note that IPv6 scoped addressing zone identifiers are not supported.
+belong to an address family for which the server also sends an Assigned Address.
+Note that IPv6 scoped addressing zone identifiers are not supported.
 
 ipproto:
 
@@ -254,21 +254,32 @@ these new capsules.
 ### ADDRESS_ASSIGN Capsule
 
 The ADDRESS_ASSIGN capsule (see {{iana-types}} for the value of the capsule
-type) allows an endpoint to inform its peer that it has assigned an IP address
-or prefix to it. The ADDRESS_ASSIGN capsule allows assigning a prefix which can
-contain multiple addresses. Any of these addresses can be used as the source
-address on IP packets originated by the receiver of this capsule.
+type) allows an endpoint to inform its peer of the list of IP addresses or
+prefixes it has assigned to it. Every capsule contains the full list of IP
+prefixes currently assigned to the receiver. Any of these addresses can be
+used as the source address on IP packets originated by the receiver of this
+capsule.
 
 ~~~
 ADDRESS_ASSIGN Capsule {
   Type (i) = ADDRESS_ASSIGN,
   Length (i),
+  Assigned Address (..) ...,
+}
+~~~
+{: #addr-assign-format title="ADDRESS_ASSIGN Capsule Format"}
+
+The ADDRESS_ASSIGN capsule contains a sequence of zero or more
+Assigned Addresses.
+
+~~~
+Assigned Address {
   IP Version (8),
   IP Address (32..128),
   IP Prefix Length (8),
 }
 ~~~
-{: #addr-assign-format title="ADDRESS_ASSIGN Capsule Format"}
+{: #assigned-addr-format title="Assigned Address Format"}
 
 IP Version:
 
@@ -291,35 +302,46 @@ address, the receiver of this capsule is allowed to send packets from any source
 address that falls within the prefix.
 {: spacing="compact"}
 
-If an endpoint receives multiple ADDRESS_ASSIGN capsules, all of the assigned
-addresses or prefixes can be used. For example, multiple ADDRESS_ASSIGN capsules
-are necessary to assign both IPv4 and IPv6 addresses.
+Note that an ADDRESS_ASSIGN capsule can also indicate that a previously assigned
+address is no longer assigned. An ADDRESS_ASSIGN capsule can also be empty.
 
 In some deployments of CONNECT-IP, an endpoint needs to be assigned an address
 by its peer before it knows what source address to set on its own packets. For
 example, in the Remote Access case ({{example-remote}}) the client cannot send
-IP packets until it knows what address to use. In these deployments, endpoints
-need to send ADDRESS_ASSIGN capsules to allow their peers to send traffic.
+IP packets until it knows what address to use. In these deployments, the
+endpoint that is expecting an address assignment MUST send an ADDRESS_REQUEST
+capsule. This isn't required if the endpoint does not need any address
+assignment, for example when it is configured out-of-band with static addresses.
+
+While ADDRESS_ASSIGN capsules are commonly sent in response to ADDRESS_REQUEST
+capsules, endpoints MAY send ADDRESS_ASSIGN capsules unprompted.
 
 ### ADDRESS_REQUEST Capsule
 
 The ADDRESS_REQUEST capsule (see {{iana-types}} for the value of the capsule
-type) allows an endpoint to request assignment of an IP address from its peer.
-This capsule is not required for simple client/proxy communication where the
-client only expects to receive one address from the proxy. The capsule allows
-the endpoint to optionally indicate a preference for which address it would get
-assigned.
+type) allows an endpoint to request assignment of IP addresses from its peer.
+The capsule allows the endpoint to optionally indicate a preference for which
+address it would get assigned.
 
 ~~~
 ADDRESS_REQUEST Capsule {
   Type (i) = ADDRESS_REQUEST,
   Length (i),
+  Requested Address (..) ...,
+}
+~~~
+{: #addr-req-format title="ADDRESS_REQUEST Capsule Format"}
+
+The ADDRESS_REQUEST capsule contains a sequence of Requested Addresses.
+
+~~~
+Requested Address {
   IP Version (8),
   IP Address (32..128),
   IP Prefix Length (8),
 }
 ~~~
-{: #addr-req-format title="ADDRESS_REQUEST Capsule Format"}
+{: #requested-addr-format title="Requested Address Format"}
 
 IP Version:
 
@@ -337,9 +359,16 @@ IP Prefix Length:
 length of the IP Address field, in bits.
 {: spacing="compact"}
 
+If the IP Address is all-zero (0.0.0.0 or ::), this indicates that the sender is
+requesting an address of that address family but does not have a preference for
+a specific address. In that scenario, the prefix length still indicates the
+sender's preference for the prefix length it is requesting.
+
 Upon receiving the ADDRESS_REQUEST capsule, an endpoint SHOULD assign an IP
 address to its peer, and then respond with an ADDRESS_ASSIGN capsule to inform
-the peer of the assignment.
+the peer of the assignment. Note that the receiver of the ADDRESS_REQUEST
+capsule is not required to assign the requested address, and that it can also
+assign some requested addresses but not others.
 
 ### ROUTE_ADVERTISEMENT Capsule
 
@@ -481,7 +510,11 @@ When the Context ID is set to zero, the Payload field contains a full IP packet
 Clients MAY optimistically start sending proxied IP packets before receiving the
 response to its IP proxying request, noting however that those may not be
 processed by the proxy if it responds to the request with a failure, or if the
-datagrams are received by the proxy before the request.
+datagrams are received by the proxy before the request. Since receiving
+addresses and routes is required in order to know that a packet can be sent
+through the tunnel, such optimistic packets might be dropped by the proxy if it
+chooses to provide different addressing or routing information than what the
+client assumed.
 
 When a CONNECT-IP endpoint receives an HTTP Datagram containing an IP packet, it
 will parse the packet's IP header, perform any local policy checks (e.g., source
@@ -792,9 +825,6 @@ capsule-protocol = ?1
                               IP Version = 4
                               IP Address = 192.0.2.3
                               IP Prefix Length = 32
-
-                              STREAM(44): CAPSULE
-                              Capsule Type = ADDRESS_ASSIGN
                               IP Version = 6
                               IP Address = 2001:db8::1234:1234
                               IP Prefix Length = 128
@@ -823,6 +853,17 @@ Payload = Encapsulated IPv4 Packet
 
 ~~~
 {: #fig-listen title="Proxied Connection Racing Example"}
+
+# Extensibility Considerations
+
+Extensions to CONNECT-IP can define behavior changes to this mechanism. Such
+extensions SHOULD define new capsule types to exchange configuration information
+if needed. It is RECOMMENDED for extensions that modify addressing to specify
+that their extension capsules be sent before the ADDRESS_ASSIGN capsule and that
+they do not take effect until the ADDRESS_ASSIGN capsule is parsed. This allows
+modifications to address assignement to operate atomically. Similarly,
+extensions that modify routing SHOULD behave similarly with regards to the
+ROUTE_ADVERTISEMENT capsule.
 
 # Security Considerations
 
@@ -882,11 +923,11 @@ field:
 This document will request IANA to add the following values to the "HTTP
 Capsule Types" registry created by {{HTTP-DGRAM}}:
 
-|  Value   |        Type         |     Description     |   Reference   |
-|:---------|---------------------|:--------------------|:--------------|
-| 0xfff100 |   ADDRESS_ASSIGN    | Address Assignment  | This Document |
-| 0xfff101 |   ADDRESS_REQUEST   | Address Request     | This Document |
-| 0xfff102 | ROUTE_ADVERTISEMENT | Route Advertisement | This Document |
+|   Value    |        Type         |     Description     |   Reference   |
+|:-----------|---------------------|:--------------------|:--------------|
+| 0x1ECA6A00 |   ADDRESS_ASSIGN    | Address Assignment  | This Document |
+| 0x1ECA6A01 |   ADDRESS_REQUEST   | Address Request     | This Document |
+| 0x1ECA6A02 | ROUTE_ADVERTISEMENT | Route Advertisement | This Document |
 {: #iana-capsules-table title="New Capsules"}
 
 
