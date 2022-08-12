@@ -508,18 +508,23 @@ that support IPv6 MUST ensure that the CONNECT-IP tunnel link MTU is at least
 1280 (i.e., that they can send HTTP Datagrams with payloads of at least 1280
 bytes). This can be accomplished using various techniques:
 
-* if HTTP intermediaries are not in use, both CONNECT-IP endpoints can pad the
-  QUIC INITIAL packets of the underlying QUIC connection that CONNECT-IP is
-  running over.
-
-* if HTTP intermediaries are in use, CONNECT-IP endpoints can enter in an out of
-  band agreement with the intermediaries to ensure that endpoints and
-  intermediaries pad QUIC INITIAL packets.
+* if both endpoints know for certain that HTTP intermediaries are not in use,
+  the endpoints can pad the QUIC INITIAL packets of the underlying QUIC
+  connection that CONNECT-IP is running over. (Assuming QUIC version 1 is in
+  use, the overhead is 1 byte type, 20 bytes maximal connection ID length, 4
+  bytes maximal packet number length, 1 byte DATAGRAM frame type, 8 bytes
+  maximal quarter stream ID, one byte for the zero context ID, and 16 bytes for
+  the AEAD authentication tag, for a total of 51 bytes of overhead which
+  corresponds to padding QUIC INITIAL packets to 1331 bytes or more.)
 
 * CONNECT-IP endpoints can also send ICMPv6 echo requests with 1232 bytes of
   data to ascertain the link MTU and tear down the tunnel if they do not receive
   a response. Unless endpoints have an out of band means of guaranteeing that
-  one of the two previous techniques is sufficient, they MUST use this method.
+  the previous techniques is sufficient, they MUST use this method.
+
+If an endpoint is using QUIC DATAGRAM frames to convey IPv6 packets, and it
+detects that the QUIC MTU is too low to allow sending 1280 bytes, it MUST abort
+the CONNECT-IP stream.
 
 Endpoints MAY implement additional filtering policies on the IP packets they
 forward.
