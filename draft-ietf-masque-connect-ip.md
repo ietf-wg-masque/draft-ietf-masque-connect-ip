@@ -258,7 +258,8 @@ ADDRESS_ASSIGN Capsule {
 ~~~
 {: #addr-assign-format title="ADDRESS_ASSIGN Capsule Format"}
 
-The ADDRESS_ASSIGN capsule contains a sequence of Assigned Addresses.
+The ADDRESS_ASSIGN capsule contains a sequence of zero or more
+Assigned Addresses.
 
 ~~~
 Assigned Address {
