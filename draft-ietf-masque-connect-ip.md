@@ -269,8 +269,8 @@ ADDRESS_ASSIGN Capsule {
 ~~~
 {: #addr-assign-format title="ADDRESS_ASSIGN Capsule Format"}
 
-The ADDRESS_ASSIGN capsule contains a sequence of zero or more
-Assigned Addresses.
+The ADDRESS_ASSIGN capsule contains a sequence of zero or more Assigned
+Addresses.
 
 ~~~
 Assigned Address {
@@ -332,7 +332,8 @@ ADDRESS_REQUEST Capsule {
 ~~~
 {: #addr-req-format title="ADDRESS_REQUEST Capsule Format"}
 
-The ADDRESS_REQUEST capsule contains a sequence of Requested Addresses.
+The ADDRESS_REQUEST capsule contains a sequence of zero or more Requested
+Addresses.
 
 ~~~
 Requested Address {
