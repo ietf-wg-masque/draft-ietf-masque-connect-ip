@@ -388,7 +388,8 @@ Start IP Address MUST be lesser or equal to the End IP Address.
 IP Protocol:
 
 : The Internet Protocol Number for traffic that can be sent to this range. If
-the value is 0, all protocols are allowed.
+the value is 0, all protocols are allowed. ICMP traffic is always allowed,
+regardless of the value of this field.
 {: spacing="compact"}
 
 Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY start routing IP
@@ -537,7 +538,27 @@ forwarding can fail if the endpoint doesn't have a route for the destination
 address, or if it is configured to reject a destination prefix by policy, or if
 the MTU of the outgoing link is lower than the size of the packet to be
 forwarded. In such scenarios, CONNECT-IP endpoints SHOULD use ICMP
-{{!ICMP=RFC4443}} to signal the forwarding error to its peer.
+{{!ICMP=RFC792}} {{!ICMPV6=RFC4443}} to signal the forwarding error to its peer.
+
+Endpoints are free to select the most appropriate ICMP errors to send. Some
+examples that are relevant for CONNECT-IP include:
+
+- For invalid source addresses, send Destination Unreachable {{Section 3.1 of !ICMPV6}}
+with code 5, "Source address failed ingress/egress policy".
+
+- For unroutable destination addresses, send Destination Unreachable {{Section 3.1 of !ICMPV6}}
+with a code 0, "No route to destination", or code 1, "Communication with destination
+administratively prohibited".
+
+- For packets that cannot fit within the MTU of the outgoing link, send Packet Too Big
+{{Section 3.2 of !ICMPV6}}.
+
+In order to receive these errors, endpoints need to be prepared to receive ICMP packets.
+If an endpoint sends ROUTE_ADVERTISEMENT capsules, its routes SHOULD include an allowance
+for receiving ICMP messages. If an endpoint does not send ROUTE_ADVERTISEMENT capsules,
+such as a client opening an IP flow through a proxy, it SHOULD process proxied ICMP packets
+from its peer in order to receive these errors. Note that ICMP messages can originate from
+a source address different from that of the CONNECT-IP peer.
 
 # Examples
 
