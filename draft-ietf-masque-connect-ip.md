@@ -274,12 +274,19 @@ Addresses.
 
 ~~~
 Assigned Address {
+  Request ID (i),
   IP Version (8),
   IP Address (32..128),
   IP Prefix Length (8),
 }
 ~~~
 {: #assigned-addr-format title="Assigned Address Format"}
+
+Request ID:
+
+: If this address assignment is in response to an Address Request (see
+{{addr_req}}), then this field SHALL contain the value of the corresponding
+field in the request. Otherwise, this field SHALL be zero.
 
 IP Version:
 
@@ -316,7 +323,7 @@ assignment, for example when it is configured out-of-band with static addresses.
 While ADDRESS_ASSIGN capsules are commonly sent in response to ADDRESS_REQUEST
 capsules, endpoints MAY send ADDRESS_ASSIGN capsules unprompted.
 
-### ADDRESS_REQUEST Capsule
+### ADDRESS_REQUEST Capsule {#addr_req}
 
 The ADDRESS_REQUEST capsule (see {{iana-types}} for the value of the capsule
 type) allows an endpoint to request assignment of IP addresses from its peer.
@@ -337,12 +344,19 @@ Addresses.
 
 ~~~
 Requested Address {
+  Request ID (i),
   IP Version (8),
   IP Address (32..128),
   IP Prefix Length (8),
 }
 ~~~
 {: #requested-addr-format title="Requested Address Format"}
+
+Request ID:
+
+: This is the identifier of this specific address request, each request from a
+given endpoint carries a different identifier. Request IDs MUST NOT be reused by
+an endpoint, and MUST NOT be zero.
 
 IP Version:
 
