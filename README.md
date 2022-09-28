@@ -5,7 +5,7 @@ This is the working area for the IETF [MASQUE Working Group](https://datatracker
 * [Editor's Copy](https://ietf-wg-masque.github.io/draft-ietf-masque-connect-ip/#go.draft-ietf-masque-connect-ip.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-masque-connect-ip)
 * [Working Group Draft](https://datatracker.ietf.org/doc/html/draft-ietf-masque-connect-ip)
-* [Compare Editor's Copy to Individual Draft](https://ietf-wg-masque.github.io/draft-ietf-masque-connect-ip/#go.draft-ietf-masque-connect-ip.diff)
+* [Compare Editor's Copy to Working Group Draft](https://ietf-wg-masque.github.io/draft-ietf-masque-connect-ip/#go.draft-ietf-masque-connect-ip.diff)
 
 
 ## Contributing
