@@ -213,27 +213,26 @@ information to optimize its resource allocation; for example, the server can
 assign the same public IP address to two CONNECT-IP requests that are scoped to
 different prefixes and/or different protocols.
 
-CONNECT-IP uses URI template variables ({{client-config}}) to determine the
-scope of the request for packet proxying. All variables defined here are
-optional, and have default values if not included.
-
-The defined variables are:
+The scope of the request is indicated by the client to the proxy via the
+"target" and "ipproto" variables of the URI Template; see {{client-config}}.
+Both the "target" and "ipproto" variables are optional; if they are not included
+they are considered to carry the wildcard value "*".
 
 target:
 
-: The variable "target" contains a DNS hostname (reg-name) or IP prefix
-(IPv6address / IPv4address ["%2F" 1*3DIGIT]) ({{URI}} syntax elements within
-parentheses) of a specific host to which the client wants to proxy packets. If
-the "target" variable is not specified or its value is "\*", the client is
-requesting to communicate with any allowable host. If the target is an IP prefix
-(IP address optionally followed by a percent-encoded slash followed by the
-prefix length in bits), the request will only support a single IP version. If
-the target is a hostname, the server is expected to perform DNS resolution to
-determine which route(s) to advertise to the client. The server SHOULD send a
-ROUTE_ADVERTISEMENT capsule that includes routes for all addresses that were
-resolved for the requested hostname, that are accessible to the server, and
-belong to an address family for which the server also sends an Assigned Address.
-Note that IPv6 scoped addressing zone identifiers are not supported.
+: The variable "target" contains a hostname or IP prefix of a specific host to
+which the client wants to proxy packets. If the "target" variable is not
+specified or its value is "\*", the client is requesting to communicate with any
+allowable host. "target" supports using DNS names, IPv6 literals and IPv4
+literals. Note that IPv6 scoped addressing zone identifiers are not supported.
+If the target is an IP prefix (IP address optionally followed by a
+percent-encoded slash followed by the prefix length in bits), the request will
+only support a single IP version. If the target is a hostname, the server is
+expected to perform DNS resolution to determine which route(s) to advertise to
+the client. The server SHOULD send a ROUTE_ADVERTISEMENT capsule that includes
+routes for all addresses that were resolved for the requested hostname, that are
+accessible to the server, and belong to an address family for which the server
+also sends an Assigned Address.
 
 ipproto:
 
@@ -243,6 +242,29 @@ that a client only wants to proxy a specific IP protocol for this request. If
 the value is "\*", or the variable is not included, the client is requesting to
 use any IP protocol.
 {: spacing="compact"}
+
+Using the terms IPv6address, IPv4address, and reg-name from {{URI}}, the
+"target" and "ipproto" variables MUST adhere to the format in {{target-format}},
+using notation from {{!ABNF=RFC2234}}. Additionally:
+
+* if "target" contains an IPv6 literal, the colons (":") MUST be
+  percent-encoded. For example, if the target host is "2001:db8::42", it will be
+  encoded in the URI as "2001%3Adb8%3A%3A42".
+
+* If present, the IP prefix length in "target" SHALL be preceded by a
+  percent-encoded slash ("/"): "%2F". The IP prefix length MUST represent an
+  integer between 0 and the length of the IP address in bits, inclusive.
+
+* "ipproto" MUST represent an integer between 0 and 255 inclusive, or the
+  wildcard value "*".
+
+~~~ ascii-art
+target = IPv6prefix / IPv4prefix / reg-name / "*"
+IPv6prefix = IPv6address ["%2F" 1*3DIGIT]
+IPv4prefix = IPv4address ["%2F" 1*2DIGIT]
+ipproto = 1*3DIGIT / "*"
+~~~
+{: #target-format title="URI Template Variable Format"}
 
 ## Capsules
 
@@ -590,15 +612,15 @@ forwarded. In such scenarios, CONNECT-IP endpoints SHOULD use ICMP
 Endpoints are free to select the most appropriate ICMP errors to send. Some
 examples that are relevant for CONNECT-IP include:
 
-- For invalid source addresses, send Destination Unreachable {{Section 3.1 of !ICMPV6}}
-with code 5, "Source address failed ingress/egress policy".
+- For invalid source addresses, send Destination Unreachable {{Section 3.1 of
+  ICMPv6}} with code 5, "Source address failed ingress/egress policy".
 
-- For unroutable destination addresses, send Destination Unreachable {{Section 3.1 of !ICMPV6}}
-with a code 0, "No route to destination", or code 1, "Communication with destination
-administratively prohibited".
+- For unroutable destination addresses, send Destination Unreachable {{Section
+  3.1 of ICMPv6}} with a code 0, "No route to destination", or code 1,
+  "Communication with destination administratively prohibited".
 
-- For packets that cannot fit within the MTU of the outgoing link, send Packet Too Big
-{{Section 3.2 of !ICMPV6}}.
+- For packets that cannot fit within the MTU of the outgoing link, send Packet
+  Too Big {{Section 3.2 of ICMPv6}}.
 
 In order to receive these errors, endpoints need to be prepared to receive ICMP packets.
 If an endpoint sends ROUTE_ADVERTISEMENT capsules, its routes SHOULD include an allowance
