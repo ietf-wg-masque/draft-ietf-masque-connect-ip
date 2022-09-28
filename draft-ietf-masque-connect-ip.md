@@ -966,7 +966,6 @@ Capsule Types" registry created by {{HTTP-DGRAM}}:
 | 0x1ECA6A02 | ROUTE_ADVERTISEMENT | Route Advertisement | This Document |
 {: #iana-capsules-table title="New Capsules"}
 
-
 --- back
 
 # Acknowledgments
