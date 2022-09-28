@@ -75,10 +75,9 @@ being limited to just TCP like CONNECT or UDP like CONNECT-UDP.
 
 This document describes a method of proxying IP packets over HTTP. When using
 HTTP/2 or HTTP/3, IP proxying uses HTTP Extended CONNECT as described in
-{{!EXT-CONNECT2=RFC8441}} and {{!EXT-CONNECT3=RFC9220}}.
-When using HTTP/1.x, IP proxying uses HTTP Upgrade as defined in {{Section 7.8
-of !SEMANTICS=RFC9110}}. This protocol is similar to
-CONNECT-UDP {{?CONNECT-UDP=I-D.ietf-masque-connect-udp}}, but allows
+{{!EXT-CONNECT2=RFC8441}} and {{!EXT-CONNECT3=RFC9220}}. When using HTTP/1.x, IP
+proxying uses HTTP Upgrade as defined in {{Section 7.8 of !SEMANTICS=RFC9110}}.
+This protocol is similar to CONNECT-UDP {{?CONNECT-UDP=RFC9298}}, but allows
 transmitting arbitrary IP packets, without being limited to just TCP like
 CONNECT {{SEMANTICS}} or UDP like CONNECT-UDP.
 
@@ -91,7 +90,7 @@ general-purpose packet tunnelling, such as for a point-to-point or
 point-to-network VPN, or for limited forwarding of packets to specific hosts.
 
 Forwarded IP packets can be sent efficiently via the proxy using HTTP Datagram
-support {{!HTTP-DGRAM=I-D.ietf-masque-h3-datagram}}.
+support {{!HTTP-DGRAM=RFC9297}}.
 
 # Conventions and Definitions
 
@@ -550,7 +549,7 @@ choices in IPsec {{?IPSEC=RFC4301}}.
 IPv6 requires that every link have an MTU of at least 1280 bytes
 {{!IPv6=RFC8200}}. Since CONNECT-IP conveys IP packets in HTTP Datagrams and
 those can in turn be sent in QUIC DATAGRAM frames which cannot be fragmented
-{{!DGRAM=RFC8221}}, the MTU of a CONNECT-IP link can be limited by the MTU of
+{{!DGRAM=RFC9221}}, the MTU of a CONNECT-IP link can be limited by the MTU of
 the QUIC connection that CONNECT-IP is operating over. This can lead to
 situations where the IPv6 minimum link MTU is violated. CONNECT-IP endpoints
 that support IPv6 MUST ensure that the CONNECT-IP tunnel link MTU is at least
@@ -586,7 +585,7 @@ forwarding can fail if the endpoint doesn't have a route for the destination
 address, or if it is configured to reject a destination prefix by policy, or if
 the MTU of the outgoing link is lower than the size of the packet to be
 forwarded. In such scenarios, CONNECT-IP endpoints SHOULD use ICMP
-{{!ICMP=RFC792}} {{!ICMPV6=RFC4443}} to signal the forwarding error to its peer.
+{{!ICMP=RFC792}} {{!ICMPv6=RFC4443}} to signal the forwarding error to its peer.
 
 Endpoints are free to select the most appropriate ICMP errors to send. Some
 examples that are relevant for CONNECT-IP include:
