@@ -569,30 +569,36 @@ requirements, it MUST abort the IP proxying request stream.
 
 # Context Identifiers
 
-This protocol allows future extensions to exchange HTTP Datagrams which carry
-different semantics from IP packets. For example, an extension could define a
-way to send compressed IP header fields. In order to allow for this
-extensibility, all HTTP Datagrams associated with IP proxying request streams
-start with a context ID, see {{payload-format}}.
+The mechanism for proxying IP in HTTP defined in this document allows future
+extensions to exchange HTTP Datagrams that carry different semantics from IP
+payloads. Some of these extensions can augment IP payloads with additional
+data or compress IP header fields, while others can exchange data that is
+completely separate from IP payloads. In order to accomplish this, all HTTP
+Datagrams associated with IP proxying request streams start with a Context ID
+field; see {{payload-format}}.
 
 Context IDs are 62-bit integers (0 to 2<sup>62</sup>-1). Context IDs are encoded
-as variable-length integers, see {{Section 16 of !QUIC=RFC9000}}. The context ID
-value of 0 is reserved for IP packets, while non-zero values are dynamically
-allocated: non-zero even-numbered context IDs are client-allocated, and
-odd-numbered context IDs are proxy-allocated. The context ID namespace is tied
-to a given HTTP request: it is possible for a context ID with the same numeric
-value to be simultaneously assigned different semantics in distinct requests,
-potentially with different semantics. Context IDs MUST NOT be re-allocated
-within a given HTTP namespace but MAY be allocated in any order. Once allocated,
-any context ID can be used by both client and IP proxy - only allocation carries
-separate namespaces to avoid requiring synchronization.
+as variable-length integers; see {{Section 16 of !QUIC=RFC9000}}. The Context ID value of
+0 is reserved for IP payloads, while non-zero values are dynamically allocated.
+Non-zero even-numbered Context IDs are client-allocated, and odd-numbered
+Context IDs are proxy-allocated. The Context ID namespace is tied to a given
+HTTP request; it is possible for a Context ID with the same numeric value to be
+simultaneously allocated in distinct requests, potentially with different
+semantics. Context IDs MUST NOT be re-allocated within a given HTTP namespace
+but MAY be allocated in any order. The Context ID allocation restrictions to the
+use of even-numbered and odd-numbered Context IDs exist in order to avoid the
+need for synchronization between endpoints. However, once a Context ID has been
+allocated, those restrictions do not apply to the use of the Context ID; it can
+be used by any client or IP proxy, independent of which endpoint initially
+allocated it.
 
 Registration is the action by which an endpoint informs its peer of the
-semantics and format of a given context ID. This document does not define how
-registration occurs. Depending on the method being used, it is possible for
-datagrams to be received with Context IDs which have not yet been registered,
-for instance due to reordering of the datagram and the registration packets
-during transmission.
+semantics and format of a given Context ID. This document does not define how
+registration occurs. Future extensions MAY use HTTP header fields or capsules to
+register Context IDs. Depending on the method being used, it is possible for
+datagrams to be received with Context IDs that have not yet been registered. For
+instance, this can be due to reordering of the packet containing the datagram
+and the packet containing the registration message during transmission.
 
 # HTTP Datagram Payload Format {#payload-format}
 
@@ -666,7 +672,7 @@ bytes). This can be accomplished using various techniques:
   connection that IP proxying is running over. (Assuming QUIC version 1 is in
   use, the overhead is 1 byte type, 20 bytes maximal connection ID length, 4
   bytes maximal packet number length, 1 byte DATAGRAM frame type, 8 bytes
-  maximal quarter stream ID, one byte for the zero context ID, and 16 bytes for
+  maximal quarter stream ID, one byte for the zero Context ID, and 16 bytes for
   the AEAD authentication tag, for a total of 51 bytes of overhead which
   corresponds to padding QUIC INITIAL packets to 1331 bytes or more.)
 
