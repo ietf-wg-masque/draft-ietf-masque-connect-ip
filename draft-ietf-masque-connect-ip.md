@@ -750,11 +750,11 @@ source address in its assigned prefix.
 [[ From Client ]]             [[ From IP Proxy ]]
 
 SETTINGS
-H3_DATAGRAM = 1
+  H3_DATAGRAM = 1
 
                               SETTINGS
-                              SETTINGS_ENABLE_CONNECT_PROTOCOL = 1
-                              H3_DATAGRAM = 1
+                                ENABLE_CONNECT_PROTOCOL = 1
+                                H3_DATAGRAM = 1
 
 STREAM(44): HEADERS
 :method = CONNECT
@@ -849,10 +849,11 @@ send and receive SCTP IP packets to the remote host.
 [[ From Client ]]             [[ From IP Proxy ]]
 
 SETTINGS
-H3_DATAGRAM = 1
+  H3_DATAGRAM = 1
+
                               SETTINGS
-                              SETTINGS_ENABLE_CONNECT_PROTOCOL = 1
-                              H3_DATAGRAM = 1
+                                ENABLE_CONNECT_PROTOCOL = 1
+                                H3_DATAGRAM = 1
 
 STREAM(52): HEADERS
 :method = CONNECT
@@ -927,11 +928,11 @@ through the IP proxy.
 [[ From Client ]]             [[ From IP Proxy ]]
 
 SETTINGS
-H3_DATAGRAM = 1
+  H3_DATAGRAM = 1
 
                               SETTINGS
-                              SETTINGS_ENABLE_CONNECT_PROTOCOL = 1
-                              H3_DATAGRAM = 1
+                                ENABLE_CONNECT_PROTOCOL = 1
+                                H3_DATAGRAM = 1
 
 STREAM(44): HEADERS
 :method = CONNECT
