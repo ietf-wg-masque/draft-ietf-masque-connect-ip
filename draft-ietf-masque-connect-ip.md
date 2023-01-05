@@ -732,11 +732,11 @@ the IP proxy. Such VPN setups can be either full-tunnel or split-tunnel.
 
 ~~~ aasvg
 
-+--------+ IP A         IP B +--------+              +---> IP D
-|        |-------------------|   IP   | IP C         |
-| Client | IP Subnet C <-> ? |  Proxy |--------------+---> IP E
-|        |-------------------|        |              |
-+--------+                   +--------+              +---> IP ...
++--------+ IP A          IP B +--------+           +---> IP D
+|        |--------------------|   IP   | IP C      |
+| Client | IP Subnet C <--> ? |  Proxy |-----------+---> IP E
+|        |--------------------|        |           |
++--------+                    +--------+           +---> IP ...
 
 ~~~
 {: #diagram-tunnel title="VPN Tunnel Setup"}
@@ -827,7 +827,7 @@ that isn't easily proxied with existing HTTP methods, such as ICMP, ESP, etc.
 
 +--------+ IP A         IP B +--------+
 |        |-------------------|   IP   | IP C
-| Client |    IP C <-> D     |  Proxy |---------> IP D
+| Client |    IP C <--> D    |  Proxy |---------> IP D
 |        |-------------------|        |
 +--------+                   +--------+
 
@@ -903,8 +903,9 @@ new capabilities even for TCP and UDP.
 ~~~ aasvg
 
 +--------+ IP A         IP B +--------+ IP C
-|        |-------------------|   IP   |<------------> IP E
-| Client |  IP C<->E, D<->F  |  Proxy |
+|        |-------------------|        |<------------> IP E
+| Client |  IP C <--> E      |   IP   |
+|        |     D <--> F      |  Proxy |
 |        |-------------------|        |<------------> IP F
 +--------+                   +--------+ IP D
 
