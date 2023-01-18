@@ -1076,6 +1076,8 @@ Capsule Types" registry maintained at
 The design of this method was inspired by discussions in the MASQUE working
 group around {{?PROXY-REQS=I-D.ietf-masque-ip-proxy-reqs}}. The authors would
 like to thank participants in those discussions for their feedback.
+Additionally, {{{Alejandro Sedeño}}} provided valuable feedback on the
+document.
 
 Most of the text on client configuration is based on the corresponding text in
 {{CONNECT-UDP}}.
