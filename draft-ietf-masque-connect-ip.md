@@ -320,10 +320,11 @@ also sends an Assigned Address.
 ipproto:
 
 : The variable "ipproto" contains an IP protocol number, as defined in the
-"Assigned Internet Protocol Numbers" IANA registry. If present, it specifies
-that a client only wants to proxy a specific IP protocol for this request. If
-the value is "\*", or the variable is not included, the client is requesting to
-use any IP protocol.
+"Assigned Internet Protocol Numbers" IANA registry maintained at
+<[](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml)>.
+If present, it specifies that a client only wants to proxy a specific IP
+protocol for this request. If the value is "\*", or the variable is not
+included, the client is requesting to use any IP protocol.
 {: spacing="compact"}
 
 Using the terms IPv6address, IPv4address, and reg-name from {{URI}}, the
@@ -1047,7 +1048,8 @@ field:
 ## Capsule Type Registrations {#iana-types}
 
 This document will request IANA to add the following values to the "HTTP
-Capsule Types" registry created by {{HTTP-DGRAM}}:
+Capsule Types" registry maintained at
+<[](https://www.iana.org/assignments/http-capsule-protocol/http-capsule-protocol.xhtml)>.
 
 |   Value    |        Type         |     Description     |   Reference   |
 |:-----------|---------------------|:--------------------|:--------------|
