@@ -448,7 +448,7 @@ ADDRESS_REQUEST Capsule {
 ~~~
 {: #addr-req-format title="ADDRESS_REQUEST Capsule Format"}
 
-The ADDRESS_REQUEST capsule contains a sequence of zero or more Requested
+The ADDRESS_REQUEST capsule contains a sequence of one or more Requested
 Addresses.
 
 ~~~
@@ -495,6 +495,9 @@ address to its peer, and then respond with an ADDRESS_ASSIGN capsule to inform
 the peer of the assignment. Note that the receiver of the ADDRESS_REQUEST
 capsule is not required to assign the requested address, and that it can also
 assign some requested addresses but not others.
+
+If an endpoint receives an ADDRESS_REQUEST capsule that contains zero Requested
+Addresses, it MUST abort the IP proxying request stream.
 
 ### ROUTE_ADVERTISEMENT Capsule
 
@@ -571,7 +574,7 @@ in the same ROUTE_ADVERTISEMENT capsule, they MUST follow these requirements:
 * If the IP Version and IP Protocol of A and B are both equal, the End IP
   Address of A MUST be strictly less than the Start IP Address of B.
 
-If an endpoint received a ROUTE_ADVERTISEMENT capsule that does not meet these
+If an endpoint receives a ROUTE_ADVERTISEMENT capsule that does not meet these
 requirements, it MUST abort the IP proxying request stream.
 
 # Context Identifiers
