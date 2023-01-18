@@ -416,8 +416,10 @@ less than the length of the IP address, the receiver of this capsule is allowed
 to send packets from any source address that falls within the prefix.
 {: spacing="compact"}
 
-Note that an ADDRESS_ASSIGN capsule can also indicate that a previously assigned
-address is no longer assigned. An ADDRESS_ASSIGN capsule can also be empty.
+If an ADDRESS_ASSIGN capsule does not contain an address that was sent
+previously transmitted in another ADDRESS_ASSIGN capsule, that indicates that
+the address has been removed. An ADDRESS_ASSIGN capsule can also be empty,
+that indicates that all addresses have been removed.
 
 In some deployments of IP proxying in HTTP, an endpoint needs to be assigned an address
 by its peer before it knows what source address to set on its own packets. For
