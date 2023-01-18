@@ -73,10 +73,9 @@ normative:
 --- abstract
 
 This document describes how to proxy IP packets in HTTP. This protocol is
-similar to UDP proxying in HTTP, but allows transmitting arbitrary IP packets,
-without being limited to just TCP or UDP. More specifically, this document
-defines a protocol that allows an HTTP client to create an IP tunnel through
-an HTTP server that acts as a proxy.
+similar to UDP proxying in HTTP, but allows transmitting arbitrary IP packets.
+More specifically, this document defines a protocol that allows an HTTP client
+to create an IP tunnel through an HTTP server that acts as a proxy.
 
 
 --- middle
@@ -578,19 +577,19 @@ Datagrams associated with IP proxying request streams start with a Context ID
 field; see {{payload-format}}.
 
 Context IDs are 62-bit integers (0 to 2<sup>62</sup>-1). Context IDs are encoded
-as variable-length integers; see {{Section 16 of !QUIC=RFC9000}}. The Context ID value of
-0 is reserved for IP payloads, while non-zero values are dynamically allocated.
-Non-zero even-numbered Context IDs are client-allocated, and odd-numbered
-Context IDs are proxy-allocated. The Context ID namespace is tied to a given
-HTTP request; it is possible for a Context ID with the same numeric value to be
-simultaneously allocated in distinct requests, potentially with different
-semantics. Context IDs MUST NOT be re-allocated within a given HTTP namespace
-but MAY be allocated in any order. The Context ID allocation restrictions to the
-use of even-numbered and odd-numbered Context IDs exist in order to avoid the
-need for synchronization between endpoints. However, once a Context ID has been
-allocated, those restrictions do not apply to the use of the Context ID; it can
-be used by any client or IP proxy, independent of which endpoint initially
-allocated it.
+as variable-length integers; see {{Section 16 of !QUIC=RFC9000}}. The Context ID
+value of 0 is reserved for IP payloads, while non-zero values are dynamically
+allocated. Non-zero even-numbered Context IDs are client-allocated, and
+odd-numbered Context IDs are proxy-allocated. The Context ID namespace is tied
+to a given HTTP request; it is possible for a Context ID with the same numeric
+value to be simultaneously allocated in distinct requests, potentially with
+different semantics. Context IDs MUST NOT be re-allocated within a given HTTP
+namespace but MAY be allocated in any order. The Context ID allocation
+restrictions to the use of even-numbered and odd-numbered Context IDs exist in
+order to avoid the need for synchronization between endpoints. However, once a
+Context ID has been allocated, those restrictions do not apply to the use of the
+Context ID; it can be used by any client or IP proxy, independent of which
+endpoint initially allocated it.
 
 Registration is the action by which an endpoint informs its peer of the
 semantics and format of a given Context ID. This document does not define how
@@ -645,7 +644,7 @@ client assumed.
 When an endpoint receives an HTTP Datagram containing an IP packet, it
 will parse the packet's IP header, perform any local policy checks (e.g., source
 address validation), check their routing table to pick an outbound interface,
-and then send the IP packet on that interface.
+and then send the IP packet on that interface or pass it to a local application.
 
 In the other direction, when an endpoint receives an IP packet, it checks to see
 if the packet matches the routes mapped for an IP tunnel, and performs the same
@@ -841,8 +840,8 @@ of the client and allocate a specific outbound socket for the client instead of
 allocating an entire IP address to the client. In this regard, the request is
 similar to a traditional CONNECT proxy request.
 
-The IP proxy assigns a single IPv6 address to the client (2001:db8::1234:1234) and
-a route to a single IPv6 host (2001:db8::3456), scoped to SCTP. The client can
+The IP proxy assigns a single IPv6 address to the client (2001:db8:1234::a) and
+a route to a single IPv6 host (2001:db8:3456::b), scoped to SCTP. The client can
 send and receive SCTP IP packets to the remote host.
 
 ~~~
@@ -855,7 +854,7 @@ SETTINGS
                                 ENABLE_CONNECT_PROTOCOL = 1
                                 H3_DATAGRAM = 1
 
-STREAM(52): HEADERS
+STREAM(44): HEADERS
 :method = CONNECT
 :protocol = connect-ip
 :scheme = https
@@ -863,21 +862,21 @@ STREAM(52): HEADERS
 :authority = proxy.example.com
 capsule-protocol = ?1
 
-                              STREAM(52): HEADERS
+                              STREAM(44): HEADERS
                               :status = 200
                               capsule-protocol = ?1
 
-                              STREAM(52): CAPSULE
+                              STREAM(44): CAPSULE
                               Capsule Type = ADDRESS_ASSIGN
                               IP Version = 6
-                              IP Address = 2001:db8::1234:1234
+                              IP Address = 2001:db8:1234::a
                               IP Prefix Length = 128
 
-                              STREAM(52): CAPSULE
+                              STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
                               (IP Version = 6
-                               Start IP Address = 2001:db8::3456
-                               End IP Address = 2001:db8::3456
+                               Start IP Address = 2001:db8:3456::b
+                               End IP Address = 2001:db8:3456::b
                                IP Protocol = 132)
 
 DATAGRAM
@@ -919,8 +918,8 @@ options to the client as separate routes. It can also ensure that the client has
 both IPv4 and IPv6 addresses assigned.
 
 The IP proxy assigns the client both an IPv4 address (192.0.2.3) and an IPv6
-address (2001:db8::1234:1234) to the client, as well as an IPv4 route
-(198.51.100.2) and an IPv6 route (2001:db8::3456), which represent the resolved
+address (2001:db8:1234::a) to the client, as well as an IPv4 route
+(198.51.100.2) and an IPv6 route (2001:db8:3456::b), which represent the resolved
 addresses of the target hostname, scoped to UDP. The client can send and recieve
 UDP IP packets to the either of the IP proxy addresses to enable Happy Eyeballs
 through the IP proxy.
@@ -963,8 +962,8 @@ capsule-protocol = ?1
                                End IP Address = 198.51.100.2
                                IP Protocol = 17),
                               (IP Version = 6
-                               Start IP Address = 2001:db8::3456
-                               End IP Address = 2001:db8::3456
+                               Start IP Address = 2001:db8:3456::b
+                               End IP Address = 2001:db8:3456::b
                                IP Protocol = 17)
 ...
 
