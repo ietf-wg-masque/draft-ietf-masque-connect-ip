@@ -389,13 +389,15 @@ Assigned Address {
 
 Request ID:
 
-: If this address assignment is in response to an Address Request (see
-{{addr_req}}), then this field SHALL contain the value of the corresponding
-field in the request. Otherwise, this field SHALL be zero.
+: Request identifier, encoded as a variable-length integer. If this address
+assignment is in response to an Address Request (see {{addr_req}}), then this
+field SHALL contain the value of the corresponding field in the request.
+Otherwise, this field SHALL be zero.
 
 IP Version:
 
-: IP Version of this address assignment. MUST be either 4 or 6.
+: IP Version of this address assignment, encoded as an unsigned 8-bit integer.
+MUST be either 4 or 6.
 
 IP Address:
 
@@ -406,12 +408,12 @@ IP Address field SHALL have a length of 128 bits.
 IP Prefix Length:
 
 : The number of bits in the IP Address that are used to define the prefix that
-is being assigned. This MUST be less than or equal to the length of the IP
-Address field, in bits. If the prefix length is equal to the length of the IP
-Address, the receiver of this capsule is only allowed to send packets from a
-single source address. If the prefix length is less than the length of the IP
-address, the receiver of this capsule is allowed to send packets from any source
-address that falls within the prefix.
+is being assigned, encoded as an unsigned 8-bit integer. This MUST be less than
+or equal to the length of the IP Address field, in bits. If the prefix length
+is equal to the length of the IP Address, the receiver of this capsule is only
+allowed to send packets from a single source address. If the prefix length is
+less than the length of the IP address, the receiver of this capsule is allowed
+to send packets from any source address that falls within the prefix.
 {: spacing="compact"}
 
 Note that an ADDRESS_ASSIGN capsule can also indicate that a previously assigned
@@ -459,13 +461,15 @@ Requested Address {
 
 Request ID:
 
-: This is the identifier of this specific address request, each request from a
-given endpoint carries a different identifier. Request IDs MUST NOT be reused by
-an endpoint, and MUST NOT be zero.
+: Request identifier, encoded as a variable-length integer. This is the
+identifier of this specific address request, each request from a given endpoint
+carries a different identifier. Request IDs MUST NOT be reused by an endpoint,
+and MUST NOT be zero.
 
 IP Version:
 
-: IP Version of this address request. MUST be either 4 or 6.
+: IP Version of this address request, encoded as an unsigned 8-bit integer.
+MUST be either 4 or 6.
 
 IP Address:
 
@@ -475,8 +479,8 @@ IP Address field SHALL have a length of 128 bits.
 
 IP Prefix Length:
 
-: Length of the IP Prefix requested, in bits. MUST be lesser or equal to the
-length of the IP Address field, in bits.
+: Length of the IP Prefix requested, in bits, encoded as an unsigned 8-bit
+integer. MUST be lesser or equal to the length of the IP Address field, in bits.
 {: spacing="compact"}
 
 If the IP Address is all-zero (0.0.0.0 or ::), this indicates that the sender is
@@ -525,7 +529,8 @@ IP Address Range {
 
 IP Version:
 
-: IP Version of this range. MUST be either 4 or 6.
+: IP Version of this range, encoded as an unsigned 8-bit integer. MUST be
+either 4 or 6.
 
 Start IP Address and End IP Address:
 
@@ -536,9 +541,9 @@ Start IP Address MUST be lesser or equal to the End IP Address.
 
 IP Protocol:
 
-: The Internet Protocol Number for traffic that can be sent to this range. If
-the value is 0, all protocols are allowed. ICMP traffic is always allowed,
-regardless of the value of this field.
+: The Internet Protocol Number for traffic that can be sent to this range,
+encoded as an unsigned 8-bit integer. If the value is 0, all protocols are
+allowed. ICMP traffic is always allowed, regardless of the value of this field.
 {: spacing="compact"}
 
 Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY start routing IP
