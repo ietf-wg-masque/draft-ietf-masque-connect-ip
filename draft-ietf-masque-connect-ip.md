@@ -891,12 +891,12 @@ capsule-protocol = ?1
                                IP Protocol = 132)
 
 DATAGRAM
-Quarter Stream ID = 13
+Quarter Stream ID = 11
 Context ID = 0
 Payload = Encapsulated SCTP/IP Packet
 
                               DATAGRAM
-                              Quarter Stream ID = 13
+                              Quarter Stream ID = 11
                               Context ID = 0
                               Payload = Encapsulated SCTP/IP Packet
 ~~~
