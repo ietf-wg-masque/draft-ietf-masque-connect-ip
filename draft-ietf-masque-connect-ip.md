@@ -306,8 +306,8 @@ target:
 : The variable "target" contains a hostname or IP prefix of a specific host to
 which the client wants to proxy packets. If the "target" variable is not
 specified or its value is "\*", the client is requesting to communicate with any
-allowable host. "target" supports using DNS names, IPv6 literals and IPv4
-literals. Note that IPv6 scoped addressing zone identifiers are not supported.
+allowable host. "target" supports using DNS names, IPv6 prefixes and IPv4
+prefixes. Note that IPv6 scoped addressing zone identifiers are not supported.
 If the target is an IP prefix (IP address optionally followed by a
 percent-encoded slash followed by the prefix length in bits), the request will
 only support a single IP version. If the target is a hostname, the IP proxy is
@@ -331,7 +331,7 @@ Using the terms IPv6address, IPv4address, and reg-name from {{URI}}, the
 "target" and "ipproto" variables MUST adhere to the format in {{target-format}},
 using notation from {{!ABNF=RFC2234}}. Additionally:
 
-* if "target" contains an IPv6 literal, the colons (":") MUST be
+* if "target" contains an IPv6 literal or prefix, the colons (":") MUST be
   percent-encoded. For example, if the target host is "2001:db8::42", it will be
   encoded in the URI as "2001%3Adb8%3A%3A42".
 
