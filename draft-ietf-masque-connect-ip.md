@@ -86,7 +86,7 @@ an HTTP server that acts as a proxy.
 HTTP provides the CONNECT method (see {{Section 9.3.6 of !HTTP=RFC9110}}) for
 creating a TCP {{!TCP=RFC0793}} tunnel to a proxy and a similar mechanism for
 UDP {{?CONNECT-UDP=RFC9298}}. However, these mechanisms cannot tunnel other
-protocols nor conveying fields of the IP header.
+protocols nor convey fields of the IP header.
 
 This document describes a protocol for tunnelling IP to an HTTP server acting
 as an IP-specific proxy over HTTP. This can be used for various use cases
@@ -94,8 +94,8 @@ such as point-to-network VPN, secure point-to-point communication, or
 general-purpose packet tunnelling.
 
 IP proxying operates similarly to UDP proxying {{?CONNECT-UDP=RFC9298}},
-whereby the proxy itself is identified with an absolute URL optionally
-containing the traffic's destination. Clients generate those URLs using a
+whereby the proxy itself is identified with an absolute URL, optionally
+containing the traffic's destination. Clients generate these URLs using a
 URI Template {{!TEMPLATE=RFC6570}}, as described in {{client-config}}.
 
 This protocol supports all existing versions of HTTP by using HTTP Datagrams
@@ -692,7 +692,7 @@ forward.
 
 Since IP proxying endpoints often forward IP packets onwards to other network
 interfaces, they need to handle errors in the forwarding process. For example,
-forwarding can fail if the endpoint doesn't have a route for the destination
+forwarding can fail if the endpoint does not have a route for the destination
 address, or if it is configured to reject a destination prefix by policy, or if
 the MTU of the outgoing link is lower than the size of the packet to be
 forwarded. In such scenarios, IP proxying endpoints SHOULD use ICMP
