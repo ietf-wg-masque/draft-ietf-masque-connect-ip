@@ -780,9 +780,10 @@ capsule-protocol = ?1
 
                               STREAM(44): CAPSULE
                               Capsule Type = ADDRESS_ASSIGN
-                              IP Version = 4
-                              IP Address = 192.0.2.11
-                              IP Prefix Length = 32
+                              (Request ID = 0
+                               IP Version = 4
+                               IP Address = 192.0.2.11
+                               IP Prefix Length = 32)
 
                               STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
@@ -812,9 +813,10 @@ route is restricted to 192.0.2.0/24, rather than 0.0.0.0/0.
 
                               STREAM(44): CAPSULE
                               Capsule Type = ADDRESS_ASSIGN
-                              IP Version = 4
-                              IP Address = 192.0.2.42
-                              IP Prefix Length = 32
+                              (Request ID = 0
+                               IP Version = 4
+                               IP Address = 192.0.2.42
+                               IP Prefix Length = 32)
 
                               STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
@@ -879,9 +881,10 @@ capsule-protocol = ?1
 
                               STREAM(44): CAPSULE
                               Capsule Type = ADDRESS_ASSIGN
-                              IP Version = 6
-                              IP Address = 2001:db8:1234::a
-                              IP Prefix Length = 128
+                              (Request ID = 0
+                               IP Version = 6
+                               IP Address = 2001:db8:1234::a
+                               IP Prefix Length = 128)
 
                               STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
@@ -959,12 +962,14 @@ capsule-protocol = ?1
 
                               STREAM(44): CAPSULE
                               Capsule Type = ADDRESS_ASSIGN
-                              IP Version = 4
-                              IP Address = 192.0.2.3
-                              IP Prefix Length = 32
-                              IP Version = 6
-                              IP Address = 2001:db8::1234:1234
-                              IP Prefix Length = 128
+                              (Request ID = 0
+                               IP Version = 4
+                               IP Address = 192.0.2.3
+                               IP Prefix Length = 32),
+                              (Request ID = 0
+                               IP Version = 6
+                               IP Address = 2001:db8::1234:1234
+                               IP Prefix Length = 128)
 
                               STREAM(44): CAPSULE
                               Capsule Type = ROUTE_ADVERTISEMENT
