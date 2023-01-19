@@ -83,8 +83,8 @@ to create an IP tunnel through an HTTP server that acts as a proxy.
 # Introduction
 
 HTTP provides the CONNECT method (see {{Section 9.3.6 of !HTTP=RFC9110}}) for
-creating a TCP {{!TCP=RFC0793}} tunnel to a proxy and a similar mechanism for
-UDP {{?CONNECT-UDP=RFC9298}}. However, these mechanisms cannot tunnel other
+creating a TCP {{!TCP=RFC0793}} tunnel to a destination and a similar mechanism
+for UDP {{?CONNECT-UDP=RFC9298}}. However, these mechanisms cannot tunnel other
 protocols nor convey fields of the IP header.
 
 This document describes a protocol for tunnelling IP to an HTTP server acting
@@ -182,7 +182,7 @@ defined in {{payload-format}}.
 
 To initiate an IP tunnel associated with a single HTTP stream, a client issues a
 request containing the "connect-ip" upgrade token. The target of the tunnel is
-indicated by the client to the UDP proxy via the "target_host" and "target_port"
+indicated by the client to the IP proxy via the "target_host" and "target_port"
 variables of the URI Template; see {{client-config}}.
 
 When sending its IP proxying request, the client SHALL perform URI template
@@ -464,7 +464,7 @@ Requested Address {
 Request ID:
 
 : Request identifier, encoded as a variable-length integer. This is the
-identifier of this specific address request, each request from a given endpoint
+identifier of this specific address request. Each request from a given endpoint
 carries a different identifier. Request IDs MUST NOT be reused by an endpoint,
 and MUST NOT be zero.
 
