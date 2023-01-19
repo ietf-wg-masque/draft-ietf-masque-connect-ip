@@ -1084,7 +1084,7 @@ URI suffix in the "Well-Known URIs" registry maintained at
 IANA is requested to update the "Reference" field to include this
 document in addition to previous values from that field.
 
-IANA is requested to replace the "Related Information" field with 
+IANA is requested to replace the "Related Information" field with
 "See registry at IANA_URL_TBD." where IANA_URL_TBD is the URL of the new
 registry described in {{iana-suffix}}.
 
