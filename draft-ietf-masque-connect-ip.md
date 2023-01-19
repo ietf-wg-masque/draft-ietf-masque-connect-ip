@@ -9,6 +9,7 @@ wg: MASQUE
 number:
 date:
 consensus: true
+updates: 9298
 venue:
   group: "MASQUE"
   type: "Working Group"
@@ -75,7 +76,8 @@ normative:
 This document describes how to proxy IP packets in HTTP. This protocol is
 similar to UDP proxying in HTTP, but allows transmitting arbitrary IP packets.
 More specifically, this document defines a protocol that allows an HTTP client
-to create an IP tunnel through an HTTP server that acts as a proxy.
+to create an IP tunnel through an HTTP server that acts as a proxy. This
+document updates RFC 9298.
 
 
 --- middle
@@ -1046,6 +1048,33 @@ References:
 : This document
 {: spacing="compact"}
 
+## Creation of the MASQUE URI Suffixes Registry {#iana-suffix}
+
+This document requests that IANA create a new "MASQUE URI Suffixes" registry
+maintained at IANA_URL_TBD. This new registry contains three columns:
+
+Path Segment:
+: An ASCII string containing only characters allowed in tokens; see
+{{Section 5.6.2 of HTTP}}. Entries in this registry MUST all have distinct
+entries in this column.
+
+Description:
+: A description of the entry.
+
+Reference:
+: An optional reference defining the use of the entry.
+
+The registration policy for this registry is Expert Review; see
+{{Section 4.5 of !IANA-POLICY=RFC8126}}.
+
+There are initially two entries in this registry:
+
+| Path Segment |  Description |   Reference   |
+|:-------------|:-------------|:--------------|
+|      udp     | UDP Proxying |   RFC 9298    |
+|      ip      |  IP Proxying | This Document |
+{: #iana-suffixes-table title="New MASQUE URI Suffixes"}
+
 ## Updates to masque Well-Known URI {#iana-uri}
 
 This document will request IANA to update the entry for the "masque"
@@ -1055,10 +1084,9 @@ URI suffix in the "Well-Known URIs" registry maintained at
 IANA is requested to update the "Reference" field to include this
 document in addition to previous values from that field.
 
-IANA is requested to add the following sentence to the "Related Information"
-field:
-: Includes all resources identified with the path prefix "/.well-known/masque/ip/".
-{: spacing="compact"}
+IANA is requested to replace the "Related Information" field with 
+"See registry at IANA_URL_TBD." where IANA_URL_TBD is the URL of the new
+registry described in {{iana-suffix}}.
 
 ## Capsule Type Registrations {#iana-types}
 
@@ -1067,7 +1095,7 @@ Capsule Types" registry maintained at
 <[](https://www.iana.org/assignments/http-capsule-protocol/http-capsule-protocol.xhtml)>.
 
 |   Value    |        Type         |     Description     |   Reference   |
-|:-----------|---------------------|:--------------------|:--------------|
+|:-----------|:--------------------|:--------------------|:--------------|
 | 0x1ECA6A00 |   ADDRESS_ASSIGN    | Address Assignment  | This Document |
 | 0x1ECA6A01 |   ADDRESS_REQUEST   | Address Request     | This Document |
 | 0x1ECA6A02 | ROUTE_ADVERTISEMENT | Route Advertisement | This Document |
