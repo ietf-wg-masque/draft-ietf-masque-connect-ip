@@ -1053,7 +1053,7 @@ References:
 This document requests that IANA create a new "MASQUE URI Suffixes" registry
 maintained at IANA_URL_TBD. This new registry governs the path segment that
 immediately follows "masque" in paths that start with "/.well-known/masque/",
-see <[](https://www.iana.org/assignments/well-known-uris)> for the registration 
+see <[](https://www.iana.org/assignments/well-known-uris)> for the registration
 of "masque" in the "Well-Known URIs" registry. This new registry contains three
 columns:
 
