@@ -1051,7 +1051,11 @@ References:
 ## Creation of the MASQUE URI Suffixes Registry {#iana-suffix}
 
 This document requests that IANA create a new "MASQUE URI Suffixes" registry
-maintained at IANA_URL_TBD. This new registry contains three columns:
+maintained at IANA_URL_TBD. This new registry governs the path segment that
+immediately follows "masque" in paths that start with "/.well-known/masque/",
+see <[](https://www.iana.org/assignments/well-known-uris)> for the registration 
+of "masque" in the "Well-Known URIs" registry. This new registry contains three
+columns:
 
 Path Segment:
 : An ASCII string containing only characters allowed in tokens; see
@@ -1085,8 +1089,8 @@ IANA is requested to update the "Reference" field to include this
 document in addition to previous values from that field.
 
 IANA is requested to replace the "Related Information" field with
-"See registry at IANA_URL_TBD." where IANA_URL_TBD is the URL of the new
-registry described in {{iana-suffix}}.
+"For sub-suffix allocations, see registry at IANA_URL_TBD." where
+IANA_URL_TBD is the URL of the new registry described in {{iana-suffix}}.
 
 ## Capsule Type Registrations {#iana-types}
 
