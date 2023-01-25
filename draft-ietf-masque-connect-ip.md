@@ -492,11 +492,17 @@ requesting an address of that address family but does not have a preference for
 a specific address. In that scenario, the prefix length still indicates the
 sender's preference for the prefix length it is requesting.
 
-Upon receiving the ADDRESS_REQUEST capsule, an endpoint SHOULD assign an IP
-address to its peer, and then respond with an ADDRESS_ASSIGN capsule to inform
-the peer of the assignment. Note that the receiver of the ADDRESS_REQUEST
-capsule is not required to assign the requested address, and that it can also
-assign some requested addresses but not others.
+Upon receiving the ADDRESS_REQUEST capsule, an endpoint SHOULD assign one or more
+IP addresses to its peer, and then respond with an ADDRESS_ASSIGN capsule to inform
+the peer of the assignment. For each Requested Address, the receiver of the
+ADDRESS_REQUEST capsule SHOULD respond with a Assigned Address with a matching
+Request ID. If the requested address was assigned, the IP Address and
+IP Prefix Length fields in the Assigned Address response SHALL be set to the assigned
+values. If the requested address was not assigned, the IP Address SHALL be all-zero
+(0.0.0.0 or ::) and IP Prefix Length SHALL be the maximum length (32 or 128) to
+indicate that no address was assigned. Note that other Assigned Address entries
+that do not correspond to any Request ID can also be contained in the ADDRESS_ASSIGN
+response.
 
 If an endpoint receives an ADDRESS_REQUEST capsule that contains zero Requested
 Addresses, it MUST abort the IP proxying request stream.
