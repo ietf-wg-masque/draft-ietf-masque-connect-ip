@@ -499,9 +499,9 @@ ADDRESS_REQUEST capsule SHOULD respond with a Assigned Address with a matching
 Request ID. If the requested address was assigned, the IP Address and
 IP Prefix Length fields in the Assigned Address response SHALL be set to the assigned
 values. If the requested address was not assigned, the IP Address SHALL be all-zero
-(0.0.0.0 or ::) and IP Prefix Length SHALL be the maximum length (32 or 128) to
+and the IP Prefix Length SHALL be the maximum length (0.0.0.0/32 or ::/128) to
 indicate that no address was assigned. Note that other Assigned Address entries
-that do not correspond to any Request ID can also be contained in the ADDRESS_ASSIGN
+that do not correspond to any Request ID can also be contained in the same ADDRESS_ASSIGN
 response.
 
 If an endpoint receives an ADDRESS_REQUEST capsule that contains zero Requested
