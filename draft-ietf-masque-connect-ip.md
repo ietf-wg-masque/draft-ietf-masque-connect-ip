@@ -780,9 +780,16 @@ capsule-protocol = ?1
                               :status = 200
                               capsule-protocol = ?1
 
+STREAM(44): CAPSULE
+Capsule Type = ADDRESS_REQUEST
+(Request ID = 1
+ IP Version = 4
+ IP Address = 0.0.0.0
+ IP Prefix Length = 32)
+
                               STREAM(44): CAPSULE
                               Capsule Type = ADDRESS_ASSIGN
-                              (Request ID = 0
+                              (Request ID = 1
                                IP Version = 4
                                IP Address = 192.0.2.11
                                IP Prefix Length = 32)
