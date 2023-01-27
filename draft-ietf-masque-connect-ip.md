@@ -484,7 +484,8 @@ IP Address field SHALL have a length of 128 bits.
 IP Prefix Length:
 
 : Length of the IP Prefix requested, in bits, encoded as an unsigned 8-bit
-integer. MUST be lesser or equal to the length of the IP Address field, in bits.
+integer. MUST be less than or equal to the length of the IP Address field, in
+bits.
 {: spacing="compact"}
 
 If the IP Address is all-zero (0.0.0.0 or ::), this indicates that the sender is
@@ -550,7 +551,7 @@ Start IP Address and End IP Address:
 : Inclusive start and end IP address of the advertised range. If the IP Version
 field has value 4, these fields SHALL have a length of 32 bits. If the IP
 Version field has value 6, these fields SHALL have a length of 128 bits. The
-Start IP Address MUST be lesser or equal to the End IP Address.
+Start IP Address MUST be less than or equal to the End IP Address.
 
 IP Protocol:
 
@@ -574,10 +575,10 @@ ordered; this places the burden on the sender and makes verification by the
 receiver much simpler. If an IP Address Range A precedes an IP address range B
 in the same ROUTE_ADVERTISEMENT capsule, they MUST follow these requirements:
 
-* IP Version of A MUST be lesser or equal than IP Version of B
+* IP Version of A MUST be less than or equal than IP Version of B
 
-* If the IP Version of A and B are equal, the IP Protocol of A MUST be lesser or
-  equal than IP Protocol of B.
+* If the IP Version of A and B are equal, the IP Protocol of A MUST be less than
+  or equal than IP Protocol of B.
 
 * If the IP Version and IP Protocol of A and B are both equal, the End IP
   Address of A MUST be strictly less than the Start IP Address of B.
