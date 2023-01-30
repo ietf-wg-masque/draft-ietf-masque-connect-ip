@@ -195,8 +195,10 @@ forwarding tunnel between it and the client. Any response other than a
 successful response indicates that the tunnel has not been formed.
 
 The lifetime of the IP forwarding tunnel is tied to the IP proxying request stream.
-Closing that stream (in HTTP/3 via the FIN bit on a QUIC STREAM frame, or a
-QUIC RESET_STREAM frame) closes the associated IP tunnel.
+The IP proxy MUST maintain all IP address and route assignments associated with the
+IP forwarding tunnel while the request stream is open. IP proxies MAY choose to
+tear down the tunnel due to a period of inactivity, but they MUST close the request
+stream when doing so.
 
 Along with a successful response, the IP proxy can send capsules to assign
 addresses and advertise routes to the client ({{capsules}}). The client can also
