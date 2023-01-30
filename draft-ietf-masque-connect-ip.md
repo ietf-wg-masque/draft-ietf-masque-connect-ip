@@ -231,7 +231,7 @@ use the 400 (Bad Request) status code.
 
 For example, if the client is configured with URI Template
 "https://example.org/.well-known/masque/ip/{target}/{ipproto}/" and
-wishes to open a IP forwarding tunnel with no target or protocol limitations,
+wishes to open an IP forwarding tunnel with no target or protocol limitations,
 it could send the following request:
 
 ~~~ http-message
@@ -299,7 +299,7 @@ malformed (see {{Section 8.1.1 of H2}} and {{Section 4.1.2 of H3}}).
 
 For example, if the client is configured with URI Template
 "https://example.org/.well-known/masque/ip/{target}/{ipproto}/" and
-wishes to open a IP forwarding tunnel with no target or protocol limitations,
+wishes to open an IP forwarding tunnel with no target or protocol limitations,
 it could send the following request:
 
 ~~~ http-message
