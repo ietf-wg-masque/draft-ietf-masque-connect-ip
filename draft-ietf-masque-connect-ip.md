@@ -229,6 +229,19 @@ An IP proxying request that does not conform to these restrictions is malformed.
 The recipient of such a malformed request MUST respond with an error and SHOULD
 use the 400 (Bad Request) status code.
 
+For example, if the client is configured with URI Template
+"https://example.org/.well-known/masque/ip/{target}/{ipproto}/" and
+wishes to open an IP forwarding tunnel with no target or protocol limitations,
+it could send the following request:
+
+~~~ http-message
+GET https://example.org/.well-known/masque/ip/*/*/ HTTP/1.1
+Host: example.org
+Connection: Upgrade
+Upgrade: connect-ip
+Capsule-Protocol: ?1
+~~~
+{: #fig-req-h1 title="Example HTTP/1.1 Request"}
 
 ## HTTP/1.1 Response {#resp1}
 
@@ -249,6 +262,16 @@ following requirements:
 
 If any of these requirements are not met, the client MUST treat this proxying
 attempt as failed and abort the connection.
+
+For example, the IP proxy could respond with:
+
+~~~ http-message
+HTTP/1.1 101 Switching Protocols
+Connection: Upgrade
+Upgrade: connect-ip
+Capsule-Protocol: ?1
+~~~
+{: #fig-resp-h1 title="Example HTTP/1.1 Response"}
 
 ## HTTP/2 and HTTP/3 Requests {#req23}
 
@@ -274,6 +297,22 @@ pseudo-header fields with the following requirements:
 An IP proxying request that does not conform to these restrictions is
 malformed (see {{Section 8.1.1 of H2}} and {{Section 4.1.2 of H3}}).
 
+For example, if the client is configured with URI Template
+"https://example.org/.well-known/masque/ip/{target}/{ipproto}/" and
+wishes to open an IP forwarding tunnel with no target or protocol limitations,
+it could send the following request:
+
+~~~ http-message
+HEADERS
+:method = CONNECT
+:protocol = connect-ip
+:scheme = https
+:path = /.well-known/masque/ip/*/*/
+:authority = example.org
+capsule-protocol = ?1
+~~~
+{: #fig-req-h2 title="Example HTTP/2 or HTTP/3 Request"}
+
 ## HTTP/2 and HTTP/3 Responses {#resp23}
 
 The IP proxy SHALL indicate a successful response by replying with the
@@ -286,6 +325,15 @@ following requirements:
 
 If any of these requirements are not met, the client MUST treat this proxying
 attempt as failed and abort the request.
+
+For example, the IP proxy could respond with:
+
+~~~ http-message
+HEADERS
+:status = 200
+capsule-protocol = ?1
+~~~
+{: #fig-resp-h2 title="Example HTTP/2 or HTTP/3 Response"}
 
 ## Limiting Request Scope {#scope}
 
