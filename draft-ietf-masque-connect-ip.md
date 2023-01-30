@@ -418,6 +418,10 @@ less than the length of the IP address, the receiver of this capsule is allowed
 to send packets from any source address that falls within the prefix.
 {: spacing="compact"}
 
+If any of the capsule fields are malformed upon reception, the receiver of the
+capsule MUST follow the error handling procedure defined in
+{{Section 3.3 of HTTP-DGRAM}}.
+
 If an ADDRESS_ASSIGN capsule does not contain an address that was previously
 transmitted in another ADDRESS_ASSIGN capsule, that indicates that the address
 has been removed. An ADDRESS_ASSIGN capsule can also be empty, indicating that
@@ -493,6 +497,10 @@ requesting an address of that address family but does not have a preference for
 a specific address. In that scenario, the prefix length still indicates the
 sender's preference for the prefix length it is requesting.
 
+If any of the capsule fields are malformed upon reception, the receiver of the
+capsule MUST follow the error handling procedure defined in
+{{Section 3.3 of HTTP-DGRAM}}.
+
 Upon receiving the ADDRESS_REQUEST capsule, an endpoint SHOULD assign one or
 more IP addresses to its peer, and then respond with an ADDRESS_ASSIGN capsule
 to inform the peer of the assignment. For each Requested Address, the receiver
@@ -560,6 +568,10 @@ IP Protocol:
 encoded as an unsigned 8-bit integer. If the value is 0, all protocols are
 allowed. ICMP traffic is always allowed, regardless of the value of this field.
 {: spacing="compact"}
+
+If any of the capsule fields are malformed upon reception, the receiver of the
+capsule MUST follow the error handling procedure defined in
+{{Section 3.3 of HTTP-DGRAM}}.
 
 Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY start routing IP
 packets in these ranges to its peer.
