@@ -554,7 +554,7 @@ capsule MUST follow the error handling procedure defined in
 Upon receiving the ADDRESS_REQUEST capsule, an endpoint SHOULD assign one or
 more IP addresses to its peer, and then respond with an ADDRESS_ASSIGN capsule
 to inform the peer of the assignment. For each Requested Address, the receiver
-of the ADDRESS_REQUEST capsule SHALL respond with a Assigned Address with a
+of the ADDRESS_REQUEST capsule SHALL respond with an Assigned Address with a
 matching Request ID. If the requested address was assigned, the IP Address and
 IP Prefix Length fields in the Assigned Address response SHALL be set to the
 assigned values. If the requested address was not assigned, the IP Address SHALL
