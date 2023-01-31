@@ -122,7 +122,7 @@ entire connection.
 
 Clients are configured to use IP proxying over HTTP via an URI Template
 {{!TEMPLATE=RFC6570}}. The URI template MAY contain two variables: "target" and
-"ipproto" ({{scope}}). The optionality of the variables needs to be considered
+"ipproto"; see {{scope}}. The optionality of the variables needs to be considered
 when defining the template so that either the variable is self-identifying or it
 is possible to exclude it in the syntax.
 
@@ -183,16 +183,41 @@ Protocol (see {{Section 3.2 of HTTP-DGRAM}}) with HTTP Datagrams in the format
 defined in {{payload-format}}.
 
 To initiate an IP tunnel associated with a single HTTP stream, a client issues a
-request containing the "connect-ip" upgrade token. The target of the tunnel is
-indicated by the client to the IP proxy via the "target_host" and "target_port"
-variables of the URI Template; see {{client-config}}.
+request containing the "connect-ip" upgrade token.
 
 When sending its IP proxying request, the client SHALL perform URI template
 expansion to determine the path and query of its request, see {{client-config}}.
 
-A successful response indicates that the IP proxy is willing to open an IP
-forwarding tunnel between it and the client. Any response other than a
-successful response indicates that the tunnel has not been formed.
+By virtue of the definition of the Capsule Protocol (see {{Section 3.2 of
+HTTP-DGRAM}}), IP proxying requests do not carry any message content.
+Similarly, successful IP proxying responses also do not carry any message
+content.
+
+## IP Proxy Handling
+
+Upon receiving an IP proxying request:
+
+ * if the recipient is configured to use another HTTP proxy, it will act as an
+   intermediary by forwarding the request to another HTTP server. Note that such
+   intermediaries may need to re-encode the request if they forward it using a
+   version of HTTP that is different from the one used to receive it, as the
+   request encoding differs by version (see below).
+
+* otherwise, the recipient will act as an IP proxy. It extracts the optional
+  "target" and "ipproto" variables from the URI it has reconstructed
+  from the request headers, decodes their percent-encoding, and establishes an
+  IP tunnel.
+
+IP proxies MUST validate whether the decoded "target" and "ipproto" variables
+meet the requirements in {{scope}}. If they do not, the IP proxy MUST treat
+the request as malformed; see {{Section 8.1.1 of H2}} and
+{{Section 4.1.2 of H3}}. If the "target" variable is a DNS name, the IP proxy
+MUST perform DNS resolution before replying to the HTTP request. If errors
+occur during this process, the IP proxy MUST reject the request and SHOULD
+send details using an appropriate Proxy-Status header field
+{{!PROXY-STATUS=RFC9209}}. For example, if DNS resolution returns an error,
+the proxy can use the dns_error Proxy Error Type from
+{{Section 2.3.2 of PROXY-STATUS}}.
 
 The lifetime of the IP forwarding tunnel is tied to the IP proxying request stream.
 The IP proxy MUST maintain all IP address and route assignments associated with the
@@ -200,16 +225,15 @@ IP forwarding tunnel while the request stream is open. IP proxies MAY choose to
 tear down the tunnel due to a period of inactivity, but they MUST close the request
 stream when doing so.
 
+A successful response (as defined in Sections {{<resp1}} and {{<resp23}})
+indicates that the IP proxy has established an IP tunnel and is willing to
+proxy IP payloads. Any response other than a successful response
+indicates that the request has failed; thus, the client MUST abort the request.
+
 Along with a successful response, the IP proxy can send capsules to assign
 addresses and advertise routes to the client ({{capsules}}). The client can also
 assign addresses and advertise routes to the IP proxy for network-to-network
 routing.
-
-By virtue of the definition of the Capsule Protocol (see {{Section 3.2 of
-HTTP-DGRAM}}), IP proxying requests do not carry any message content.
-Similarly, successful IP proxying responses also do not carry any message
-content.
-
 
 ## HTTP/1.1 Request {#req1}
 
@@ -297,7 +321,7 @@ pseudo-header fields with the following requirements:
   see {{scope}}.
 
 An IP proxying request that does not conform to these restrictions is
-malformed (see {{Section 8.1.1 of H2}} and {{Section 4.1.2 of H3}}).
+malformed; see {{Section 8.1.1 of H2}} and {{Section 4.1.2 of H3}}.
 
 For example, if the client is configured with URI Template
 "https://example.org/.well-known/masque/ip/{target}/{ipproto}/" and
@@ -388,10 +412,10 @@ using notation from {{!ABNF=RFC2234}}. Additionally:
   encoded in the URI as "2001%3Adb8%3A%3A42".
 
 * If present, the IP prefix length in "target" SHALL be preceded by a
-  percent-encoded slash ("/"): "%2F". The IP prefix length MUST represent an
-  integer between 0 and the length of the IP address in bits, inclusive.
+  percent-encoded slash ("/"): "%2F". The IP prefix length MUST represent a
+  decimal integer between 0 and the length of the IP address in bits, inclusive.
 
-* "ipproto" MUST represent an integer between 0 and 255 inclusive, or the
+* "ipproto" MUST represent a decimal integer between 0 and 255 inclusive, or the
   wildcard value "*".
 
 ~~~ ascii-art
