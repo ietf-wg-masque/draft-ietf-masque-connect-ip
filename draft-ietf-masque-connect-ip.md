@@ -70,6 +70,13 @@ normative:
   H3:
     =: RFC9114
     display: HTTP/3
+informative:
+  IANA-PN:
+    author:
+      org: IANA
+    title: "Protocol Numbers"
+    date: false
+    target: "https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml"
 
 --- abstract
 
@@ -87,7 +94,7 @@ document updates RFC 9298.
 HTTP provides the CONNECT method (see {{Section 9.3.6 of !HTTP=RFC9110}}) for
 creating a TCP {{!TCP=RFC0793}} tunnel to a destination and a similar mechanism
 for UDP {{?CONNECT-UDP=RFC9298}}. However, these mechanisms cannot tunnel other
-protocols nor convey fields of the IP header.
+IP protocols {{IANA-PN}} nor convey fields of the IP header.
 
 This document describes a protocol for tunnelling IP to an HTTP server acting
 as an IP-specific proxy over HTTP. This can be used for various use cases
@@ -113,6 +120,12 @@ In this document, we use the term "IP proxy" to refer to the HTTP server that
 responds to the IP proxying request. If there are HTTP intermediaries (as defined
 in {{Section 3.7 of HTTP}}) between the client and the proxy, those are
 referred to as "intermediaries" in this document.
+
+This document uses terminology from {{!QUIC=RFC9000}}. Where this document
+defines protocol types, the definition format uses the notation from
+{{Section 1.3 of QUIC}}. This specification uses the variable-length integer
+encoding from {{Section 16 of !QUIC=RFC9000}}. Variable-length integer values
+do not need to be encoded on the minimum number of bytes necessary.
 
 Note that, when the HTTP version in use does not support multiplexing streams
 (such as HTTP/1.1), any reference to "stream" in this document represents the
@@ -218,8 +231,8 @@ requirements:
 
 * the method SHALL be "GET".
 
-* the request SHALL include a single Host header field containing the origin
-  of the IP proxy.
+* the request SHALL include a single Host header field containing the host
+  and optional port of the IP proxy.
 
 * the request SHALL include a Connection header field with value "Upgrade"
   (note that this requirement is case-insensitive as per {{Section 7.6.1 of
@@ -247,8 +260,8 @@ Capsule-Protocol: ?1
 
 ## HTTP/1.1 Response {#resp1}
 
-The IP proxy SHALL indicate a successful response by replying with the
-following requirements:
+The IP proxy indicates a successful response by replying with the following
+requirements:
 
 * the HTTP status code on the response SHALL be 101 (Switching Protocols).
 
@@ -317,8 +330,8 @@ capsule-protocol = ?1
 
 ## HTTP/2 and HTTP/3 Responses {#resp23}
 
-The IP proxy SHALL indicate a successful response by replying with the
-following requirements:
+The IP proxy indicates a successful response by replying with the following
+requirements:
 
 * the HTTP status code on the response SHALL be in the 2xx (Successful) range.
 
@@ -402,6 +415,10 @@ ipproto = 1*3DIGIT / "*"
 ~~~
 {: #target-format title="URI Template Variable Format"}
 
+IP proxies MAY perform access control using the scoping information provided
+by the client: if the client is not authorized to access any of the destinations
+included in the scope, then the IP proxy can immediately fail the request.
+
 ## Capsules
 
 This document defines multiple new capsule types that allow endpoints to
@@ -438,6 +455,8 @@ Assigned Address {
 }
 ~~~
 {: #assigned-addr-format title="Assigned Address Format"}
+
+Each Assigned Address contains the following fields:
 
 Request ID:
 
@@ -516,6 +535,8 @@ Requested Address {
 }
 ~~~
 {: #requested-addr-format title="Requested Address Format"}
+
+Each Requested Address contains the following fields:
 
 Request ID:
 
@@ -600,6 +621,8 @@ IP Address Range {
 ~~~
 {: #addr-range-format title="IP Address Range Format"}
 
+Each IP Address Range contains the following fields:
+
 IP Version:
 
 : IP Version of this range, encoded as an unsigned 8-bit integer. MUST be
@@ -660,19 +683,19 @@ Datagrams associated with IP proxying request streams start with a Context ID
 field; see {{payload-format}}.
 
 Context IDs are 62-bit integers (0 to 2<sup>62</sup>-1). Context IDs are encoded
-as variable-length integers; see {{Section 16 of !QUIC=RFC9000}}. The Context ID
+as variable-length integers; see {{Section 16 of QUIC}}. The Context ID
 value of 0 is reserved for IP payloads, while non-zero values are dynamically
 allocated. Non-zero even-numbered Context IDs are client-allocated, and
 odd-numbered Context IDs are proxy-allocated. The Context ID namespace is tied
 to a given HTTP request; it is possible for a Context ID with the same numeric
 value to be simultaneously allocated in distinct requests, potentially with
 different semantics. Context IDs MUST NOT be re-allocated within a given HTTP
-namespace but MAY be allocated in any order. The Context ID allocation
+request but MAY be allocated in any order. The Context ID allocation
 restrictions to the use of even-numbered and odd-numbered Context IDs exist in
 order to avoid the need for synchronization between endpoints. However, once a
 Context ID has been allocated, those restrictions do not apply to the use of the
-Context ID; it can be used by any client or IP proxy, independent of which
-endpoint initially allocated it.
+Context ID; it can be used by either the client or the IP proxy, independent of
+which endpoint initially allocated it.
 
 Registration is the action by which an endpoint informs its peer of the
 semantics and format of a given Context ID. This document does not define how
@@ -697,6 +720,8 @@ IP Proxying HTTP Datagram Payload {
 }
 ~~~
 {: #dgram-format title="IP Proxying HTTP Datagram Format"}
+
+The IP Proxying HTTP Datagram Payload contains the following fields:
 
 Context ID:
 
@@ -850,21 +875,21 @@ capsule-protocol = ?1
                               :status = 200
                               capsule-protocol = ?1
 
-STREAM(44): CAPSULE
+STREAM(44): DATA
 Capsule Type = ADDRESS_REQUEST
 (Request ID = 1
  IP Version = 4
  IP Address = 0.0.0.0
  IP Prefix Length = 32)
 
-                              STREAM(44): CAPSULE
+                              STREAM(44): DATA
                               Capsule Type = ADDRESS_ASSIGN
                               (Request ID = 1
                                IP Version = 4
                                IP Address = 192.0.2.11
                                IP Prefix Length = 32)
 
-                              STREAM(44): CAPSULE
+                              STREAM(44): DATA
                               Capsule Type = ROUTE_ADVERTISEMENT
                               (IP Version = 4
                                Start IP Address = 0.0.0.0
@@ -890,14 +915,14 @@ route is restricted to 192.0.2.0/24, rather than 0.0.0.0/0.
 ~~~
 [[ From Client ]]             [[ From IP Proxy ]]
 
-                              STREAM(44): CAPSULE
+                              STREAM(44): DATA
                               Capsule Type = ADDRESS_ASSIGN
                               (Request ID = 0
                                IP Version = 4
                                IP Address = 192.0.2.42
                                IP Prefix Length = 32)
 
-                              STREAM(44): CAPSULE
+                              STREAM(44): DATA
                               Capsule Type = ROUTE_ADVERTISEMENT
                               (IP Version = 4
                                Start IP Address = 192.0.2.0
@@ -958,14 +983,14 @@ capsule-protocol = ?1
                               :status = 200
                               capsule-protocol = ?1
 
-                              STREAM(44): CAPSULE
+                              STREAM(44): DATA
                               Capsule Type = ADDRESS_ASSIGN
                               (Request ID = 0
                                IP Version = 6
                                IP Address = 2001:db8:1234::a
                                IP Prefix Length = 128)
 
-                              STREAM(44): CAPSULE
+                              STREAM(44): DATA
                               Capsule Type = ROUTE_ADVERTISEMENT
                               (IP Version = 6
                                Start IP Address = 2001:db8:3456::b
@@ -1039,7 +1064,7 @@ capsule-protocol = ?1
                               :status = 200
                               capsule-protocol = ?1
 
-                              STREAM(44): CAPSULE
+                              STREAM(44): DATA
                               Capsule Type = ADDRESS_ASSIGN
                               (Request ID = 0
                                IP Version = 4
@@ -1050,7 +1075,7 @@ capsule-protocol = ?1
                                IP Address = 2001:db8::1234:1234
                                IP Prefix Length = 128)
 
-                              STREAM(44): CAPSULE
+                              STREAM(44): DATA
                               Capsule Type = ROUTE_ADVERTISEMENT
                               (IP Version = 4
                                Start IP Address = 198.51.100.2
@@ -1190,8 +1215,8 @@ Capsule Types" registry maintained at
 The design of this method was inspired by discussions in the MASQUE working
 group around {{?PROXY-REQS=I-D.ietf-masque-ip-proxy-reqs}}. The authors would
 like to thank participants in those discussions for their feedback.
-Additionally, {{{Alejandro Sedeño}}} provided valuable feedback on the
-document.
+Additionally, {{{Mike Bishop}}}, {{{Lucas Pardue}}}, and {{{Alejandro Sedeño}}}
+provided valuable feedback on the document.
 
 Most of the text on client configuration is based on the corresponding text in
 {{CONNECT-UDP}}.
