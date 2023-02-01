@@ -203,7 +203,7 @@ Upon receiving an IP proxying request:
    version of HTTP that is different from the one used to receive it, as the
    request encoding differs by version (see below).
 
-* otherwise, the recipient will act as an IP proxy. It extracts the optional
+ * otherwise, the recipient will act as an IP proxy. It extracts the optional
   "target" and "ipproto" variables from the URI it has reconstructed
   from the request headers, decodes their percent-encoding, and establishes an
   IP tunnel.
