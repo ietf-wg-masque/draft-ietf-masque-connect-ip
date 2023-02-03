@@ -216,7 +216,7 @@ MUST perform DNS resolution before replying to the HTTP request. If errors
 occur during this process, the IP proxy MUST reject the request and SHOULD
 send details using an appropriate Proxy-Status header field
 {{!PROXY-STATUS=RFC9209}}. For example, if DNS resolution returns an error,
-the proxy can use the dns_error Proxy Error Type from
+the proxy can use the `dns_error` Proxy Error Type from
 {{Section 2.3.2 of PROXY-STATUS}}.
 
 The lifetime of the IP forwarding tunnel is tied to the IP proxying request stream.
