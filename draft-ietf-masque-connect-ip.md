@@ -612,6 +612,10 @@ same ADDRESS_ASSIGN response.
 If an endpoint receives an ADDRESS_REQUEST capsule that contains zero Requested
 Addresses, it MUST abort the IP proxying request stream.
 
+Note that the ordering of Requested Addresses does not carry any semantics.
+Similarly, the Request ID is only meant as a unique identifier, it does not
+convey any priority or importance.
+
 ### ROUTE_ADVERTISEMENT Capsule
 
 The ROUTE_ADVERTISEMENT capsule (see {{iana-types}} for the value of the capsule
