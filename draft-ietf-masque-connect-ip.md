@@ -1129,18 +1129,16 @@ information, or when allowed prefixes are shared via ADDRESS_ASSIGN capsules. In
 such scenarios, endpoints MUST follow the recommendations from
 {{!BCP38=RFC2827}} to prevent source address spoofing.
 
-Assigning the same external IP address to multiple different endpoints
-requesting service can be done if they don't have overlapping IP
-protocol number scope. However, in that case allowing ICMP to be
-forward to one of the endpoints will enable limited monitoring of the
-other endpoints. If IP traffic from the other endpoints results in
-that the network sends back an ICMP message that would be forward and
-include part of the packet sent revealing IP destination, protocol and
-possibly part of the payload. Therefore if multiple endpoints are
-allowed to share the same external IP address the ICMP message MUST be
-filtered to only forward ICMP related to IP packets sent by the endpoint
-receiving this ICMP.
-
+Limiting request scope (see {{scope}}) allows two clients to share one
+of the proxy's external IP addresses if their requests are scoped to different
+IP protocol numbers. If the proxy receives an ICMP packet destined for that
+external IP address, it has the option to forward it back to the clients.
+However, some of these ICMP packets carry part of the original IP packet
+that triggered the ICMP response. Forwarding such packets can accidentally
+divulge information about one client's traffic to another client. To avoid this,
+proxies that forward ICMP on shared external IP addresses MUST inspect
+the invoking packet included in the ICMP packet and only forward the ICMP
+packet to the client whose scoping matches the invoking packet.
 
 # IANA Considerations
 
