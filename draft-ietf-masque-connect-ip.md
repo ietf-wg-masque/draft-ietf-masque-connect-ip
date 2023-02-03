@@ -1152,6 +1152,17 @@ information, or when allowed prefixes are shared via ADDRESS_ASSIGN capsules. In
 such scenarios, endpoints MUST follow the recommendations from
 {{!BCP38=RFC2827}} to prevent source address spoofing.
 
+Limiting request scope (see {{scope}}) allows two clients to share one
+of the proxy's external IP addresses if their requests are scoped to different
+IP protocol numbers. If the proxy receives an ICMP packet destined for that
+external IP address, it has the option to forward it back to the clients.
+However, some of these ICMP packets carry part of the original IP packet
+that triggered the ICMP response. Forwarding such packets can accidentally
+divulge information about one client's traffic to another client. To avoid this,
+proxies that forward ICMP on shared external IP addresses MUST inspect
+the invoking packet included in the ICMP packet and only forward the ICMP
+packet to the client whose scoping matches the invoking packet.
+
 # IANA Considerations
 
 ## HTTP Upgrade Token
