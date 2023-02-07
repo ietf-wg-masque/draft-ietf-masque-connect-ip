@@ -1065,8 +1065,8 @@ both IPv4 and IPv6 addresses assigned.
 The IP proxy assigns the client both an IPv4 address (192.0.2.3) and an IPv6
 address (2001:db8:1234::a) to the client, as well as an IPv4 route
 (198.51.100.2) and an IPv6 route (2001:db8:3456::b), which represent the resolved
-addresses of the target hostname, scoped to UDP. The client can send and recieve
-UDP IP packets to the either of the IP proxy addresses to enable Happy Eyeballs
+addresses of the target hostname, scoped to UDP. The client can send and receive
+UDP IP packets to either one of the IP proxy addresses to enable Happy Eyeballs
 through the IP proxy.
 
 ~~~
