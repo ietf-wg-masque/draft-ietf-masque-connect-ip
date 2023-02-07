@@ -821,7 +821,9 @@ bytes). This can be accomplished using various techniques:
 * IP proxying endpoints can also send ICMPv6 echo requests with 1232 bytes of
   data to ascertain the link MTU and tear down the tunnel if they do not receive
   a response. Unless endpoints have an out of band means of guaranteeing that
-  the previous techniques is sufficient, they MUST use this method.
+  the previous techniques is sufficient, they MUST use this method. If an
+  endpoint does not know an IPv6 address of its peer, it can send the ICMPv6
+  echo request to the link local all nodes multicast address (ff02::1).
 
 If an endpoint is using QUIC DATAGRAM frames to convey IPv6 packets, and it
 detects that the QUIC MTU is too low to allow sending 1280 bytes, it MUST abort
