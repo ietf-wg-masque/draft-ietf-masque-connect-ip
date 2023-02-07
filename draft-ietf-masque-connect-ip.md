@@ -700,6 +700,13 @@ in the same ROUTE_ADVERTISEMENT capsule, they MUST follow these requirements:
 If an endpoint receives a ROUTE_ADVERTISEMENT capsule that does not meet these
 requirements, it MUST abort the IP proxying request stream.
 
+Since setting the IP protocol to zero indicates all protocols are allowed, the
+requirements above make it possible for two routes to overlap when one has
+IP protocol set to zero and the other set to non-zero. Endpoints MUST not send
+a ROUTE_ADVERTISEMENT capsule with routes that overlap in such a way.
+Validating this requirement is OPTIONAL, but if an endpoint detects the
+violation, it MUST abort the IP proxying request stream.
+
 # Context Identifiers
 
 The mechanism for proxying IP in HTTP defined in this document allows future
