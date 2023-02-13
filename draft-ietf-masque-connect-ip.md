@@ -216,7 +216,8 @@ Upon receiving an IP proxying request:
    version of HTTP that is different from the one used to receive it, as the
    request encoding differs by version (see below).
 
- * otherwise, the recipient will act as an IP proxy. It extracts the optional
+ * otherwise, the recipient will act as an IP proxy. The IP proxy can choose to
+  reject the IP proxying request. Otherwise, it extracts the optional
   "target" and "ipproto" variables from the URI it has reconstructed
   from the request headers, decodes their percent-encoding, and establishes an
   IP tunnel.
@@ -225,7 +226,8 @@ IP proxies MUST validate whether the decoded "target" and "ipproto" variables
 meet the requirements in {{scope}}. If they do not, the IP proxy MUST treat
 the request as malformed; see {{Section 8.1.1 of H2}} and
 {{Section 4.1.2 of H3}}. If the "target" variable is a DNS name, the IP proxy
-MUST perform DNS resolution before replying to the HTTP request. If errors
+MUST perform DNS resolution (to query the corresponding IPv4 and/or IPv6
+addresses via A and/or AAAA records) before replying to the HTTP request. If errors
 occur during this process, the IP proxy MUST reject the request and SHOULD
 send details using an appropriate Proxy-Status header field
 {{!PROXY-STATUS=RFC9209}}. For example, if DNS resolution returns an error,
@@ -876,9 +878,9 @@ the IP proxy. Such VPN setups can be either full-tunnel or split-tunnel.
 ~~~ aasvg
 
 +--------+ IP A          IP B +--------+           +---> IP D
-|        |--------------------|   IP   | IP C      |
-| Client | IP Subnet C <--> ? |  Proxy |-----------+---> IP E
-|        |--------------------|        |           |
+|        +--------------------+   IP   | IP C      |
+| Client | IP Subnet C <--> ? |  Proxy +-----------+---> IP E
+|        +--------------------+        |           |
 +--------+                    +--------+           +---> IP ...
 
 ~~~
@@ -967,6 +969,97 @@ route is restricted to 192.0.2.0/24, rather than 0.0.0.0/0.
 ~~~
 {: #fig-split-tunnel title="VPN Split-Tunnel Capsule Example"}
 
+## Site-to-Site VPN
+
+The following example shows how to connect a branch office network to a
+corporate network such that all machines on those networks can communicate.
+In this example, the IP proxying client is attached to the branch office
+network 192.0.2.0/24, and the IP proxy is attached to the corporate network
+233.252.0.0/24. There are legacy clients on the branch office network that
+only allow maintenance request from machines on their subnet, so the IP
+Proxy is provisioned with an IP address from that subnet.
+
+~~~ aasvg
+
+192.0.2.1 <--+   +--------+             +-------+   +---> 233.252.0.9
+             |   |        +-------------+  IP   |   |
+192.0.2.2 <--+---+ Client | IP Proxying | Proxy +---+---> 233.252.0.8
+             |   |        +-------------+       |   |
+192.0.2.3 <--+   +--------+             +-------+   +---> 233.252.0.7
+
+~~~
+{: #diagram-s2s title="Site-to-site VPN Example"}
+
+In this case, the client does not specify any scope in its request. The IP
+proxy assigns the client an IPv4 address (233.252.0.100) and a split-tunnel
+route to the corporate network (233.252.0.0/24). The client assigns the IP
+proxy an IPv4 address (192.0.2.200) and a split-tunnel route to the branch
+office network (192.0.2.0/24). This allows hosts on both networks to
+communicate with each other, and allows the IP proxy to perform maintenance
+on legacy hosts in the branch office.
+
+~~~
+[[ From Client ]]             [[ From IP Proxy ]]
+
+SETTINGS
+  H3_DATAGRAM = 1
+
+                              SETTINGS
+                                ENABLE_CONNECT_PROTOCOL = 1
+                                H3_DATAGRAM = 1
+
+STREAM(44): HEADERS
+:method = CONNECT
+:protocol = connect-ip
+:scheme = https
+:path = /corp
+:authority = proxy.example.com
+capsule-protocol = ?1
+
+                              STREAM(44): HEADERS
+                              :status = 200
+                              capsule-protocol = ?1
+
+STREAM(44): DATA
+Capsule Type = ADDRESS_ASSIGN
+(Request ID = 0
+IP Version = 4
+IP Address = 192.0.2.200
+IP Prefix Length = 32)
+
+STREAM(44): DATA
+Capsule Type = ROUTE_ADVERTISEMENT
+(IP Version = 4
+Start IP Address = 192.0.2.0
+End IP Address = 192.0.2.255
+IP Protocol = 0) // Any
+
+                              STREAM(44): DATA
+                              Capsule Type = ADDRESS_ASSIGN
+                              (Request ID = 0
+                               IP Version = 4
+                               IP Address = 233.252.0.100
+                               IP Prefix Length = 32)
+
+                              STREAM(44): DATA
+                              Capsule Type = ROUTE_ADVERTISEMENT
+                              (IP Version = 4
+                               Start IP Address = 233.252.0.0
+                               End IP Address = 233.252.0.255
+                               IP Protocol = 0) // Any
+
+DATAGRAM
+Quarter Stream ID = 11
+Context ID = 0
+Payload = Encapsulated IP Packet
+
+                              DATAGRAM
+                              Quarter Stream ID = 11
+                              Context ID = 0
+                              Payload = Encapsulated IP Packet
+~~~
+{: #fig-s2s title="Site-to-site VPN Capsule Example"}
+
 ## IP Flow Forwarding
 
 The following example shows an IP flow forwarding setup, where a client requests
@@ -978,9 +1071,9 @@ that isn't easily proxied with existing HTTP methods, such as ICMP, ESP, etc.
 ~~~ aasvg
 
 +--------+ IP A         IP B +--------+
-|        |-------------------|   IP   | IP C
-| Client |    IP C <--> D    |  Proxy |---------> IP D
-|        |-------------------|        |
+|        +-------------------+   IP   | IP C
+| Client |    IP C <--> D    |  Proxy +---------> IP D
+|        +-------------------+        |
 +--------+                   +--------+
 
 ~~~
@@ -1056,10 +1149,10 @@ new capabilities even for TCP and UDP.
 ~~~ aasvg
 
 +--------+ IP A         IP B +--------+ IP C
-|        |-------------------|        |<------------> IP E
+|        +-------------------+        |<------------> IP E
 | Client |  IP C <--> E      |   IP   |
 |        |     D <--> F      |  Proxy |
-|        |-------------------|        |<------------> IP F
+|        +-------------------+        |<------------> IP F
 +--------+                   +--------+ IP D
 
 ~~~
