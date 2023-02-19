@@ -92,7 +92,7 @@ document updates RFC 9298.
 # Introduction
 
 HTTP provides the CONNECT method (see {{Section 9.3.6 of !HTTP=RFC9110}}) for
-creating a TCP {{!TCP=RFC0793}} tunnel to a destination and a similar mechanism
+creating a TCP {{!TCP=RFC9293}} tunnel to a destination and a similar mechanism
 for UDP {{?CONNECT-UDP=RFC9298}}. However, these mechanisms cannot tunnel other
 IP protocols {{IANA-PN}} nor convey fields of the IP header.
 
@@ -418,7 +418,7 @@ included, the client is requesting to use any IP protocol.
 
 Using the terms IPv6address, IPv4address, and reg-name from {{URI}}, the
 "target" and "ipproto" variables MUST adhere to the format in {{target-format}},
-using notation from {{!ABNF=RFC2234}}. Additionally:
+using notation from {{!ABNF=RFC4234}}. Additionally:
 
 * if "target" contains an IPv6 literal or prefix, the colons (":") MUST be
   percent-encoded. For example, if the target host is "2001:db8::42", it will be
@@ -702,7 +702,7 @@ requirements, it MUST abort the IP proxying request stream.
 
 Since setting the IP protocol to zero indicates all protocols are allowed, the
 requirements above make it possible for two routes to overlap when one has
-IP protocol set to zero and the other set to non-zero. Endpoints MUST not send
+IP protocol set to zero and the other set to non-zero. Endpoints MUST NOT send
 a ROUTE_ADVERTISEMENT capsule with routes that overlap in such a way.
 Validating this requirement is OPTIONAL, but if an endpoint detects the
 violation, it MUST abort the IP proxying request stream.
