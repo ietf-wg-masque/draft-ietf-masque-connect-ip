@@ -443,6 +443,13 @@ IP proxies MAY perform access control using the scoping information provided
 by the client: if the client is not authorized to access any of the destinations
 included in the scope, then the IP proxy can immediately fail the request.
 
+Note that IP protocol numbers represent both upper layers (as defined in
+{{Section 2 of !IPv6=RFC8200}}, examples include TCP and UDP) and IPv6
+extension headers (as defined in {{Section 4 of IPv6}}, examples include
+Fragment and Routing headers). Implementations that support scoping by IP
+protocol number MUST either drop packets with IPv6 extension headers, or walk
+the chain of extensions to find the upper layer.
+
 ## Capsules
 
 This document defines multiple new capsule types that allow endpoints to
@@ -800,7 +807,7 @@ prevents infinite loops in the presence of routing loops, and matches the
 choices in IPsec {{?IPSEC=RFC4301}}.
 
 IPv6 requires that every link have an MTU of at least 1280 bytes
-{{!IPv6=RFC8200}}. Since IP proxying in HTTP conveys IP packets in HTTP Datagrams and
+{{IPv6}}. Since IP proxying in HTTP conveys IP packets in HTTP Datagrams and
 those can in turn be sent in QUIC DATAGRAM frames which cannot be fragmented
 {{!DGRAM=RFC9221}}, the MTU of an IP tunnel can be limited by the MTU of
 the QUIC connection that IP proxying is operating over. This can lead to
