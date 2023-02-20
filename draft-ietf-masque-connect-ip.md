@@ -418,7 +418,7 @@ included, the client is requesting to use any IP protocol.
 
 Using the terms IPv6address, IPv4address, and reg-name from {{URI}}, the
 "target" and "ipproto" variables MUST adhere to the format in {{target-format}},
-using notation from {{!ABNF=RFC4234}}. Additionally:
+using notation from {{!ABNF=RFC5234}}. Additionally:
 
 * if "target" contains an IPv6 literal or prefix, the colons (":") MUST be
   percent-encoded. For example, if the target host is "2001:db8::42", it will be
