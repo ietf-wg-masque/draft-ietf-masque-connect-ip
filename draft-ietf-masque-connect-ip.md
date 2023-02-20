@@ -975,24 +975,24 @@ The following example shows how to connect a branch office network to a
 corporate network such that all machines on those networks can communicate.
 In this example, the IP proxying client is attached to the branch office
 network 192.0.2.0/24, and the IP proxy is attached to the corporate network
-233.252.0.0/24. There are legacy clients on the branch office network that
+203.0.113.0/24. There are legacy clients on the branch office network that
 only allow maintenance request from machines on their subnet, so the IP
 Proxy is provisioned with an IP address from that subnet.
 
 ~~~ aasvg
 
-192.0.2.1 <--+   +--------+             +-------+   +---> 233.252.0.9
+192.0.2.1 <--+   +--------+             +-------+   +---> 203.0.113.9
              |   |        +-------------+  IP   |   |
-192.0.2.2 <--+---+ Client | IP Proxying | Proxy +---+---> 233.252.0.8
+192.0.2.2 <--+---+ Client | IP Proxying | Proxy +---+---> 203.0.113.8
              |   |        +-------------+       |   |
-192.0.2.3 <--+   +--------+             +-------+   +---> 233.252.0.7
+192.0.2.3 <--+   +--------+             +-------+   +---> 203.0.113.7
 
 ~~~
 {: #diagram-s2s title="Site-to-site VPN Example"}
 
 In this case, the client does not specify any scope in its request. The IP
-proxy assigns the client an IPv4 address (233.252.0.100) and a split-tunnel
-route to the corporate network (233.252.0.0/24). The client assigns the IP
+proxy assigns the client an IPv4 address (203.0.113.100) and a split-tunnel
+route to the corporate network (203.0.113.0/24). The client assigns the IP
 proxy an IPv4 address (192.0.2.200) and a split-tunnel route to the branch
 office network (192.0.2.0/24). This allows hosts on both networks to
 communicate with each other, and allows the IP proxy to perform maintenance
@@ -1038,14 +1038,14 @@ IP Protocol = 0) // Any
                               Capsule Type = ADDRESS_ASSIGN
                               (Request ID = 0
                                IP Version = 4
-                               IP Address = 233.252.0.100
+                               IP Address = 203.0.113.100
                                IP Prefix Length = 32)
 
                               STREAM(44): DATA
                               Capsule Type = ROUTE_ADVERTISEMENT
                               (IP Version = 4
-                               Start IP Address = 233.252.0.0
-                               End IP Address = 233.252.0.255
+                               Start IP Address = 203.0.113.0
+                               End IP Address = 203.0.113.255
                                IP Protocol = 0) // Any
 
 DATAGRAM
