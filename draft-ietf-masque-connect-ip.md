@@ -446,9 +446,10 @@ included in the scope, then the IP proxy can immediately fail the request.
 Note that IP protocol numbers represent both upper layers (as defined in
 {{Section 2 of !IPv6=RFC8200}}, examples include TCP and UDP) and IPv6
 extension headers (as defined in {{Section 4 of IPv6}}, examples include
-Fragment and Routing headers). Implementations that support scoping by IP
-protocol number MUST either drop packets with IPv6 extension headers, or walk
-the chain of extensions to find the upper layer.
+Fragment and Options headers). IP proxies MAY reject requests to scope
+to protocol numbers that are used for extension headers. Upon receiving
+packets, implementations that support scoping by IP protocol number MUST
+walk the chain of extensions to find the matching IP protocol number.
 
 ## Capsules
 
