@@ -447,6 +447,14 @@ IP proxies MAY perform access control using the scoping information provided
 by the client: if the client is not authorized to access any of the destinations
 included in the scope, then the IP proxy can immediately fail the request.
 
+Note that IP protocol numbers represent both upper layers (as defined in
+{{Section 2 of !IPv6=RFC8200}}, examples include TCP and UDP) and IPv6
+extension headers (as defined in {{Section 4 of IPv6}}, examples include
+Fragment and Options headers). IP proxies MAY reject requests to scope
+to protocol numbers that are used for extension headers. Upon receiving
+packets, implementations that support scoping by IP protocol number MUST
+walk the chain of extensions to find the matching IP protocol number.
+
 ## Capsules
 
 This document defines multiple new capsule types that allow endpoints to
@@ -804,7 +812,7 @@ prevents infinite loops in the presence of routing loops, and matches the
 choices in IPsec {{?IPSEC=RFC4301}}.
 
 IPv6 requires that every link have an MTU of at least 1280 bytes
-{{!IPv6=RFC8200}}. Since IP proxying in HTTP conveys IP packets in HTTP Datagrams and
+{{IPv6}}. Since IP proxying in HTTP conveys IP packets in HTTP Datagrams and
 those can in turn be sent in QUIC DATAGRAM frames which cannot be fragmented
 {{!DGRAM=RFC9221}}, the MTU of an IP tunnel can be limited by the MTU of
 the QUIC connection that IP proxying is operating over. This can lead to
@@ -1284,6 +1292,10 @@ divulge information about one client's traffic to another client. To avoid this,
 proxies that forward ICMP on shared external IP addresses MUST inspect
 the invoking packet included in the ICMP packet and only forward the ICMP
 packet to the client whose scoping matches the invoking packet.
+
+Since there are known risks with some IPv6 extension headers (e.g.,
+{{?ROUTING-HDR=RFC5095}}), implementers need to follow the latest guidance
+regarding handling of IPv6 extension headers.
 
 # IANA Considerations
 
