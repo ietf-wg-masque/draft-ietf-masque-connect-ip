@@ -1352,7 +1352,7 @@ IANA_URL_TBD is the URL of the new registry described in {{iana-suffix}}.
 
 ## Capsule Type Registrations {#iana-types}
 
-This document requests IANA add the following values to the "HTTP Capsule Types"
+This document requests IANA to add the following values to the "HTTP Capsule Types"
 registry maintained at
 <[](https://www.iana.org/assignments/http-capsule-protocol)>.
 
