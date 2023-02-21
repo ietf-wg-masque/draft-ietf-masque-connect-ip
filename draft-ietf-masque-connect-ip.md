@@ -806,7 +806,7 @@ decremented right before an IP packet is transmitted in an HTTP Datagram. This
 prevents infinite loops in the presence of routing loops, and matches the
 choices in IPsec {{?IPSEC=RFC4301}}.
 
-Implementors need to ensure that they do not forward any link-local traffic
+Implementers need to ensure that they do not forward any link-local traffic
 onto a different interface than the one it was received on. IP proxies also
 need to properly reply to packets destined to link-local multicast addresses.
 
