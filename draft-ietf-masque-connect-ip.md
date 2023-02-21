@@ -543,6 +543,13 @@ assignment, for example when it is configured out-of-band with static addresses.
 While ADDRESS_ASSIGN capsules are commonly sent in response to ADDRESS_REQUEST
 capsules, endpoints MAY send ADDRESS_ASSIGN capsules unprompted.
 
+Note that the IP forwarding tunnels described in this document are not fully
+featured "interfaces" in the IPv6 addressing architecture sense
+{{?IPv6-ADDR=RFC4291}}. In particular, they do not necessarily have IPv6
+link-local addresses. Additionally, IPv6 stateless autoconfiguration or router
+advertisement messages are not used in such interfaces, and neither is neighbor
+discovery.
+
 ### ADDRESS_REQUEST Capsule {#addr_req}
 
 The ADDRESS_REQUEST capsule (see {{iana-types}} for the value of the capsule
@@ -810,6 +817,10 @@ encapsulation but not decapsulation. In other words, the Hop Count is
 decremented right before an IP packet is transmitted in an HTTP Datagram. This
 prevents infinite loops in the presence of routing loops, and matches the
 choices in IPsec {{?IPSEC=RFC4301}}.
+
+Implementers need to ensure that they do not forward any link-local traffic
+onto a different interface than the one it was received on. IP proxies also
+need to properly reply to packets destined to link-local multicast addresses.
 
 IPv6 requires that every link have an MTU of at least 1280 bytes
 {{IPv6}}. Since IP proxying in HTTP conveys IP packets in HTTP Datagrams and
