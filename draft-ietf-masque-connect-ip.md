@@ -1375,16 +1375,46 @@ IANA_URL_TBD is the URL of the new registry described in {{iana-suffix}}.
 
 ## Capsule Type Registrations {#iana-types}
 
-This document will request IANA to add the following values to the "HTTP
-Capsule Types" registry maintained at
-<[](https://www.iana.org/assignments/http-capsule-protocol/http-capsule-protocol.xhtml)>.
+This document requests IANA to add the following values to the "HTTP Capsule Types"
+registry maintained at
+<[](https://www.iana.org/assignments/http-capsule-protocol)>.
 
-|   Value    |        Type         |     Description     |   Reference   |
-|:-----------|:--------------------|:--------------------|:--------------|
-| 0x1ECA6A00 |   ADDRESS_ASSIGN    | Address Assignment  | This Document |
-| 0x1ECA6A01 |   ADDRESS_REQUEST   | Address Request     | This Document |
-| 0x1ECA6A02 | ROUTE_ADVERTISEMENT | Route Advertisement | This Document |
+| Value |    Capsule Type     |     Description     |
+|:------|:--------------------|:--------------------|
+| 0x01  |   ADDRESS_ASSIGN    | Address Assignment  |
+| 0x02  |   ADDRESS_REQUEST   | Address Request     |
+| 0x03  | ROUTE_ADVERTISEMENT | Route Advertisement |
 {: #iana-capsules-table title="New Capsules"}
+
+All of these new entries use the following values for these fields:
+
+Status:
+
+: provisional (permanent when this document is approved)
+
+Reference:
+
+: This Document
+
+Change Controller:
+
+: IETF
+
+Contact:
+
+: masque@ietf.org
+
+Notes:
+
+: Empty
+
+RFC Editor: please remove the rest of this subsection before publication.
+
+Since this document has not yet been published, it might still change before
+publication as RFC. Any implementer that wishes to deploy IP proxying in
+production before publication MUST use the following temporary codepoints
+instead: 0x2575D601 for ADDRESS_ASSIGN, 0x2575D602 for ADDRESS_REQUEST, and
+0x2575D603 for ROUTE_ADVERTISEMENT.
 
 --- back
 
