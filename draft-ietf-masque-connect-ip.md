@@ -997,7 +997,7 @@ corporate network such that all machines on those networks can communicate.
 In this example, the IP proxying client is attached to the branch office
 network 192.0.2.0/24, and the IP proxy is attached to the corporate network
 203.0.113.0/24. There are legacy clients on the branch office network that
-only allow maintenance request from machines on their subnet, so the IP
+only allow maintenance requests from machines on their subnet, so the IP
 Proxy is provisioned with an IP address from that subnet.
 
 ~~~ aasvg
