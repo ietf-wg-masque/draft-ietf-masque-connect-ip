@@ -533,7 +533,7 @@ all addresses have been removed.
 
 In some deployments of IP proxying in HTTP, an endpoint needs to be assigned an address
 by its peer before it knows what source address to set on its own packets. For
-example, in the Remote Access case ({{example-remote}}) the client cannot send
+example, in the Remote Access VPN case ({{example-remote}}) the client cannot send
 IP packets until it knows what address to use. In these deployments, the
 endpoint that is expecting an address assignment MUST send an ADDRESS_REQUEST
 capsule. This isn't required if the endpoint does not need any address
