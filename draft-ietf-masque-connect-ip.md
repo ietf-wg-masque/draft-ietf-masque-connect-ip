@@ -516,7 +516,7 @@ IP Prefix Length:
 : The number of bits in the IP Address that are used to define the prefix that
 is being assigned, encoded as an unsigned 8-bit integer. This MUST be less than
 or equal to the length of the IP Address field, in bits. If the prefix length
-is equal to the length of the IP Address, the receiver of this capsule is only
+is equal to the length of the IP Address, the receiver of this capsule is
 allowed to send packets from a single source address. If the prefix length is
 less than the length of the IP address, the receiver of this capsule is allowed
 to send packets from any source address that falls within the prefix.
