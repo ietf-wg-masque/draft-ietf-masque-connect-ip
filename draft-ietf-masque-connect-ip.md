@@ -868,15 +868,15 @@ forwarded. In such scenarios, IP proxying endpoints SHOULD use ICMP
 Endpoints are free to select the most appropriate ICMP errors to send. Some
 examples that are relevant for IP proxying include:
 
-- For invalid source addresses, send Destination Unreachable {{Section 3.1 of
-  ICMPv6}} with code 5, "Source address failed ingress/egress policy".
+- For invalid source addresses, send Destination Unreachable ({{Section 3.1 of
+  ICMPv6}}) with code 5, "Source address failed ingress/egress policy".
 
-- For unroutable destination addresses, send Destination Unreachable {{Section
-  3.1 of ICMPv6}} with a code 0, "No route to destination", or code 1,
+- For unroutable destination addresses, send Destination Unreachable ({{Section
+  3.1 of ICMPv6}}) with a code 0, "No route to destination", or code 1,
   "Communication with destination administratively prohibited".
 
 - For packets that cannot fit within the MTU of the outgoing link, send Packet
-  Too Big {{Section 3.2 of ICMPv6}}.
+  Too Big ({{Section 3.2 of ICMPv6}}).
 
 In order to receive these errors, endpoints need to be prepared to receive ICMP
 packets. If an endpoint does not send ROUTE_ADVERTISEMENT capsules, such as a
