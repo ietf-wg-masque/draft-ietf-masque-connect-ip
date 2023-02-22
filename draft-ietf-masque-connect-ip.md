@@ -76,7 +76,7 @@ informative:
       org: IANA
     title: "Protocol Numbers"
     date: false
-    target: "https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml"
+    target: "https://www.iana.org/assignments/protocol-numbers"
 
 --- abstract
 
@@ -413,8 +413,7 @@ also sends an Assigned Address.
 ipproto:
 
 : The variable "ipproto" contains an IP protocol number, as defined in the
-"Assigned Internet Protocol Numbers" IANA registry maintained at
-<[](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml)>.
+"Assigned Internet Protocol Numbers" IANA registry {{IANA-PN}}.
 If present, it specifies that a client only wants to proxy a specific IP
 protocol for this request. If the value is "\*", or the variable is not
 included, the client is requesting to use any IP protocol.
