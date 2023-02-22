@@ -98,8 +98,8 @@ IP protocols {{IANA-PN}} nor convey fields of the IP header.
 
 This document describes a protocol for tunnelling IP through an HTTP server acting
 as an IP-specific proxy over HTTP. This can be used for various use cases
-such as point-to-network VPN, secure point-to-point communication, or
-general-purpose packet tunnelling.
+such as remote access VPN, site-to-site VPN, secure point-to-point communication,
+or general-purpose packet tunnelling.
 
 IP proxying operates similarly to UDP proxying {{?CONNECT-UDP=RFC9298}},
 whereby the proxy itself is identified with an absolute URL, optionally
