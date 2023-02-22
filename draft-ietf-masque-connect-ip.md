@@ -76,7 +76,7 @@ informative:
       org: IANA
     title: "Protocol Numbers"
     date: false
-    target: "https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml"
+    target: "https://www.iana.org/assignments/protocol-numbers"
 
 --- abstract
 
@@ -98,8 +98,8 @@ IP protocols {{IANA-PN}} nor convey fields of the IP header.
 
 This document describes a protocol for tunnelling IP through an HTTP server acting
 as an IP-specific proxy over HTTP. This can be used for various use cases
-such as point-to-network VPN, secure point-to-point communication, or
-general-purpose packet tunnelling.
+such as remote access VPN, site-to-site VPN, secure point-to-point communication,
+or general-purpose packet tunnelling.
 
 IP proxying operates similarly to UDP proxying {{?CONNECT-UDP=RFC9298}},
 whereby the proxy itself is identified with an absolute URL, optionally
@@ -413,8 +413,7 @@ also sends an Assigned Address.
 ipproto:
 
 : The variable "ipproto" contains an IP protocol number, as defined in the
-"Assigned Internet Protocol Numbers" IANA registry maintained at
-<[](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml)>.
+"Assigned Internet Protocol Numbers" IANA registry {{IANA-PN}}.
 If present, it specifies that a client only wants to proxy a specific IP
 protocol for this request. If the value is "\*", or the variable is not
 included, the client is requesting to use any IP protocol.
@@ -446,6 +445,14 @@ ipproto = 1*3DIGIT / "*"
 IP proxies MAY perform access control using the scoping information provided
 by the client: if the client is not authorized to access any of the destinations
 included in the scope, then the IP proxy can immediately fail the request.
+
+Note that IP protocol numbers represent both upper layers (as defined in
+{{Section 2 of !IPv6=RFC8200}}, examples include TCP and UDP) and IPv6
+extension headers (as defined in {{Section 4 of IPv6}}, examples include
+Fragment and Options headers). IP proxies MAY reject requests to scope
+to protocol numbers that are used for extension headers. Upon receiving
+packets, implementations that support scoping by IP protocol number MUST
+walk the chain of extensions to find the matching IP protocol number.
 
 ## Capsules
 
@@ -509,7 +516,7 @@ IP Prefix Length:
 : The number of bits in the IP Address that are used to define the prefix that
 is being assigned, encoded as an unsigned 8-bit integer. This MUST be less than
 or equal to the length of the IP Address field, in bits. If the prefix length
-is equal to the length of the IP Address, the receiver of this capsule is only
+is equal to the length of the IP Address, the receiver of this capsule is
 allowed to send packets from a single source address. If the prefix length is
 less than the length of the IP address, the receiver of this capsule is allowed
 to send packets from any source address that falls within the prefix.
@@ -526,7 +533,7 @@ all addresses have been removed.
 
 In some deployments of IP proxying in HTTP, an endpoint needs to be assigned an address
 by its peer before it knows what source address to set on its own packets. For
-example, in the Remote Access case ({{example-remote}}) the client cannot send
+example, in the Remote Access VPN case ({{example-remote}}) the client cannot send
 IP packets until it knows what address to use. In these deployments, the
 endpoint that is expecting an address assignment MUST send an ADDRESS_REQUEST
 capsule. This isn't required if the endpoint does not need any address
@@ -534,6 +541,13 @@ assignment, for example when it is configured out-of-band with static addresses.
 
 While ADDRESS_ASSIGN capsules are commonly sent in response to ADDRESS_REQUEST
 capsules, endpoints MAY send ADDRESS_ASSIGN capsules unprompted.
+
+Note that the IP forwarding tunnels described in this document are not fully
+featured "interfaces" in the IPv6 addressing architecture sense
+{{?IPv6-ADDR=RFC4291}}. In particular, they do not necessarily have IPv6
+link-local addresses. Additionally, IPv6 stateless autoconfiguration or router
+advertisement messages are not used in such interfaces, and neither is neighbor
+discovery.
 
 ### ADDRESS_REQUEST Capsule {#addr_req}
 
@@ -641,7 +655,8 @@ ROUTE_ADVERTISEMENT Capsule {
 ~~~
 {: #route-adv-format title="ROUTE_ADVERTISEMENT Capsule Format"}
 
-The ROUTE_ADVERTISEMENT capsule contains a sequence of IP Address Ranges.
+The ROUTE_ADVERTISEMENT capsule contains a sequence of zero or more IP Address
+Ranges.
 
 ~~~
 IP Address Range {
@@ -803,8 +818,12 @@ decremented right before an IP packet is transmitted in an HTTP Datagram. This
 prevents infinite loops in the presence of routing loops, and matches the
 choices in IPsec {{?IPSEC=RFC4301}}.
 
+Implementers need to ensure that they do not forward any link-local traffic
+onto a different interface than the one it was received on. IP proxies also
+need to properly reply to packets destined to link-local multicast addresses.
+
 IPv6 requires that every link have an MTU of at least 1280 bytes
-{{!IPv6=RFC8200}}. Since IP proxying in HTTP conveys IP packets in HTTP Datagrams and
+{{IPv6}}. Since IP proxying in HTTP conveys IP packets in HTTP Datagrams and
 those can in turn be sent in QUIC DATAGRAM frames which cannot be fragmented
 {{!DGRAM=RFC9221}}, the MTU of an IP tunnel can be limited by the MTU of
 the QUIC connection that IP proxying is operating over. This can lead to
@@ -849,15 +868,15 @@ forwarded. In such scenarios, IP proxying endpoints SHOULD use ICMP
 Endpoints are free to select the most appropriate ICMP errors to send. Some
 examples that are relevant for IP proxying include:
 
-- For invalid source addresses, send Destination Unreachable {{Section 3.1 of
-  ICMPv6}} with code 5, "Source address failed ingress/egress policy".
+- For invalid source addresses, send Destination Unreachable ({{Section 3.1 of
+  ICMPv6}}) with code 5, "Source address failed ingress/egress policy".
 
-- For unroutable destination addresses, send Destination Unreachable {{Section
-  3.1 of ICMPv6}} with a code 0, "No route to destination", or code 1,
+- For unroutable destination addresses, send Destination Unreachable ({{Section
+  3.1 of ICMPv6}}) with a code 0, "No route to destination", or code 1,
   "Communication with destination administratively prohibited".
 
 - For packets that cannot fit within the MTU of the outgoing link, send Packet
-  Too Big {{Section 3.2 of ICMPv6}}.
+  Too Big ({{Section 3.2 of ICMPv6}}).
 
 In order to receive these errors, endpoints need to be prepared to receive ICMP
 packets. If an endpoint does not send ROUTE_ADVERTISEMENT capsules, such as a
@@ -978,7 +997,7 @@ corporate network such that all machines on those networks can communicate.
 In this example, the IP proxying client is attached to the branch office
 network 192.0.2.0/24, and the IP proxy is attached to the corporate network
 203.0.113.0/24. There are legacy clients on the branch office network that
-only allow maintenance request from machines on their subnet, so the IP
+only allow maintenance requests from machines on their subnet, so the IP
 Proxy is provisioned with an IP address from that subnet.
 
 ~~~ aasvg
@@ -1284,6 +1303,10 @@ divulge information about one client's traffic to another client. To avoid this,
 proxies that forward ICMP on shared external IP addresses MUST inspect
 the invoking packet included in the ICMP packet and only forward the ICMP
 packet to the client whose scoping matches the invoking packet.
+
+Since there are known risks with some IPv6 extension headers (e.g.,
+{{?ROUTING-HDR=RFC5095}}), implementers need to follow the latest guidance
+regarding handling of IPv6 extension headers.
 
 # IANA Considerations
 
