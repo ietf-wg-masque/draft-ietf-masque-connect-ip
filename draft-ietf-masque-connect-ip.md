@@ -655,7 +655,8 @@ ROUTE_ADVERTISEMENT Capsule {
 ~~~
 {: #route-adv-format title="ROUTE_ADVERTISEMENT Capsule Format"}
 
-The ROUTE_ADVERTISEMENT capsule contains a sequence of IP Address Ranges.
+The ROUTE_ADVERTISEMENT capsule contains a sequence of zero or more IP Address
+Ranges.
 
 ~~~
 IP Address Range {
