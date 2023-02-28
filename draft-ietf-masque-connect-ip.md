@@ -807,6 +807,10 @@ When an endpoint receives an HTTP Datagram containing an IP packet, it
 will parse the packet's IP header, perform any local policy checks (e.g., source
 address validation), check their routing table to pick an outbound interface,
 and then send the IP packet on that interface or pass it to a local application.
+The endpoint can also choose to drop any received packets instead of forwarding
+them. If a received IP packet fails any correctness or policy checks, that is a
+forwarding error, not a protocol violation as far as IP proxying is concerned;
+see {{error-signal}}.
 
 In the other direction, when an endpoint receives an IP packet, it checks to see
 if the packet matches the routes mapped for an IP tunnel, and performs the same
@@ -855,7 +859,7 @@ the IP proxying request stream.
 Endpoints MAY implement additional filtering policies on the IP packets they
 forward.
 
-# Error Signalling
+# Error Signalling {#error-signal}
 
 Since IP proxying endpoints often forward IP packets onwards to other network
 interfaces, they need to handle errors in the forwarding process. For example,
