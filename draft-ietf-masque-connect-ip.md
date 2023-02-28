@@ -864,8 +864,7 @@ address, or if it is configured to reject a destination prefix by policy, or if
 the MTU of the outgoing link is lower than the size of the packet to be
 forwarded. In such scenarios, IP proxying endpoints SHOULD use ICMP
 {{!ICMP=RFC0792}} {{!ICMPv6=RFC4443}} to signal the forwarding error to its peer
-by generating ICMP packets with corresponding IP headers and sending them
-using HTTP Datagrams.
+by generating ICMP packets and sending them using HTTP Datagrams.
 
 Endpoints are free to select the most appropriate ICMP errors to send. Some
 examples that are relevant for IP proxying include:
