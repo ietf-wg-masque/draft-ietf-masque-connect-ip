@@ -1206,7 +1206,7 @@ STREAM(44): HEADERS
 :method = CONNECT
 :protocol = connect-ip
 :scheme = https
-:path = /proxy?ipproto=17
+:path = /proxy?target=target.example.com&ipproto=17
 :authority = proxy.example.com
 capsule-protocol = ?1
 
