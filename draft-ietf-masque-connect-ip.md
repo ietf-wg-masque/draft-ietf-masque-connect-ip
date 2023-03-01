@@ -693,8 +693,9 @@ If any of the capsule fields are malformed upon reception, the receiver of the
 capsule MUST follow the error handling procedure defined in
 {{Section 3.3 of HTTP-DGRAM}}.
 
-Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY install
-corresponding entries into its routing table.
+Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY update its local
+state about what its peer is willing to route (subject to local policy), such as by installing
+entries in a routing table.
 
 Each ROUTE_ADVERTISEMENT contains the full list of address ranges. If multiple
 ROUTE_ADVERTISEMENT capsules are sent in one direction, each ROUTE_ADVERTISEMENT
