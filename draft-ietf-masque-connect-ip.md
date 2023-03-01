@@ -694,7 +694,7 @@ capsule MUST follow the error handling procedure defined in
 {{Section 3.3 of HTTP-DGRAM}}.
 
 Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY update its local
-state about what its peer is willing to route (subject to local policy), such
+state regarding what its peer is willing to route (subject to local policy), such
 as by installing entries in a routing table.
 
 Each ROUTE_ADVERTISEMENT contains the full list of address ranges. If multiple
