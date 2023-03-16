@@ -136,7 +136,7 @@ entire connection.
 # Configuration of Clients {#client-config}
 
 Clients are configured to use IP proxying over HTTP via an URI Template
-{{!TEMPLATE=RFC6570}}. The URI template MAY contain two variables: "target" and
+{{!TEMPLATE=RFC6570}}. The URI Template MAY contain two variables: "target" and
 "ipproto"; see {{scope}}. The optionality of the variables needs to be considered
 when defining the template so that either the variable is self-identifying or it
 is possible to exclude it in the syntax.
@@ -162,7 +162,7 @@ The following requirements apply to the URI Template:
 
 * All template variables MUST be within the path or query components of the URI.
 
-* The URI template MAY contain the two variables "target" and "ipproto" and MAY
+* The URI Template MAY contain the two variables "target" and "ipproto" and MAY
   contain other variables. If the "target" or "ipproto" variables are included,
   their values MUST NOT be empty. Clients can instead use "\*" to indicate
   wildcard or no-preference values; see {{scope}}.
@@ -193,14 +193,14 @@ to interoperate with such clients.
 # Tunnelling IP over HTTP
 
 To allow negotiation of a tunnel for IP over HTTP, this document defines the
-"connect-ip" HTTP Upgrade Token. The resulting IP tunnels use the Capsule
+"connect-ip" HTTP upgrade token. The resulting IP tunnels use the Capsule
 Protocol (see {{Section 3.2 of HTTP-DGRAM}}) with HTTP Datagrams in the format
 defined in {{payload-format}}.
 
 To initiate an IP tunnel associated with a single HTTP stream, a client issues a
 request containing the "connect-ip" upgrade token.
 
-When sending its IP proxying request, the client SHALL perform URI template
+When sending its IP proxying request, the client SHALL perform URI Template
 expansion to determine the path and query of its request, see {{client-config}}.
 
 By virtue of the definition of the Capsule Protocol (see {{Section 3.2 of
@@ -333,7 +333,7 @@ pseudo-header fields with the following requirements:
 * The :path and :scheme pseudo-header fields SHALL NOT be empty. Their
   values SHALL contain the scheme and path from the URI Template after the URI
   Template expansion process has been completed; see {{client-config}}.
-  Variables in the URI template can determine the scope of the request, such
+  Variables in the URI Template can determine the scope of the request, such
   as requesting full-tunnel IP packet forwarding, or a specific proxied flow;
   see {{scope}}.
 
@@ -513,10 +513,10 @@ IP Address field SHALL have a length of 128 bits.
 
 IP Prefix Length:
 
-: The number of bits in the IP Address that are used to define the prefix that
+: The number of bits in the IP address that are used to define the prefix that
 is being assigned, encoded as an unsigned 8-bit integer. This MUST be less than
 or equal to the length of the IP Address field, in bits. If the prefix length
-is equal to the length of the IP Address, the receiver of this capsule is
+is equal to the length of the IP address, the receiver of this capsule is
 allowed to send packets from a single source address. If the prefix length is
 less than the length of the IP address, the receiver of this capsule is allowed
 to send packets from any source address that falls within the prefix.
@@ -605,7 +605,7 @@ integer. MUST be less than or equal to the length of the IP Address field, in
 bits.
 {: spacing="compact"}
 
-If the IP Address is all-zero (0.0.0.0 or ::), this indicates that the sender is
+If the IP address is all-zero (0.0.0.0 or ::), this indicates that the sender is
 requesting an address of that address family but does not have a preference for
 a specific address. In that scenario, the prefix length still indicates the
 sender's preference for the prefix length it is requesting.
@@ -620,7 +620,7 @@ to inform the peer of the assignment. For each Requested Address, the receiver
 of the ADDRESS_REQUEST capsule SHALL respond with an Assigned Address with a
 matching Request ID. If the requested address was assigned, the IP Address and
 IP Prefix Length fields in the Assigned Address response SHALL be set to the
-assigned values. If the requested address was not assigned, the IP Address SHALL
+assigned values. If the requested address was not assigned, the IP address SHALL
 be all-zero and the IP Prefix Length SHALL be the maximum length (0.0.0.0/32 or
 ::/128) to indicate that no address was assigned. These address rejections SHOULD NOT be
 included in subsequent ADDRESS_ASSIGN capsules. Note that other Assigned Address
@@ -706,7 +706,7 @@ capsule does not contain it, the receiver will consider that range withdrawn.
 If multiple ranges using the same IP protocol were to overlap, some routing
 table implementations might reject them. To prevent overlap, the ranges are
 ordered; this places the burden on the sender and makes verification by the
-receiver much simpler. If an IP Address Range A precedes an IP address range B
+receiver much simpler. If an IP Address Range A precedes an IP Address Range B
 in the same ROUTE_ADVERTISEMENT capsule, they MUST follow these requirements:
 
 * IP Version of A MUST be less than or equal than IP Version of B
