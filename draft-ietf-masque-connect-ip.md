@@ -96,21 +96,21 @@ creating a TCP {{!TCP=RFC9293}} tunnel to a destination and a similar mechanism
 for UDP {{?CONNECT-UDP=RFC9298}}. However, these mechanisms cannot tunnel other
 IP protocols {{IANA-PN}} nor convey fields of the IP header.
 
-This document describes a protocol for tunnelling IP through an HTTP server acting
-as an IP-specific proxy over HTTP. This can be used for various use cases
-such as remote access VPN, site-to-site VPN, secure point-to-point communication,
-or general-purpose packet tunnelling.
+This document describes a protocol for tunnelling IP through an HTTP server
+acting as an IP-specific proxy over HTTP. This can be used for various use
+cases such as remote access VPN, site-to-site VPN, secure point-to-point
+communication, or general-purpose packet tunnelling.
 
 IP proxying operates similarly to UDP proxying {{?CONNECT-UDP=RFC9298}},
 whereby the proxy itself is identified with an absolute URL, optionally
-containing the traffic's destination. Clients generate these URLs using a
-URI Template {{!TEMPLATE=RFC6570}}, as described in {{client-config}}.
+containing the traffic's destination. Clients generate these URLs using a URI
+Template {{!TEMPLATE=RFC6570}}, as described in {{client-config}}.
 
 This protocol supports all existing versions of HTTP by using HTTP Datagrams
 {{!HTTP-DGRAM=RFC9297}}. When using HTTP/2 {{H2}} or HTTP/3 {{H3}}, it uses
 HTTP Extended CONNECT as described in {{!EXT-CONNECT2=RFC8441}} and
-{{!EXT-CONNECT3=RFC9220}}. When using HTTP/1.x {{H1}}, it uses HTTP Upgrade
-as defined in {{Section 7.8 of HTTP}}.
+{{!EXT-CONNECT3=RFC9220}}. When using HTTP/1.x {{H1}}, it uses HTTP Upgrade as
+defined in {{Section 7.8 of HTTP}}.
 
 This document updates {{CONNECT-UDP}}.
 
@@ -119,15 +119,15 @@ This document updates {{CONNECT-UDP}}.
 {::boilerplate bcp14-tagged}
 
 In this document, we use the term "IP proxy" to refer to the HTTP server that
-responds to the IP proxying request. If there are HTTP intermediaries (as defined
-in {{Section 3.7 of HTTP}}) between the client and the proxy, those are
+responds to the IP proxying request. If there are HTTP intermediaries (as
+defined in {{Section 3.7 of HTTP}}) between the client and the proxy, those are
 referred to as "intermediaries" in this document.
 
 This document uses terminology from {{!QUIC=RFC9000}}. Where this document
-defines protocol types, the definition format uses the notation from
-{{Section 1.3 of QUIC}}. This specification uses the variable-length integer
-encoding from {{Section 16 of !QUIC=RFC9000}}. Variable-length integer values
-do not need to be encoded in the minimum number of bytes necessary.
+defines protocol types, the definition format uses the notation from {{Section
+1.3 of QUIC}}. This specification uses the variable-length integer encoding
+from {{Section 16 of !QUIC=RFC9000}}. Variable-length integer values do not
+need to be encoded in the minimum number of bytes necessary.
 
 Note that, when the HTTP version in use does not support multiplexing streams
 (such as HTTP/1.1), any reference to "stream" in this document represents the
@@ -137,9 +137,9 @@ entire connection.
 
 Clients are configured to use IP proxying over HTTP via an URI Template
 {{!TEMPLATE=RFC6570}}. The URI Template MAY contain two variables: "target" and
-"ipproto"; see {{scope}}. The optionality of the variables needs to be considered
-when defining the template so that either the variable is self-identifying or it
-is possible to exclude it in the syntax.
+"ipproto"; see {{scope}}. The optionality of the variables needs to be
+considered when defining the template so that either the variable is
+self-identifying or it is possible to exclude it in the syntax.
 
 Examples are shown below:
 
@@ -177,18 +177,19 @@ The following requirements apply to the URI Template:
   Semicolon-Prefix.
 
 Clients SHOULD validate the requirements above; however, clients MAY use a
-general-purpose URI Template implementation that lacks this specific validation.
-If a client detects that any of the requirements above are not met by a URI
-Template, the client MUST reject its configuration and abort the request without
-sending it to the IP proxy.
+general-purpose URI Template implementation that lacks this specific
+validation. If a client detects that any of the requirements above are not met
+by a URI Template, the client MUST reject its configuration and abort the
+request without sending it to the IP proxy.
 
-As with UDP proxying, some client configurations for IP proxies will only
-allow the user to configure the proxy host and proxy port. Clients with such limitations
-MAY attempt to access IP proxying capabilities using the default template, which is
-defined as: "https://$PROXY_HOST:$PROXY_PORT/.well-known/masque/ip/{target}/{ipproto}/",
-where $PROXY_HOST and $PROXY_PORT are the configured host and port of the IP proxy,
-respectively. IP proxy deployments SHOULD offer service at this location if they need
-to interoperate with such clients.
+As with UDP proxying, some client configurations for IP proxies will only allow
+the user to configure the proxy host and proxy port. Clients with such
+limitations MAY attempt to access IP proxying capabilities using the default
+template, which is defined as:
+"https://$PROXY_HOST:$PROXY_PORT/.well-known/masque/ip/{target}/{ipproto}/",
+where $PROXY_HOST and $PROXY_PORT are the configured host and port of the IP
+proxy, respectively. IP proxy deployments SHOULD offer service at this location
+if they need to interoperate with such clients.
 
 # Tunnelling IP over HTTP
 
@@ -197,8 +198,8 @@ To allow negotiation of a tunnel for IP over HTTP, this document defines the
 Protocol (see {{Section 3.2 of HTTP-DGRAM}}) with HTTP Datagrams in the format
 defined in {{payload-format}}.
 
-To initiate an IP tunnel associated with a single HTTP stream, a client issues a
-request containing the "connect-ip" upgrade token.
+To initiate an IP tunnel associated with a single HTTP stream, a client issues
+a request containing the "connect-ip" upgrade token.
 
 When sending its IP proxying request, the client SHALL perform URI Template
 expansion to determine the path and query of its request, see {{client-config}}.
@@ -213,44 +214,42 @@ content.
 Upon receiving an IP proxying request:
 
  * if the recipient is configured to use another HTTP proxy, it will act as an
-   intermediary by forwarding the request to another HTTP server. Note that such
-   intermediaries may need to re-encode the request if they forward it using a
-   version of HTTP that is different from the one used to receive it, as the
-   request encoding differs by version (see below).
+   intermediary by forwarding the request to another HTTP server. Note that
+   such intermediaries may need to re-encode the request if they forward it
+   using a version of HTTP that is different from the one used to receive it,
+   as the request encoding differs by version (see below).
 
  * otherwise, the recipient will act as an IP proxy. The IP proxy can choose to
-  reject the IP proxying request. Otherwise, it extracts the optional
-  "target" and "ipproto" variables from the URI it has reconstructed
-  from the request headers, decodes their percent-encoding, and establishes an
-  IP tunnel.
+   reject the IP proxying request. Otherwise, it extracts the optional "target"
+   and "ipproto" variables from the URI it has reconstructed from the request
+   headers, decodes their percent-encoding, and establishes an IP tunnel.
 
 IP proxies MUST validate whether the decoded "target" and "ipproto" variables
-meet the requirements in {{scope}}. If they do not, the IP proxy MUST treat
-the request as malformed; see {{Section 8.1.1 of H2}} and
-{{Section 4.1.2 of H3}}. If the "target" variable is a DNS name, the IP proxy
-MUST perform DNS resolution (to query the corresponding IPv4 and/or IPv6
-addresses via A and/or AAAA records) before replying to the HTTP request. If errors
-occur during this process, the IP proxy MUST reject the request and SHOULD
-send details using an appropriate Proxy-Status header field
-{{!PROXY-STATUS=RFC9209}}. For example, if DNS resolution returns an error,
-the proxy can use the `dns_error` Proxy Error Type from
-{{Section 2.3.2 of PROXY-STATUS}}.
+meet the requirements in {{scope}}. If they do not, the IP proxy MUST treat the
+request as malformed; see {{Section 8.1.1 of H2}} and {{Section 4.1.2 of H3}}.
+If the "target" variable is a DNS name, the IP proxy MUST perform DNS
+resolution (to query the corresponding IPv4 and/or IPv6 addresses via A and/or
+AAAA records) before replying to the HTTP request. If errors occur during this
+process, the IP proxy MUST reject the request and SHOULD send details using an
+appropriate Proxy-Status header field {{!PROXY-STATUS=RFC9209}}. For example,
+if DNS resolution returns an error, the proxy can use the `dns_error` Proxy
+Error Type from {{Section 2.3.2 of PROXY-STATUS}}.
 
-The lifetime of the IP forwarding tunnel is tied to the IP proxying request stream.
-The IP proxy MUST maintain all IP address and route assignments associated with the
-IP forwarding tunnel while the request stream is open. IP proxies MAY choose to
-tear down the tunnel due to a period of inactivity, but they MUST close the request
-stream when doing so.
+The lifetime of the IP forwarding tunnel is tied to the IP proxying request
+stream. The IP proxy MUST maintain all IP address and route assignments
+associated with the IP forwarding tunnel while the request stream is open. IP
+proxies MAY choose to tear down the tunnel due to a period of inactivity, but
+they MUST close the request stream when doing so.
 
 A successful response (as defined in Sections {{<resp1}} and {{<resp23}})
 indicates that the IP proxy has established an IP tunnel and is willing to
-proxy IP payloads. Any response other than a successful response
-indicates that the request has failed; thus, the client MUST abort the request.
+proxy IP payloads. Any response other than a successful response indicates that
+the request has failed; thus, the client MUST abort the request.
 
 Along with a successful response, the IP proxy can send capsules to assign
-addresses and advertise routes to the client ({{capsules}}). The client can also
-assign addresses and advertise routes to the IP proxy for network-to-network
-routing.
+addresses and advertise routes to the client ({{capsules}}). The client can
+also assign addresses and advertise routes to the IP proxy for
+network-to-network routing.
 
 ## HTTP/1.1 Request {#req1}
 
@@ -268,14 +267,14 @@ requirements:
 
 * the request SHALL include an Upgrade header field with value "connect-ip".
 
-An IP proxying request that does not conform to these restrictions is malformed.
-The recipient of such a malformed request MUST respond with an error and SHOULD
-use the 400 (Bad Request) status code.
+An IP proxying request that does not conform to these restrictions is
+malformed. The recipient of such a malformed request MUST respond with an error
+and SHOULD use the 400 (Bad Request) status code.
 
 For example, if the client is configured with URI Template
-"https://example.org/.well-known/masque/ip/{target}/{ipproto}/" and
-wishes to open an IP forwarding tunnel with no target or protocol limitations,
-it could send the following request:
+"https://example.org/.well-known/masque/ip/{target}/{ipproto}/" and wishes to
+open an IP forwarding tunnel with no target or protocol limitations, it could
+send the following request:
 
 ~~~ http-message
 GET https://example.org/.well-known/masque/ip/*/*/ HTTP/1.1
@@ -330,20 +329,20 @@ pseudo-header fields with the following requirements:
 * The :authority pseudo-header field SHALL contain the authority of the IP
   proxy.
 
-* The :path and :scheme pseudo-header fields SHALL NOT be empty. Their
-  values SHALL contain the scheme and path from the URI Template after the URI
+* The :path and :scheme pseudo-header fields SHALL NOT be empty. Their values
+  SHALL contain the scheme and path from the URI Template after the URI
   Template expansion process has been completed; see {{client-config}}.
-  Variables in the URI Template can determine the scope of the request, such
-  as requesting full-tunnel IP packet forwarding, or a specific proxied flow;
-  see {{scope}}.
+  Variables in the URI Template can determine the scope of the request, such as
+  requesting full-tunnel IP packet forwarding, or a specific proxied flow; see
+  {{scope}}.
 
 An IP proxying request that does not conform to these restrictions is
 malformed; see {{Section 8.1.1 of H2}} and {{Section 4.1.2 of H3}}.
 
 For example, if the client is configured with URI Template
-"https://example.org/.well-known/masque/ip/{target}/{ipproto}/" and
-wishes to open an IP forwarding tunnel with no target or protocol limitations,
-it could send the following request:
+"https://example.org/.well-known/masque/ip/{target}/{ipproto}/" and wishes to
+open an IP forwarding tunnel with no target or protocol limitations, it could
+send the following request:
 
 ~~~ http-message
 HEADERS
@@ -380,59 +379,59 @@ capsule-protocol = ?1
 
 ## Limiting Request Scope {#scope}
 
-Unlike UDP proxying requests, which require specifying a target host, IP proxying
-requests can allow endpoints to send arbitrary IP packets to any host. The
-client can choose to restrict a given request to a specific IP prefix or IP
+Unlike UDP proxying requests, which require specifying a target host, IP
+proxying requests can allow endpoints to send arbitrary IP packets to any host.
+The client can choose to restrict a given request to a specific IP prefix or IP
 protocol by adding parameters to its request. When the IP proxy knows that a
 request is scoped to a target prefix or protocol, it can leverage this
 information to optimize its resource allocation; for example, the IP proxy can
-assign the same public IP address to two IP proxying requests that are scoped to
-different prefixes and/or different protocols.
+assign the same public IP address to two IP proxying requests that are scoped
+to different prefixes and/or different protocols.
 
 The scope of the request is indicated by the client to the IP proxy via the
 "target" and "ipproto" variables of the URI Template; see {{client-config}}.
-Both the "target" and "ipproto" variables are optional; if they are not included,
-they are considered to carry the wildcard value "\*".
+Both the "target" and "ipproto" variables are optional; if they are not
+included, they are considered to carry the wildcard value "\*".
 
 target:
 
 : The variable "target" contains a hostname or IP prefix of a specific host to
 which the client wants to proxy packets. If the "target" variable is not
-specified or its value is "\*", the client is requesting to communicate with any
-allowable host. "target" supports using DNS names, IPv6 prefixes and IPv4
+specified or its value is "\*", the client is requesting to communicate with
+any allowable host. "target" supports using DNS names, IPv6 prefixes and IPv4
 prefixes. Note that IPv6 scoped addressing zone identifiers are not supported.
 If the target is an IP prefix (IP address optionally followed by a
 percent-encoded slash followed by the prefix length in bits), the request will
 only support a single IP version. If the target is a hostname, the IP proxy is
 expected to perform DNS resolution to determine which route(s) to advertise to
-the client. The IP proxy SHOULD send a ROUTE_ADVERTISEMENT capsule that includes
-routes for all addresses that were resolved for the requested hostname, that are
-accessible to the IP proxy, and belong to an address family for which the IP proxy
-also sends an Assigned Address.
+the client. The IP proxy SHOULD send a ROUTE_ADVERTISEMENT capsule that
+includes routes for all addresses that were resolved for the requested
+hostname, that are accessible to the IP proxy, and belong to an address family
+for which the IP proxy also sends an Assigned Address.
 
 ipproto:
 
 : The variable "ipproto" contains an IP protocol number, as defined in the
-"Assigned Internet Protocol Numbers" IANA registry {{IANA-PN}}.
-If present, it specifies that a client only wants to proxy a specific IP
-protocol for this request. If the value is "\*", or the variable is not
-included, the client is requesting to use any IP protocol.
+"Assigned Internet Protocol Numbers" IANA registry {{IANA-PN}}. If present, it
+specifies that a client only wants to proxy a specific IP protocol for this
+request. If the value is "\*", or the variable is not included, the client is
+requesting to use any IP protocol.
 {: spacing="compact"}
 
 Using the terms IPv6address, IPv4address, and reg-name from {{URI}}, the
-"target" and "ipproto" variables MUST adhere to the format in {{target-format}},
-using notation from {{!ABNF=RFC5234}}. Additionally:
+"target" and "ipproto" variables MUST adhere to the format in
+{{target-format}}, using notation from {{!ABNF=RFC5234}}. Additionally:
 
 * if "target" contains an IPv6 literal or prefix, the colons (":") MUST be
-  percent-encoded. For example, if the target host is "2001:db8::42", it will be
-  encoded in the URI as "2001%3Adb8%3A%3A42".
+  percent-encoded. For example, if the target host is "2001:db8::42", it will
+  be encoded in the URI as "2001%3Adb8%3A%3A42".
 
 * If present, the IP prefix length in "target" SHALL be preceded by a
   percent-encoded slash ("/"): "%2F". The IP prefix length MUST represent a
   decimal integer between 0 and the length of the IP address in bits, inclusive.
 
-* "ipproto" MUST represent a decimal integer between 0 and 255 inclusive, or the
-  wildcard value "*".
+* "ipproto" MUST represent a decimal integer between 0 and 255 inclusive, or
+  the wildcard value "*".
 
 ~~~ ascii-art
 target = IPv6prefix / IPv4prefix / reg-name / "*"
@@ -442,17 +441,17 @@ ipproto = 1*3DIGIT / "*"
 ~~~
 {: #target-format title="URI Template Variable Format"}
 
-IP proxies MAY perform access control using the scoping information provided
-by the client: if the client is not authorized to access any of the destinations
+IP proxies MAY perform access control using the scoping information provided by
+the client: if the client is not authorized to access any of the destinations
 included in the scope, then the IP proxy can immediately fail the request.
 
 Note that IP protocol numbers represent both upper layers (as defined in
 {{Section 2 of !IPv6=RFC8200}}, examples include TCP and UDP) and IPv6
 extension headers (as defined in {{Section 4 of IPv6}}, examples include
-Fragment and Options headers). IP proxies MAY reject requests to scope
-to protocol numbers that are used for extension headers. Upon receiving
-packets, implementations that support scoping by IP protocol number MUST
-walk the chain of extensions to find the matching IP protocol number.
+Fragment and Options headers). IP proxies MAY reject requests to scope to
+protocol numbers that are used for extension headers. Upon receiving packets,
+implementations that support scoping by IP protocol number MUST walk the chain
+of extensions to find the matching IP protocol number.
 
 ## Capsules
 
@@ -465,9 +464,8 @@ these new capsules.
 The ADDRESS_ASSIGN capsule (see {{iana-types}} for the value of the capsule
 type) allows an endpoint to inform its peer of the list of IP addresses or
 prefixes it has assigned to it. Every capsule contains the full list of IP
-prefixes currently assigned to the receiver. Any of these addresses can be
-used as the source address on IP packets originated by the receiver of this
-capsule.
+prefixes currently assigned to the receiver. Any of these addresses can be used
+as the source address on IP packets originated by the receiver of this capsule.
 
 ~~~
 ADDRESS_ASSIGN Capsule {
@@ -523,21 +521,22 @@ to send packets from any source address that falls within the prefix.
 {: spacing="compact"}
 
 If any of the capsule fields are malformed upon reception, the receiver of the
-capsule MUST follow the error handling procedure defined in
-{{Section 3.3 of HTTP-DGRAM}}.
+capsule MUST follow the error handling procedure defined in {{Section 3.3 of
+HTTP-DGRAM}}.
 
 If an ADDRESS_ASSIGN capsule does not contain an address that was previously
 transmitted in another ADDRESS_ASSIGN capsule, that indicates that the address
 has been removed. An ADDRESS_ASSIGN capsule can also be empty, indicating that
 all addresses have been removed.
 
-In some deployments of IP proxying in HTTP, an endpoint needs to be assigned an address
-by its peer before it knows what source address to set on its own packets. For
-example, in the Remote Access VPN case ({{example-remote}}) the client cannot send
-IP packets until it knows what address to use. In these deployments, the
-endpoint that is expecting an address assignment MUST send an ADDRESS_REQUEST
-capsule. This isn't required if the endpoint does not need any address
-assignment, for example when it is configured out-of-band with static addresses.
+In some deployments of IP proxying in HTTP, an endpoint needs to be assigned an
+address by its peer before it knows what source address to set on its own
+packets. For example, in the Remote Access VPN case ({{example-remote}}) the
+client cannot send IP packets until it knows what address to use. In these
+deployments, the endpoint that is expecting an address assignment MUST send an
+ADDRESS_REQUEST capsule. This isn't required if the endpoint does not need any
+address assignment, for example when it is configured out-of-band with static
+addresses.
 
 While ADDRESS_ASSIGN capsules are commonly sent in response to ADDRESS_REQUEST
 capsules, endpoints MAY send ADDRESS_ASSIGN capsules unprompted.
@@ -605,14 +604,14 @@ integer. MUST be less than or equal to the length of the IP Address field, in
 bits.
 {: spacing="compact"}
 
-If the IP address is all-zero (0.0.0.0 or ::), this indicates that the sender is
-requesting an address of that address family but does not have a preference for
-a specific address. In that scenario, the prefix length still indicates the
+If the IP address is all-zero (0.0.0.0 or ::), this indicates that the sender
+is requesting an address of that address family but does not have a preference
+for a specific address. In that scenario, the prefix length still indicates the
 sender's preference for the prefix length it is requesting.
 
 If any of the capsule fields are malformed upon reception, the receiver of the
-capsule MUST follow the error handling procedure defined in
-{{Section 3.3 of HTTP-DGRAM}}.
+capsule MUST follow the error handling procedure defined in {{Section 3.3 of
+HTTP-DGRAM}}.
 
 Upon receiving the ADDRESS_REQUEST capsule, an endpoint SHOULD assign one or
 more IP addresses to its peer, and then respond with an ADDRESS_ASSIGN capsule
@@ -620,12 +619,12 @@ to inform the peer of the assignment. For each Requested Address, the receiver
 of the ADDRESS_REQUEST capsule SHALL respond with an Assigned Address with a
 matching Request ID. If the requested address was assigned, the IP Address and
 IP Prefix Length fields in the Assigned Address response SHALL be set to the
-assigned values. If the requested address was not assigned, the IP address SHALL
-be all-zero and the IP Prefix Length SHALL be the maximum length (0.0.0.0/32 or
-::/128) to indicate that no address was assigned. These address rejections SHOULD NOT be
-included in subsequent ADDRESS_ASSIGN capsules. Note that other Assigned Address
-entries that do not correspond to any Request ID can also be contained in the
-same ADDRESS_ASSIGN response.
+assigned values. If the requested address was not assigned, the IP address
+SHALL be all-zero and the IP Prefix Length SHALL be the maximum length
+(0.0.0.0/32 or ::/128) to indicate that no address was assigned. These address
+rejections SHOULD NOT be included in subsequent ADDRESS_ASSIGN capsules. Note
+that other Assigned Address entries that do not correspond to any Request ID
+can also be contained in the same ADDRESS_ASSIGN response.
 
 If an endpoint receives an ADDRESS_REQUEST capsule that contains zero Requested
 Addresses, it MUST abort the IP proxying request stream.
@@ -636,15 +635,15 @@ convey any priority or importance.
 
 ### ROUTE_ADVERTISEMENT Capsule
 
-The ROUTE_ADVERTISEMENT capsule (see {{iana-types}} for the value of the capsule
-type) allows an endpoint to communicate to its peer that it is willing to route
-traffic to a set of IP address ranges. This indicates that the sender has an
-existing route to each address range, and notifies its peer that if the receiver
-of the ROUTE_ADVERTISEMENT capsule sends IP packets for one of these ranges in
-HTTP Datagrams, the sender of the capsule will forward them along its
-preexisting route. Any address which is in one of the address ranges can be used
-as the destination address on IP packets originated by the receiver of this
-capsule.
+The ROUTE_ADVERTISEMENT capsule (see {{iana-types}} for the value of the
+capsule type) allows an endpoint to communicate to its peer that it is willing
+to route traffic to a set of IP address ranges. This indicates that the sender
+has an existing route to each address range, and notifies its peer that if the
+receiver of the ROUTE_ADVERTISEMENT capsule sends IP packets for one of these
+ranges in HTTP Datagrams, the sender of the capsule will forward them along its
+preexisting route. Any address which is in one of the address ranges can be
+used as the destination address on IP packets originated by the receiver of
+this capsule.
 
 ~~~
 ROUTE_ADVERTISEMENT Capsule {
@@ -690,18 +689,19 @@ allowed. ICMP traffic is always allowed, regardless of the value of this field.
 {: spacing="compact"}
 
 If any of the capsule fields are malformed upon reception, the receiver of the
-capsule MUST follow the error handling procedure defined in
-{{Section 3.3 of HTTP-DGRAM}}.
+capsule MUST follow the error handling procedure defined in {{Section 3.3 of
+HTTP-DGRAM}}.
 
-Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY update its local
-state regarding what its peer is willing to route (subject to local policy), such
-as by installing entries in a routing table.
+Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY update its
+local state regarding what its peer is willing to route (subject to local
+policy), such as by installing entries in a routing table.
 
 Each ROUTE_ADVERTISEMENT contains the full list of address ranges. If multiple
-ROUTE_ADVERTISEMENT capsules are sent in one direction, each ROUTE_ADVERTISEMENT
-capsule supersedes prior ones. In other words, if a given address range was
-present in a prior capsule but the most recently received ROUTE_ADVERTISEMENT
-capsule does not contain it, the receiver will consider that range withdrawn.
+ROUTE_ADVERTISEMENT capsules are sent in one direction, each
+ROUTE_ADVERTISEMENT capsule supersedes prior ones. In other words, if a given
+address range was present in a prior capsule but the most recently received
+ROUTE_ADVERTISEMENT capsule does not contain it, the receiver will consider
+that range withdrawn.
 
 If multiple ranges using the same IP protocol were to overlap, some routing
 table implementations might reject them. To prevent overlap, the ranges are
@@ -711,8 +711,8 @@ in the same ROUTE_ADVERTISEMENT capsule, they MUST follow these requirements:
 
 * IP Version of A MUST be less than or equal than IP Version of B
 
-* If the IP Version of A and B are equal, the IP Protocol of A MUST be less than
-  or equal than IP Protocol of B.
+* If the IP Version of A and B are equal, the IP Protocol of A MUST be less
+  than or equal than IP Protocol of B.
 
 * If the IP Version and IP Protocol of A and B are both equal, the End IP
   Address of A MUST be strictly less than the Start IP Address of B.
@@ -721,24 +721,24 @@ If an endpoint receives a ROUTE_ADVERTISEMENT capsule that does not meet these
 requirements, it MUST abort the IP proxying request stream.
 
 Since setting the IP protocol to zero indicates all protocols are allowed, the
-requirements above make it possible for two routes to overlap when one has
-IP protocol set to zero and the other set to non-zero. Endpoints MUST NOT send
-a ROUTE_ADVERTISEMENT capsule with routes that overlap in such a way.
-Validating this requirement is OPTIONAL, but if an endpoint detects the
-violation, it MUST abort the IP proxying request stream.
+requirements above make it possible for two routes to overlap when one has IP
+protocol set to zero and the other set to non-zero. Endpoints MUST NOT send a
+ROUTE_ADVERTISEMENT capsule with routes that overlap in such a way. Validating
+this requirement is OPTIONAL, but if an endpoint detects the violation, it MUST
+abort the IP proxying request stream.
 
 # Context Identifiers
 
 The mechanism for proxying IP in HTTP defined in this document allows future
 extensions to exchange HTTP Datagrams that carry different semantics from IP
-payloads. Some of these extensions can augment IP payloads with additional
-data or compress IP header fields, while others can exchange data that is
-completely separate from IP payloads. In order to accomplish this, all HTTP
-Datagrams associated with IP proxying request streams start with a Context ID
-field; see {{payload-format}}.
+payloads. Some of these extensions can augment IP payloads with additional data
+or compress IP header fields, while others can exchange data that is completely
+separate from IP payloads. In order to accomplish this, all HTTP Datagrams
+associated with IP proxying request streams start with a Context ID field; see
+{{payload-format}}.
 
-Context IDs are 62-bit integers (0 to 2<sup>62</sup>-1). Context IDs are encoded
-as variable-length integers; see {{Section 16 of QUIC}}. The Context ID
+Context IDs are 62-bit integers (0 to 2<sup>62</sup>-1). Context IDs are
+encoded as variable-length integers; see {{Section 16 of QUIC}}. The Context ID
 value of 0 is reserved for IP payloads, while non-zero values are dynamically
 allocated. Non-zero even-numbered Context IDs are client-allocated, and
 odd-numbered Context IDs are proxy-allocated. The Context ID namespace is tied
@@ -748,17 +748,17 @@ different semantics. Context IDs MUST NOT be re-allocated within a given HTTP
 request but MAY be allocated in any order. The Context ID allocation
 restrictions to the use of even-numbered and odd-numbered Context IDs exist in
 order to avoid the need for synchronization between endpoints. However, once a
-Context ID has been allocated, those restrictions do not apply to the use of the
-Context ID; it can be used by either the client or the IP proxy, independent of
-which endpoint initially allocated it.
+Context ID has been allocated, those restrictions do not apply to the use of
+the Context ID; it can be used by either the client or the IP proxy,
+independent of which endpoint initially allocated it.
 
 Registration is the action by which an endpoint informs its peer of the
 semantics and format of a given Context ID. This document does not define how
-registration occurs. Future extensions MAY use HTTP header fields or capsules to
-register Context IDs. Depending on the method being used, it is possible for
-datagrams to be received with Context IDs that have not yet been registered. For
-instance, this can be due to reordering of the packet containing the datagram
-and the packet containing the registration message during transmission.
+registration occurs. Future extensions MAY use HTTP header fields or capsules
+to register Context IDs. Depending on the method being used, it is possible for
+datagrams to be received with Context IDs that have not yet been registered.
+For instance, this can be due to reordering of the packet containing the
+datagram and the packet containing the registration message during transmission.
 
 # HTTP Datagram Payload Format {#payload-format}
 
@@ -783,7 +783,8 @@ Context ID:
 : A variable-length integer that contains the value of the Context ID. If an
 HTTP/3 datagram which carries an unknown Context ID is received, the receiver
 SHALL either drop that datagram silently or buffer it temporarily (on the order
-of a round trip) while awaiting the registration of the corresponding Context ID.
+of a round trip) while awaiting the registration of the corresponding Context
+ID.
 
 Payload:
 
@@ -795,63 +796,65 @@ IP packets are encoded using HTTP Datagrams with the Context ID set to zero.
 When the Context ID is set to zero, the Payload field contains a full IP packet
 (from the IP Version field until the last byte of the IP Payload).
 
-Clients MAY optimistically start sending proxied IP packets before receiving the
-response to its IP proxying request, noting however that those may not be
-processed by the IP proxy if it responds to the request with a failure, or if the
-datagrams are received by the IP proxy before the request. Since receiving
+Clients MAY optimistically start sending proxied IP packets before receiving
+the response to its IP proxying request, noting however that those may not be
+processed by the IP proxy if it responds to the request with a failure, or if
+the datagrams are received by the IP proxy before the request. Since receiving
 addresses and routes is required in order to know that a packet can be sent
-through the tunnel, such optimistic packets might be dropped by the IP proxy if it
-chooses to provide different addressing or routing information than what the
+through the tunnel, such optimistic packets might be dropped by the IP proxy if
+it chooses to provide different addressing or routing information than what the
 client assumed.
 
-When an endpoint receives an HTTP Datagram containing an IP packet, it
-will parse the packet's IP header, perform any local policy checks (e.g., source
+When an endpoint receives an HTTP Datagram containing an IP packet, it will
+parse the packet's IP header, perform any local policy checks (e.g., source
 address validation), check their routing table to pick an outbound interface,
-and then send the IP packet on that interface or pass it to a local application.
-The endpoint can also choose to drop any received packets instead of forwarding
-them. If a received IP packet fails any correctness or policy checks, that is a
-forwarding error, not a protocol violation as far as IP proxying is concerned;
-see {{error-signal}}.
+and then send the IP packet on that interface or pass it to a local
+application. The endpoint can also choose to drop any received packets instead
+of forwarding them. If a received IP packet fails any correctness or policy
+checks, that is a forwarding error, not a protocol violation as far as IP
+proxying is concerned; see {{error-signal}}.
 
 In the other direction, when an endpoint receives an IP packet, it checks to see
 if the packet matches the routes mapped for an IP tunnel, and performs the same
 forwarding checks as above before transmitting the packet over HTTP Datagrams.
 
-Note that endpoints will decrement the IP Hop Count (or TTL) upon
-encapsulation but not decapsulation. In other words, the Hop Count is
-decremented right before an IP packet is transmitted in an HTTP Datagram. This
-prevents infinite loops in the presence of routing loops, and matches the
-choices in IPsec {{?IPSEC=RFC4301}}.
+Note that endpoints will decrement the IP Hop Count (or TTL) upon encapsulation
+but not decapsulation. In other words, the Hop Count is decremented right
+before an IP packet is transmitted in an HTTP Datagram. This prevents infinite
+loops in the presence of routing loops, and matches the choices in IPsec
+{{?IPSEC=RFC4301}}.
 
 Implementers need to ensure that they do not forward any link-local traffic
-beyond the IP proxying interface that it was received on. IP proxying endpoints also
-need to properly reply to packets destined to link-local multicast addresses.
+beyond the IP proxying interface that it was received on. IP proxying endpoints
+also need to properly reply to packets destined to link-local multicast
+addresses.
 
-IPv6 requires that every link have an MTU of at least 1280 bytes
-{{IPv6}}. Since IP proxying in HTTP conveys IP packets in HTTP Datagrams and
-those can in turn be sent in QUIC DATAGRAM frames which cannot be fragmented
-{{!DGRAM=RFC9221}}, the MTU of an IP tunnel can be limited by the MTU of
-the QUIC connection that IP proxying is operating over. This can lead to
-situations where the IPv6 minimum link MTU is violated. IP proxying endpoints
-that support IPv6 MUST ensure that the IP tunnel link MTU is at least
-1280 (i.e., that they can send HTTP Datagrams with payloads of at least 1280
-bytes). This can be accomplished using various techniques:
+IPv6 requires that every link have an MTU of at least 1280 bytes {{IPv6}}.
+Since IP proxying in HTTP conveys IP packets in HTTP Datagrams and those can in
+turn be sent in QUIC DATAGRAM frames which cannot be fragmented
+{{!DGRAM=RFC9221}}, the MTU of an IP tunnel can be limited by the MTU of the
+QUIC connection that IP proxying is operating over. This can lead to situations
+where the IPv6 minimum link MTU is violated. IP proxying endpoints that support
+IPv6 MUST ensure that the IP tunnel link MTU is at least 1280 (i.e., that they
+can send HTTP Datagrams with payloads of at least 1280 bytes). This can be
+accomplished using various techniques:
 
-* if both IP proxying endpoints know for certain that HTTP intermediaries are not in use,
-  the endpoints can pad the QUIC INITIAL packets of the underlying QUIC
-  connection that IP proxying is running over. (Assuming QUIC version 1 is in
-  use, the overhead is 1 byte type, 20 bytes maximal connection ID length, 4
+* if both IP proxying endpoints know for certain that HTTP intermediaries are
+  not in use, the endpoints can pad the QUIC INITIAL packets of the underlying
+  QUIC connection that IP proxying is running over. (Assuming QUIC version 1 is
+  in use, the overhead is 1 byte type, 20 bytes maximal connection ID length, 4
   bytes maximal packet number length, 1 byte DATAGRAM frame type, 8 bytes
   maximal quarter stream ID, one byte for the zero Context ID, and 16 bytes for
   the AEAD authentication tag, for a total of 51 bytes of overhead which
   corresponds to padding QUIC INITIAL packets to 1331 bytes or more.)
 
 * IP proxying endpoints can also send ICMPv6 echo requests with 1232 bytes of
-  data to ascertain the link MTU and tear down the tunnel if they do not receive
-  a response. Unless endpoints have an out of band means of guaranteeing that
-  the previous techniques is sufficient, they MUST use this method. If an
-  endpoint does not know an IPv6 address of its peer, it can send the ICMPv6
-  echo request to the link local all nodes multicast address (ff02::1).
+  data to ascertain the link MTU and tear down the tunnel if they do not
+  receive a response. Unless endpoints have an out of band means of
+  guaranteeing that the previous techniques is sufficient, they MUST use this
+  method. If an endpoint does not know an IPv6 address of its peer, it can send
+  the ICMPv6 echo request to the link local all nodes multicast address
+  (ff02::1).
 
 If an endpoint is using QUIC DATAGRAM frames to convey IPv6 packets, and it
 detects that the QUIC MTU is too low to allow sending 1280 bytes, it MUST abort
@@ -868,8 +871,8 @@ forwarding can fail if the endpoint does not have a route for the destination
 address, or if it is configured to reject a destination prefix by policy, or if
 the MTU of the outgoing link is lower than the size of the packet to be
 forwarded. In such scenarios, IP proxying endpoints SHOULD use ICMP
-{{!ICMP=RFC0792}} {{!ICMPv6=RFC4443}} to signal the forwarding error to its peer
-by generating ICMP packets and sending them using HTTP Datagrams.
+{{!ICMP=RFC0792}} {{!ICMPv6=RFC4443}} to signal the forwarding error to its
+peer by generating ICMP packets and sending them using HTTP Datagrams.
 
 Endpoints are free to select the most appropriate ICMP errors to send. Some
 examples that are relevant for IP proxying include:
@@ -892,15 +895,15 @@ can originate from a source address different from that of the IP proxying peer.
 
 # Examples
 
-IP proxying in HTTP enables many different use cases that can benefit from IP packet
-proxying and tunnelling. These examples are provided to help illustrate some of
-the ways in which IP proxying in HTTP can be used.
+IP proxying in HTTP enables many different use cases that can benefit from IP
+packet proxying and tunnelling. These examples are provided to help illustrate
+some of the ways in which IP proxying in HTTP can be used.
 
 ## Remote Access VPN {#example-remote}
 
 The following example shows a point-to-network VPN setup, where a client
-receives a set of local addresses, and can send to any remote host through
-the IP proxy. Such VPN setups can be either full-tunnel or split-tunnel.
+receives a set of local addresses, and can send to any remote host through the
+IP proxy. Such VPN setups can be either full-tunnel or split-tunnel.
 
 ~~~ aasvg
 
@@ -913,10 +916,10 @@ the IP proxy. Such VPN setups can be either full-tunnel or split-tunnel.
 ~~~
 {: #diagram-tunnel title="VPN Tunnel Setup"}
 
-In this case, the client does not specify any scope in its request. The IP proxy
-assigns the client an IPv4 address (192.0.2.11) and a full-tunnel route of all
-IPv4 addresses (0.0.0.0/0). The client can then send to any IPv4 host using a
-source address in its assigned prefix.
+In this case, the client does not specify any scope in its request. The IP
+proxy assigns the client an IPv4 address (192.0.2.11) and a full-tunnel route
+of all IPv4 addresses (0.0.0.0/0). The client can then send to any IPv4 host
+using a source address in its assigned prefix.
 
 ~~~
 [[ From Client ]]             [[ From IP Proxy ]]
@@ -999,12 +1002,12 @@ route is restricted to 192.0.2.0/24, rather than 0.0.0.0/0.
 ## Site-to-Site VPN
 
 The following example shows how to connect a branch office network to a
-corporate network such that all machines on those networks can communicate.
-In this example, the IP proxying client is attached to the branch office
-network 192.0.2.0/24, and the IP proxy is attached to the corporate network
-203.0.113.0/24. There are legacy clients on the branch office network that
-only allow maintenance requests from machines on their subnet, so the IP
-Proxy is provisioned with an IP address from that subnet.
+corporate network such that all machines on those networks can communicate. In
+this example, the IP proxying client is attached to the branch office network
+192.0.2.0/24, and the IP proxy is attached to the corporate network
+203.0.113.0/24. There are legacy clients on the branch office network that only
+allow maintenance requests from machines on their subnet, so the IP Proxy is
+provisioned with an IP address from that subnet.
 
 ~~~ aasvg
 
@@ -1022,8 +1025,8 @@ proxy assigns the client an IPv4 address (203.0.113.100) and a split-tunnel
 route to the corporate network (203.0.113.0/24). The client assigns the IP
 proxy an IPv4 address (192.0.2.200) and a split-tunnel route to the branch
 office network (192.0.2.0/24). This allows hosts on both networks to
-communicate with each other, and allows the IP proxy to perform maintenance
-on legacy hosts in the branch office.
+communicate with each other, and allows the IP proxy to perform maintenance on
+legacy hosts in the branch office.
 
 ~~~
 [[ From Client ]]             [[ From IP Proxy ]]
@@ -1089,11 +1092,12 @@ Payload = Encapsulated IP Packet
 
 ## IP Flow Forwarding
 
-The following example shows an IP flow forwarding setup, where a client requests
-to establish a forwarding tunnel to target.example.com using SCTP (IP protocol
-132), and receives a single local address and remote address it can use for
-transmitting packets. A similar approach could be used for any other IP protocol
-that isn't easily proxied with existing HTTP methods, such as ICMP, ESP, etc.
+The following example shows an IP flow forwarding setup, where a client
+requests to establish a forwarding tunnel to target.example.com using SCTP (IP
+protocol 132), and receives a single local address and remote address it can
+use for transmitting packets. A similar approach could be used for any other IP
+protocol that isn't easily proxied with existing HTTP methods, such as ICMP,
+ESP, etc.
 
 ~~~ aasvg
 
@@ -1107,15 +1111,15 @@ that isn't easily proxied with existing HTTP methods, such as ICMP, ESP, etc.
 {: #diagram-flow title="Proxied Flow Setup"}
 
 In this case, the client specfies both a target hostname and an IP protocol
-number in the scope of its request, indicating that it only needs to communicate
-with a single host. The IP proxy is able to perform DNS resolution on behalf
-of the client and allocate a specific outbound socket for the client instead of
-allocating an entire IP address to the client. In this regard, the request is
-similar to a traditional CONNECT proxy request.
+number in the scope of its request, indicating that it only needs to
+communicate with a single host. The IP proxy is able to perform DNS resolution
+on behalf of the client and allocate a specific outbound socket for the client
+instead of allocating an entire IP address to the client. In this regard, the
+request is similar to a traditional CONNECT proxy request.
 
 The IP proxy assigns a single IPv6 address to the client (2001:db8:1234::a) and
-a route to a single IPv6 host (2001:db8:3456::b), scoped to SCTP. The client can
-send and receive SCTP IP packets to the remote host.
+a route to a single IPv6 host (2001:db8:3456::b), scoped to SCTP. The client
+can send and receive SCTP IP packets to the remote host.
 
 ~~~
 [[ From Client ]]             [[ From IP Proxy ]]
@@ -1168,9 +1172,9 @@ Payload = Encapsulated SCTP/IP Packet
 ## Proxied Connection Racing
 
 The following example shows a setup where a client is proxying UDP packets
-through an IP proxy in order to control connection establishment racing
-through an IP proxy, as defined in Happy Eyeballs {{?HEv2=RFC8305}}. This example is
-a variant of the proxied flow, but highlights how IP-level proxying can enable
+through an IP proxy in order to control connection establishment racing through
+an IP proxy, as defined in Happy Eyeballs {{?HEv2=RFC8305}}. This example is a
+variant of the proxied flow, but highlights how IP-level proxying can enable
 new capabilities even for TCP and UDP.
 
 ~~~ aasvg
@@ -1188,15 +1192,15 @@ new capabilities even for TCP and UDP.
 As with proxied flows, the client specfies both a target hostname and an IP
 protocol number in the scope of its request. When the IP proxy performs DNS
 resolution on behalf of the client, it can send the various remote address
-options to the client as separate routes. It can also ensure that the client has
-both IPv4 and IPv6 addresses assigned.
+options to the client as separate routes. It can also ensure that the client
+has both IPv4 and IPv6 addresses assigned.
 
 The IP proxy assigns the client both an IPv4 address (192.0.2.3) and an IPv6
 address (2001:db8:1234::a) to the client, as well as an IPv4 route
-(198.51.100.2) and an IPv6 route (2001:db8:3456::b), which represent the resolved
-addresses of the target hostname, scoped to UDP. The client can send and receive
-UDP IP packets to either one of the IP proxy addresses to enable Happy Eyeballs
-through the IP proxy.
+(198.51.100.2) and an IPv6 route (2001:db8:3456::b), which represent the
+resolved addresses of the target hostname, scoped to UDP. The client can send
+and receive UDP IP packets to either one of the IP proxy addresses to enable
+Happy Eyeballs through the IP proxy.
 
 ~~~
 [[ From Client ]]             [[ From IP Proxy ]]
@@ -1258,57 +1262,58 @@ Payload = Encapsulated IPv4 Packet
 
 # Extensibility Considerations
 
-Extensions to IP proxying in HTTP can define behavior changes to this mechanism. Such
-extensions SHOULD define new capsule types to exchange configuration information
-if needed. It is RECOMMENDED for extensions that modify addressing to specify
-that their extension capsules be sent before the ADDRESS_ASSIGN capsule and that
-they do not take effect until the ADDRESS_ASSIGN capsule is parsed. This allows
-modifications to address assignement to operate atomically. Similarly,
-extensions that modify routing SHOULD behave similarly with regards to the
-ROUTE_ADVERTISEMENT capsule.
+Extensions to IP proxying in HTTP can define behavior changes to this
+mechanism. Such extensions SHOULD define new capsule types to exchange
+configuration information if needed. It is RECOMMENDED for extensions that
+modify addressing to specify that their extension capsules be sent before the
+ADDRESS_ASSIGN capsule and that they do not take effect until the
+ADDRESS_ASSIGN capsule is parsed. This allows modifications to address
+assignement to operate atomically. Similarly, extensions that modify routing
+SHOULD behave similarly with regards to the ROUTE_ADVERTISEMENT capsule.
 
 # Security Considerations
 
 There are significant risks in allowing arbitrary clients to establish a tunnel
 that permits sending to arbitrary hosts, regardless of whether tunnels are
-scoped to specific hosts or not. Bad actors could abuse this capability
-to send traffic and have it attributed to the IP proxy. IP proxies SHOULD
-restrict its use to authenticated users. Depending on the deployment,
-possible authentication mechanisms include mutual TLS between clients
-and proxies, HTTP-based authentication via the HTTP Authorization header
-{{HTTP}}, or even bearer tokens. Proxies can enforce policies for authenticated
-users to further constrain client behavior or deal with possible abuse.
-For example, proxies can rate limit individual clients that send an excessively
-large amount of traffic through the proxy. As another example, proxies can
-restrict address (prefix) assignment to clients based on certain client attributes
-such as geographic location.
+scoped to specific hosts or not. Bad actors could abuse this capability to send
+traffic and have it attributed to the IP proxy. IP proxies SHOULD restrict its
+use to authenticated users. Depending on the deployment, possible
+authentication mechanisms include mutual TLS between clients and proxies,
+HTTP-based authentication via the HTTP Authorization header {{HTTP}}, or even
+bearer tokens. Proxies can enforce policies for authenticated users to further
+constrain client behavior or deal with possible abuse. For example, proxies can
+rate limit individual clients that send an excessively large amount of traffic
+through the proxy. As another example, proxies can restrict address (prefix)
+assignment to clients based on certain client attributes such as geographic
+location.
 
-Address assignment can have privacy implications for endpoints. For example,
-if a proxy partitions its address space by the number of authenticated clients
-and then assigns distinct address ranges to each client, target hosts could use
+Address assignment can have privacy implications for endpoints. For example, if
+a proxy partitions its address space by the number of authenticated clients and
+then assigns distinct address ranges to each client, target hosts could use
 this information to determine when IP packets correspond to the same client.
 Avoiding such tracking vectors may be important for certain proxy deployments.
-Proxies SHOULD avoid persistent per-client address (prefix) assignment when possible.
+Proxies SHOULD avoid persistent per-client address (prefix) assignment when
+possible.
 
 Falsifying IP source addresses in sent traffic has been common for denial of
 service attacks. Implementations of this mechanism need to ensure that they do
 not facilitate such attacks. In particular, there are scenarios where an
 endpoint knows that its peer is only allowed to send IP packets from a given
 prefix. For example, that can happen through out of band configuration
-information, or when allowed prefixes are shared via ADDRESS_ASSIGN capsules. In
-such scenarios, endpoints MUST follow the recommendations from
+information, or when allowed prefixes are shared via ADDRESS_ASSIGN capsules.
+In such scenarios, endpoints MUST follow the recommendations from
 {{!BCP38=RFC2827}} to prevent source address spoofing.
 
-Limiting request scope (see {{scope}}) allows two clients to share one
-of the proxy's external IP addresses if their requests are scoped to different
-IP protocol numbers. If the proxy receives an ICMP packet destined for that
+Limiting request scope (see {{scope}}) allows two clients to share one of the
+proxy's external IP addresses if their requests are scoped to different IP
+protocol numbers. If the proxy receives an ICMP packet destined for that
 external IP address, it has the option to forward it back to the clients.
-However, some of these ICMP packets carry part of the original IP packet
-that triggered the ICMP response. Forwarding such packets can accidentally
-divulge information about one client's traffic to another client. To avoid this,
-proxies that forward ICMP on shared external IP addresses MUST inspect
-the invoking packet included in the ICMP packet and only forward the ICMP
-packet to the client whose scoping matches the invoking packet.
+However, some of these ICMP packets carry part of the original IP packet that
+triggered the ICMP response. Forwarding such packets can accidentally divulge
+information about one client's traffic to another client. To avoid this,
+proxies that forward ICMP on shared external IP addresses MUST inspect the
+invoking packet included in the ICMP packet and only forward the ICMP packet to
+the client whose scoping matches the invoking packet.
 
 Since there are known risks with some IPv6 extension headers (e.g.,
 {{?ROUTING-HDR=RFC5095}}), implementers need to follow the latest guidance
@@ -1323,15 +1328,19 @@ Token Registry maintained at
 <[](https://www.iana.org/assignments/http-upgrade-tokens)>.
 
 Value:
+
 : connect-ip
 
 Description:
+
 : Proxying of IP Payloads
 
 Expected Version Tokens:
+
 : None
 
 References:
+
 : This document
 {: spacing="compact"}
 
@@ -1345,14 +1354,17 @@ of "masque" in the "Well-Known URIs" registry. This new registry contains three
 columns:
 
 Path Segment:
+
 : An ASCII string containing only characters allowed in tokens; see
 {{Section 5.6.2 of HTTP}}. Entries in this registry MUST all have distinct
 entries in this column.
 
 Description:
+
 : A description of the entry.
 
 Reference:
+
 : An optional reference defining the use of the entry.
 
 The registration policy for this registry is Expert Review; see
@@ -1381,8 +1393,8 @@ IANA_URL_TBD is the URL of the new registry described in {{iana-suffix}}.
 
 ## Capsule Type Registrations {#iana-types}
 
-This document requests IANA to add the following values to the "HTTP Capsule Types"
-registry maintained at
+This document requests IANA to add the following values to the "HTTP Capsule
+Types" registry maintained at
 <[](https://www.iana.org/assignments/http-capsule-protocol)>.
 
 | Value |    Capsule Type     |     Description     |
