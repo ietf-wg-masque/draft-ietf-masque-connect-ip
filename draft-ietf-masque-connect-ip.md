@@ -400,12 +400,12 @@ which the client wants to proxy packets. If the "target" variable is not
 specified or its value is "\*", the client is requesting to communicate with
 any allowable host. "target" supports using DNS names, IPv6 prefixes and IPv4
 prefixes. Note that IPv6 scoped addressing zone identifiers ({{!RFC6874}}) are
-not supported. If the target is an IP prefix (IP address optionally followed by a
-percent-encoded slash followed by the prefix length in bits), the request will
-only support a single IP version. If the target is a hostname, the IP proxy is
-expected to perform DNS resolution to determine which route(s) to advertise to
-the client. The IP proxy SHOULD send a ROUTE_ADVERTISEMENT capsule that
-includes routes for all addresses that were resolved for the requested
+not supported. If the target is an IP prefix (IP address optionally followed by
+a percent-encoded slash followed by the prefix length in bits), the request
+will only support a single IP version. If the target is a hostname, the IP
+proxy is expected to perform DNS resolution to determine which route(s) to
+advertise to the client. The IP proxy SHOULD send a ROUTE_ADVERTISEMENT capsule
+that includes routes for all addresses that were resolved for the requested
 hostname, that are accessible to the IP proxy, and belong to an address family
 for which the IP proxy also sends an Assigned Address.
 
@@ -1276,16 +1276,16 @@ SHOULD behave similarly with regards to the ROUTE_ADVERTISEMENT capsule.
 There are significant risks in allowing arbitrary clients to establish a tunnel
 that permits sending to arbitrary hosts, regardless of whether tunnels are
 scoped to specific hosts or not. Bad actors could abuse this capability to send
-traffic and have it attributed to the IP proxy. HTTP servers that support IP proxying
-SHOULD restrict its use to authenticated users. Depending on the deployment, possible
-authentication mechanisms include mutual TLS between clients and proxies,
-HTTP-based authentication via the HTTP Authorization header {{HTTP}}, or even
-bearer tokens. Proxies can enforce policies for authenticated users to further
-constrain client behavior or deal with possible abuse. For example, proxies can
-rate limit individual clients that send an excessively large amount of traffic
-through the proxy. As another example, proxies can restrict address (prefix)
-assignment to clients based on certain client attributes such as geographic
-location.
+traffic and have it attributed to the IP proxy. HTTP servers that support IP
+proxying SHOULD restrict its use to authenticated users. Depending on the
+deployment, possible authentication mechanisms include mutual TLS between
+clients and proxies, HTTP-based authentication via the HTTP Authorization
+header {{HTTP}}, or even bearer tokens. Proxies can enforce policies for
+authenticated users to further constrain client behavior or deal with possible
+abuse. For example, proxies can rate limit individual clients that send an
+excessively large amount of traffic through the proxy. As another example,
+proxies can restrict address (prefix) assignment to clients based on certain
+client attributes such as geographic location.
 
 Address assignment can have privacy implications for endpoints. For example, if
 a proxy partitions its address space by the number of authenticated clients and
