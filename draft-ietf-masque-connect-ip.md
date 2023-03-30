@@ -1271,6 +1271,56 @@ ADDRESS_ASSIGN capsule is parsed. This allows modifications to address
 assignement to operate atomically. Similarly, extensions that modify routing
 SHOULD behave similarly with regards to the ROUTE_ADVERTISEMENT capsule.
 
+# Performance Considerations
+
+Bursty traffic can often lead to temporally correlated packet losses; in turn,
+this can lead to suboptimal responses from congestion controllers in protocols
+running inside the tunnel. To avoid this, endpoints SHOULD strive to avoid
+increasing burstiness of IP traffic; they SHOULD NOT queue packets in order to
+increase batching.
+
+When the protocol running inside the tunnel uses congestion control (e.g.,
+{{TCP}} or {{QUIC}}), the proxied traffic will incur at least two nested
+congestion controllers. The underlying HTTP connection MUST NOT disable
+congestion control unless it has an out-of-band way of knowing with absolute
+certainty that the inner traffic is congestion-controlled.
+
+When the protocol running inside the tunnel uses loss recovery (e.g., {{TCP}}
+or {{QUIC}}), and the underlying HTTP connection runs over TCP, the proxied
+traffic will incur at least two nested loss recovery mechanisms. This can
+reduce performance as both can sometimes independently retransmit the same
+data. To avoid this, IP proxying SHOULD be performed over HTTP/3 to allow
+leveraging the QUIC DATAGRAM frame.
+
+## MTU Considerations
+
+When using HTTP/3 with the QUIC Datagram extension {{DGRAM}}, IP packets are
+transmitted in QUIC DATAGRAM frames. Since those cannot be fragmented, they can
+only carry packets up to a given length determined by the QUIC connection
+configuration and the Path MTU (PMTU). If an endpoint is using QUIC DATAGRAM
+frames and it attempts to route an IP packet through the tunnel that will not
+fit inside a QUIC DATAGRAM frame, the IP proxy SHOULD NOT send the IP packet in
+a DATAGRAM capsule, as that defeats the end-to-end unreliability characteristic
+that methods such as Datagram Packetization Layer PMTU Discovery (DPLPMTUD)
+depend on {{?DPLPMTUD=RFC8899}}. In this scenario, the endpoint SHOULD drop the
+IP packet and send an ICMP Packet Too Big message to the sender of the dropped
+packet; see {{Section 3.2 of ICMPv6}}.
+
+## ECN Considerations
+
+IP proxying does not have a one-to-one mapping between between inner and outer
+IP packets (multiple inner packets can travel inside one outer packet, and one
+inner packet can span multiple outer packets), so the guidance in
+{{?ECN-TUNNEL=RFC6040}} about transferring ECN marks between inner and outer IP
+headers cannot be applied.
+
+Therefore, endpoints MUST NOT signal Explicit Congestion Notification (ECN)
+{{!ECN=RFC3168}} support on connections that contain an IP Proxying request
+stream. That is, endpoints MUST mark all outer IP headers with the Not-ECT
+codepoint.
+
+This matches the guidance in {{Section 12.5 of ?IPSEC-TCP=RFC8229}}.
+
 # Security Considerations
 
 There are significant risks in allowing arbitrary clients to establish a tunnel
