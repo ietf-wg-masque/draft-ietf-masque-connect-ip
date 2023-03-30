@@ -135,7 +135,7 @@ entire connection.
 
 # Configuration of Clients {#client-config}
 
-Clients are configured to use IP proxying over HTTP via an URI Template
+Clients are configured to use IP proxying over HTTP via a URI Template
 {{!TEMPLATE=RFC6570}}. The URI Template MAY contain two variables: "target" and
 "ipproto"; see {{scope}}. The optionality of the variables needs to be
 considered when defining the template so that either the variable is
@@ -399,8 +399,8 @@ target:
 which the client wants to proxy packets. If the "target" variable is not
 specified or its value is "\*", the client is requesting to communicate with
 any allowable host. "target" supports using DNS names, IPv6 prefixes and IPv4
-prefixes. Note that IPv6 scoped addressing zone identifiers are not supported.
-If the target is an IP prefix (IP address optionally followed by a
+prefixes. Note that IPv6 scoped addressing zone identifiers ({{!RFC6874}}) are
+not supported. If the target is an IP prefix (IP address optionally followed by a
 percent-encoded slash followed by the prefix length in bits), the request will
 only support a single IP version. If the target is a hostname, the IP proxy is
 expected to perform DNS resolution to determine which route(s) to advertise to
@@ -709,10 +709,10 @@ ordered; this places the burden on the sender and makes verification by the
 receiver much simpler. If an IP Address Range A precedes an IP Address Range B
 in the same ROUTE_ADVERTISEMENT capsule, they MUST follow these requirements:
 
-* IP Version of A MUST be less than or equal than IP Version of B
+* IP Version of A MUST be less than or equal to IP Version of B
 
 * If the IP Version of A and B are equal, the IP Protocol of A MUST be less
-  than or equal than IP Protocol of B.
+  than or equal to IP Protocol of B.
 
 * If the IP Version and IP Protocol of A and B are both equal, the End IP
   Address of A MUST be strictly less than the Start IP Address of B.
@@ -1195,7 +1195,7 @@ resolution on behalf of the client, it can send the various remote address
 options to the client as separate routes. It can also ensure that the client
 has both IPv4 and IPv6 addresses assigned.
 
-The IP proxy assigns the client both an IPv4 address (192.0.2.3) and an IPv6
+The IP proxy assigns both an IPv4 address (192.0.2.3) and an IPv6
 address (2001:db8:1234::a) to the client, as well as an IPv4 route
 (198.51.100.2) and an IPv6 route (2001:db8:3456::b), which represent the
 resolved addresses of the target hostname, scoped to UDP. The client can send
@@ -1276,8 +1276,8 @@ SHOULD behave similarly with regards to the ROUTE_ADVERTISEMENT capsule.
 There are significant risks in allowing arbitrary clients to establish a tunnel
 that permits sending to arbitrary hosts, regardless of whether tunnels are
 scoped to specific hosts or not. Bad actors could abuse this capability to send
-traffic and have it attributed to the IP proxy. IP proxies SHOULD restrict its
-use to authenticated users. Depending on the deployment, possible
+traffic and have it attributed to the IP proxy. HTTP servers that support IP proxying
+SHOULD restrict its use to authenticated users. Depending on the deployment, possible
 authentication mechanisms include mutual TLS between clients and proxies,
 HTTP-based authentication via the HTTP Authorization header {{HTTP}}, or even
 bearer tokens. Proxies can enforce policies for authenticated users to further
