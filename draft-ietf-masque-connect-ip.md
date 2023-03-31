@@ -1273,7 +1273,7 @@ SHOULD behave similarly with regards to the ROUTE_ADVERTISEMENT capsule.
 
 # Performance Considerations
 
-Bursty traffic can often lead to temporally correlated packet losses; in turn,
+Bursty traffic can often lead to temporally-correlated packet losses; in turn,
 this can lead to suboptimal responses from congestion controllers in protocols
 running inside the tunnel. To avoid this, endpoints SHOULD strive to avoid
 increasing burstiness of IP traffic; they SHOULD NOT queue packets in order to
@@ -1295,7 +1295,7 @@ leveraging the QUIC DATAGRAM frame.
 ## MTU Considerations
 
 When using HTTP/3 with the QUIC Datagram extension {{DGRAM}}, IP packets are
-transmitted in QUIC DATAGRAM frames. Since those cannot be fragmented, they can
+transmitted in QUIC DATAGRAM frames. Since these frames cannot be fragmented, they can
 only carry packets up to a given length determined by the QUIC connection
 configuration and the Path MTU (PMTU). If an endpoint is using QUIC DATAGRAM
 frames and it attempts to route an IP packet through the tunnel that will not
@@ -1319,7 +1319,7 @@ Therefore, endpoints MUST NOT signal Explicit Congestion Notification (ECN)
 stream. That is, endpoints MUST mark all outer IP headers with the Not-ECT
 codepoint.
 
-This matches the guidance in {{Section 12.5 of ?IPSEC-TCP=RFC8229}}.
+This matches the guidance in {{Section 9.5 of ?IPSEC-TCP=RFC9329}}.
 
 # Security Considerations
 
