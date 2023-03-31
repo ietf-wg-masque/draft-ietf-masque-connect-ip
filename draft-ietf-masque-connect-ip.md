@@ -1295,16 +1295,16 @@ leveraging the QUIC DATAGRAM frame.
 ## MTU Considerations
 
 When using HTTP/3 with the QUIC Datagram extension {{DGRAM}}, IP packets are
-transmitted in QUIC DATAGRAM frames. Since these frames cannot be fragmented, they can
-only carry packets up to a given length determined by the QUIC connection
-configuration and the Path MTU (PMTU). If an endpoint is using QUIC DATAGRAM
-frames and it attempts to route an IP packet through the tunnel that will not
-fit inside a QUIC DATAGRAM frame, the IP proxy SHOULD NOT send the IP packet in
-a DATAGRAM capsule, as that defeats the end-to-end unreliability characteristic
-that methods such as Datagram Packetization Layer PMTU Discovery (DPLPMTUD)
-depend on {{?DPLPMTUD=RFC8899}}. In this scenario, the endpoint SHOULD drop the
-IP packet and send an ICMP Packet Too Big message to the sender of the dropped
-packet; see {{Section 3.2 of ICMPv6}}.
+transmitted in QUIC DATAGRAM frames. Since these frames cannot be fragmented,
+they can only carry packets up to a given length determined by the QUIC
+connection configuration and the Path MTU (PMTU). If an endpoint is using QUIC
+DATAGRAM frames and it attempts to route an IP packet through the tunnel that
+will not fit inside a QUIC DATAGRAM frame, the IP proxy SHOULD NOT send the IP
+packet in a DATAGRAM capsule, as that defeats the end-to-end unreliability
+characteristic that methods such as Datagram Packetization Layer PMTU Discovery
+(DPLPMTUD) depend on {{?DPLPMTUD=RFC8899}}. In this scenario, the endpoint
+SHOULD drop the IP packet and send an ICMP Packet Too Big message to the sender
+of the dropped packet; see {{Section 3.2 of ICMPv6}}.
 
 ## ECN Considerations
 
