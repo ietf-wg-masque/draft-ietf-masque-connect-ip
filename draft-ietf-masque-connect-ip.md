@@ -1283,7 +1283,8 @@ When the protocol running inside the tunnel uses congestion control (e.g.,
 {{TCP}} or {{QUIC}}), the proxied traffic will incur at least two nested
 congestion controllers. The underlying HTTP connection MUST NOT disable
 congestion control unless it has an out-of-band way of knowing with absolute
-certainty that the inner traffic is congestion-controlled.
+certainty that all of the inner packets belong to congestion-controlled
+connections.
 
 When the protocol running inside the tunnel uses loss recovery (e.g., {{TCP}}
 or {{QUIC}}), and the underlying HTTP connection runs over TCP, the proxied
@@ -1308,18 +1309,18 @@ of the dropped packet; see {{Section 3.2 of ICMPv6}}.
 
 ## ECN Considerations
 
-IP proxying does not have a one-to-one mapping between between inner and outer
-IP packets (multiple inner packets can travel inside one outer packet, and one
-inner packet can span multiple outer packets), so the guidance in
-{{?ECN-TUNNEL=RFC6040}} about transferring ECN marks between inner and outer IP
-headers cannot be applied.
+If a client or IP proxy with a connection containing an IP Proxying request
+stream disables congestion control, it MUST NOT signal Explicit Congestion
+Notification (ECN) {{!ECN=RFC3168}} support on that outer connection. That is,
+it MUST mark all IP headers with the Not-ECT codepoint. It MAY continue to
+report ECN feedback via QUIC ACK_ECN frames or the TCP ECE bit, as the peer may
+not have disabled congestion control.
 
-Therefore, endpoints MUST NOT signal Explicit Congestion Notification (ECN)
-{{!ECN=RFC3168}} support on connections that contain an IP Proxying request
-stream. That is, endpoints MUST mark all outer IP headers with the Not-ECT
-codepoint.
-
-This matches the guidance in {{Section 9.5 of ?IPSEC-TCP=RFC9329}}.
+Conversely, if congestion control is not disabled on the outer congestion, the
+guidance in {{?ECN-TUNNEL=RFC6040}} about transferring ECN marks between inner
+and outer IP headers does not apply because the outer connection will react
+correctly to congestion notifications if it uses ECN. The inner traffic can
+also use ECN, independently of whether it is in use on the outer connection.
 
 # Security Considerations
 
