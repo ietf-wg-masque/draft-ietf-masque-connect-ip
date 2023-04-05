@@ -83,7 +83,7 @@ informative:
 This document describes how to proxy IP packets in HTTP. This protocol is
 similar to UDP proxying in HTTP, but allows transmitting arbitrary IP packets.
 More specifically, this document defines a protocol that allows an HTTP client
-to create an IP tunnel through an HTTP server that acts as a proxy. This
+to create an IP tunnel through an HTTP server that acts as an IP proxy. This
 document updates RFC 9298.
 
 
@@ -304,7 +304,7 @@ requirements:
   Capsule Protocol; see {{Section 3.2 of HTTP-DGRAM}}.
 
 If any of these requirements are not met, the client MUST treat this proxying
-attempt as failed and abort the connection.
+attempt as failed and close the connection.
 
 For example, the IP proxy could respond with:
 
