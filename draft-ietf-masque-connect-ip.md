@@ -1313,7 +1313,7 @@ of the dropped packet; see {{Section 3.2 of ICMPv6}}.
 If a client or IP proxy with a connection containing an IP Proxying request
 stream disables congestion control, it MUST NOT signal Explicit Congestion
 Notification (ECN) {{!ECN=RFC3168}} support on that outer connection. That is,
-it MUST mark all IP headers with the Not-ECT codepoint. It MAY continue to
+it MUST mark all IP headers with the Not-ECT codepoint. The endpoint can still
 report ECN feedback via QUIC ACK_ECN frames or the TCP ECE bit, as the peer may
 not have disabled congestion control.
 
