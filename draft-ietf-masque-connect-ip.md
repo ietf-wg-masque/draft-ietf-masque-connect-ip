@@ -842,7 +842,7 @@ can send HTTP Datagrams with payloads of at least 1280 bytes). This can be
 accomplished using various techniques:
 
 * if both IP proxying endpoints know for certain that HTTP intermediaries are
-  not in use, the endpoints can pad the QUIC INITIAL packets of the underlying
+  not in use, the endpoints can pad the QUIC INITIAL packets of the outer
   QUIC connection that IP proxying is running over. (Assuming QUIC version 1 is
   in use, the overhead is 1 byte type, 20 bytes maximal connection ID length, 4
   bytes maximal packet number length, 1 byte DATAGRAM frame type, 8 bytes
@@ -864,6 +864,12 @@ the IP proxying request stream.
 
 Endpoints MAY implement additional filtering policies on the IP packets they
 forward.
+
+Note that it is possible for multiple proxied IP packets to be encapsulated in
+the same outer packet, for example because a QUIC packet can carry two QUIC
+DATAGRAM frames. It is also possible for a proxied IP packet to span multiple
+outer packets, because a DATAGRAM capsule can be split across multiple QUIC or
+TCP packets.
 
 # Error Signalling {#error-signal}
 
@@ -1284,17 +1290,16 @@ hardware offloads.
 
 When the protocol running inside the tunnel uses congestion control (e.g.,
 {{TCP}} or {{QUIC}}), the proxied traffic will incur at least two nested
-congestion controllers. The underlying HTTP connection MUST NOT disable
-congestion control unless it has an out-of-band way of knowing with absolute
-certainty that all of the inner packets belong to congestion-controlled
-connections.
+congestion controllers. The outer HTTP connection MUST NOT disable congestion
+control unless it has an out-of-band way of knowing with absolute certainty
+that all of the inner packets belong to congestion-controlled connections.
 
 When the protocol running inside the tunnel uses loss recovery (e.g., {{TCP}}
-or {{QUIC}}), and the underlying HTTP connection runs over TCP, the proxied
-traffic will incur at least two nested loss recovery mechanisms. This can
-reduce performance as both can sometimes independently retransmit the same
-data. To avoid this, IP proxying SHOULD be performed over HTTP/3 to allow
-leveraging the QUIC DATAGRAM frame.
+or {{QUIC}}), and the outer HTTP connection runs over TCP, the proxied traffic
+will incur at least two nested loss recovery mechanisms. This can reduce
+performance as both can sometimes independently retransmit the same data. To
+avoid this, IP proxying SHOULD be performed over HTTP/3 to allow leveraging the
+QUIC DATAGRAM frame.
 
 ## MTU Considerations
 
@@ -1315,9 +1320,10 @@ of the dropped packet; see {{Section 3.2 of ICMPv6}}.
 If a client or IP proxy with a connection containing an IP Proxying request
 stream disables congestion control, it MUST NOT signal Explicit Congestion
 Notification (ECN) {{!ECN=RFC3168}} support on that outer connection. That is,
-it MUST mark all IP headers with the Not-ECT codepoint. The endpoint can still
-report ECN feedback via QUIC ACK_ECN frames or the TCP ECE bit, as the peer may
-not have disabled congestion control.
+the QUIC sender MUST mark all IP headers with the Not-ECT codepoint for QUIC
+packets which are outside of congestion control. The endpoint can still report
+ECN feedback via QUIC ACK_ECN frames or the TCP ECE bit, as the peer may not
+have disabled congestion control.
 
 Conversely, if congestion control is not disabled on the outer congestion, the
 guidance in {{?ECN-TUNNEL=RFC6040}} about transferring ECN marks between inner
