@@ -1331,6 +1331,37 @@ and outer IP headers does not apply because the outer connection will react
 correctly to congestion notifications if it uses ECN. The inner traffic can
 also use ECN, independently of whether it is in use on the outer connection.
 
+## Diffserv Considerations
+
+The tunneled IP traffic can have a Diffserv Code Point (DSCP) {{!DSCP=RFC2474}}
+set in the traffic class IP header field to request a particular per hop
+behavior. The client or IP proxy handling an IP proxying request if part of the
+differv domain and configured with the domains mapping MAY implement traffic
+differentiation. However, the use of HTTP can limit the possibilities for
+differentiated treatment of the tunneled IP packets on the path between the
+ingress and egress.
+
+If a client or IP proxy with a connection containing an IP Proxying request
+stream are using congestion control for that stream, independent if datagram or
+capsules are used, all traffic independent of DSCP marking will be treated
+equally within that transport connection. The client or proxy MUST NOT copy the
+DSCP field from the inner IP header to the outer IP header of the packet
+carrying this packet. Instead an application intending to use IP proxying with
+different DSCP will have to establish multiple transport connections, one per
+each DSCP to be used, and requesting proxying of these flows specifically. It
+need to be noted that as this specification does not allow DSCP as a selector
+for the traffic matching the Connect-IP request.
+
+If a client or IP proxy with a connection containing an IP proxying request
+stream and uses datagram and disables congestion control for this stream a
+client or proxy MAY translate the DSCP field value from the tunneled traffic to
+the outer IP header for the QUIC packet containing the datagram. Coalescing of
+multiple datagrams in one QUIC packet MAY only be done if the the IP packets
+encapsulated in each datagram have the same DSCP or an equivalent traffic
+class. Note: If the client or IP proxy can copy or needs to translate the DSCP
+value depends if the tunnel ingress and egress are in the same differentiated
+service domain or different ones.
+
 # Security Considerations
 
 There are significant risks in allowing arbitrary clients to establish a tunnel
