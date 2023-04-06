@@ -1322,7 +1322,7 @@ stream disables congestion control, it MUST NOT signal Explicit Congestion
 Notification (ECN) {{!ECN=RFC3168}} support on that outer connection. That is,
 the QUIC sender MUST mark all IP headers with the Not-ECT codepoint for QUIC
 packets which are outside of congestion control. The endpoint can still report
-ECN feedback via QUIC ACK_ECN frames or the TCP ECE bit, as the peer may not
+ECN feedback via QUIC ACK_ECN frames or the TCP ECE bit, as the peer might not
 have disabled congestion control.
 
 Conversely, if congestion control is not disabled on the outer congestion, the
