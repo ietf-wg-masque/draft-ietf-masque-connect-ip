@@ -1290,9 +1290,9 @@ hardware offloads.
 
 When the protocol running inside the tunnel uses congestion control (e.g.,
 {{TCP}} or {{QUIC}}), the proxied traffic will incur at least two nested
-congestion controllers. The outer HTTP connection MUST NOT disable congestion
-control unless it has an out-of-band way of knowing with absolute certainty
-that all of the inner packets belong to congestion-controlled connections.
+congestion controllers. The outer HTTP connection MAY disable congestion
+control if it knows that the inner packets belong to congestion-controlled
+connections.
 
 When the protocol running inside the tunnel uses loss recovery (e.g., {{TCP}}
 or {{QUIC}}), and the outer HTTP connection runs over TCP, the proxied traffic
@@ -1318,7 +1318,7 @@ of the dropped packet; see {{Section 3.2 of ICMPv6}}.
 ## ECN Considerations
 
 If a client or IP proxy with a connection containing an IP Proxying request
-stream disables congestion control, it MUST NOT signal Explicit Congestion
+stream disables congestion control, it cannot signal Explicit Congestion
 Notification (ECN) {{!ECN=RFC3168}} support on that outer connection. That is,
 the QUIC sender MUST mark all IP headers with the Not-ECT codepoint for QUIC
 packets which are outside of congestion control. The endpoint can still report
