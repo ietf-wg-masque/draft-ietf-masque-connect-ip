@@ -1438,6 +1438,10 @@ There are initially two entries in this registry:
 |      ip      |  IP Proxying | This Document |
 {: #iana-suffixes-table title="New MASQUE URI Suffixes"}
 
+Designated experts for this registry are advised that they should approve all
+requests unless they believe the requested Path Segment will conflict with
+future IETF work.
+
 ## Updates to masque Well-Known URI {#iana-uri}
 
 This document will request IANA to update the entry for the "masque"
