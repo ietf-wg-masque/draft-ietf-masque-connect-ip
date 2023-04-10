@@ -367,7 +367,9 @@ requirements:
   Capsule Protocol; see {{Section 3.2 of HTTP-DGRAM}}.
 
 If any of these requirements are not met, the client MUST treat this proxying
-attempt as failed and abort the request.
+attempt as failed and abort the request. As an example, any status code in the
+3xx range will be treated as a failure and cause the client to abort the
+request.
 
 For example, the server could respond with:
 
