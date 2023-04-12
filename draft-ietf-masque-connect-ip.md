@@ -170,7 +170,7 @@ The following requirements apply to the URI Template:
 
 * The URI Template MUST NOT contain any non-ASCII unicode characters and MUST
   only contain ASCII characters in the range 0x21-0x7E inclusive (note that
-  percent-encoding is allowed; see Section 2.1 of {{!URI=RFC3986}}.
+  percent-encoding is allowed; see Section 2.1 of {{!URI=RFC3986}}).
 
 * The URI Template MUST NOT use Reserved Expansion ("+" operator), Fragment
   Expansion ("#" operator), Label Expansion with Dot- Prefix, Path Segment
@@ -852,7 +852,7 @@ accomplished using various techniques:
 
 * IP proxying endpoints can also send ICMPv6 echo requests with 1232 bytes of
   data to ascertain the link MTU and tear down the tunnel if they do not
-  receive a response. Unless endpoints have an out of band means of
+  receive a response. Unless endpoints have an out-of-band means of
   guaranteeing that the previous techniques is sufficient, they MUST use this
   method. If an endpoint does not know an IPv6 address of its peer, it can send
   the ICMPv6 echo request to the link local all nodes multicast address
@@ -1197,7 +1197,7 @@ new capabilities even for TCP and UDP.
 ~~~
 {: #diagram-racing title="Proxied Connection Racing Setup"}
 
-As with proxied flows, the client specfies both a target hostname and an IP
+As with proxied flows, the client specifies both a target hostname and an IP
 protocol number in the scope of its request. When the IP proxy performs DNS
 resolution on behalf of the client, it can send the various remote address
 options to the client as separate routes. It can also ensure that the client
@@ -1276,8 +1276,8 @@ configuration information if needed. It is RECOMMENDED for extensions that
 modify addressing to specify that their extension capsules be sent before the
 ADDRESS_ASSIGN capsule and that they do not take effect until the
 ADDRESS_ASSIGN capsule is parsed. This allows modifications to address
-assignement to operate atomically. Similarly, extensions that modify routing
-SHOULD behave similarly with regards to the ROUTE_ADVERTISEMENT capsule.
+assignment to operate atomically. Similarly, extensions that modify routing
+SHOULD behave similarly with regard to the ROUTE_ADVERTISEMENT capsule.
 
 # Performance Considerations
 
@@ -1360,7 +1360,7 @@ Falsifying IP source addresses in sent traffic has been common for denial of
 service attacks. Implementations of this mechanism need to ensure that they do
 not facilitate such attacks. In particular, there are scenarios where an
 endpoint knows that its peer is only allowed to send IP packets from a given
-prefix. For example, that can happen through out of band configuration
+prefix. For example, that can happen through out-of-band configuration
 information, or when allowed prefixes are shared via ADDRESS_ASSIGN capsules.
 In such scenarios, endpoints MUST follow the recommendations from
 {{!BCP38=RFC2827}} to prevent source address spoofing.
