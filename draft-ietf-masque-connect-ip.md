@@ -1376,9 +1376,10 @@ proxies that forward ICMP on shared external IP addresses MUST inspect the
 invoking packet included in the ICMP packet and only forward the ICMP packet to
 the client whose scoping matches the invoking packet.
 
-Since there are known risks with some IPv6 extension headers (e.g.,
-{{?ROUTING-HDR=RFC5095}}), implementers need to follow the latest guidance
-regarding handling of IPv6 extension headers.
+Implementers will benefit from reading the guidance in
+{{?TUNNEL-SECURITY=RFC6169}}. Since there are known risks with some IPv6
+extension headers (e.g., {{?ROUTING-HDR=RFC5095}}), implementers need to follow
+the latest guidance regarding handling of IPv6 extension headers.
 
 # IANA Considerations
 
