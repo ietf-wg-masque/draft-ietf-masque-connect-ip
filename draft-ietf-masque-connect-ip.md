@@ -1034,7 +1034,9 @@ route to the corporate network (203.0.113.0/24). The client assigns the IP
 proxy an IPv4 address (192.0.2.200) and a split-tunnel route to the branch
 office network (192.0.2.0/24). This allows hosts on both networks to
 communicate with each other, and allows the IP proxy to perform maintenance on
-legacy hosts in the branch office.
+legacy hosts in the branch office. Note that IP proxying endpoints will
+decrement the IP Hop Count (or TTL) when encapsulating forwarded packets, so
+protocols that require that field be set to 255 will not function.
 
 ~~~
 [[ From Client ]]             [[ From IP Proxy ]]
