@@ -1292,7 +1292,8 @@ When the protocol running inside the tunnel uses congestion control (e.g.,
 {{TCP}} or {{QUIC}}), the proxied traffic will incur at least two nested
 congestion controllers. The outer HTTP connection MAY disable congestion
 control if it knows that the inner packets belong to congestion-controlled
-connections.
+connections. Implementers will benefit from reading the guidance in
+{{Section 3.1.11 of ?UDP-USAGE=RFC8085}}.
 
 When the protocol running inside the tunnel uses loss recovery (e.g., {{TCP}}
 or {{QUIC}}), and the outer HTTP connection runs over TCP, the proxied traffic
