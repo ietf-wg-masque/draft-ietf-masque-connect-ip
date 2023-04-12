@@ -431,6 +431,10 @@ Using the terms IPv6address, IPv4address, and reg-name from {{URI}}, the
   percent-encoded slash ("/"): "%2F". The IP prefix length MUST represent a
   decimal integer between 0 and the length of the IP address in bits, inclusive.
 
+* If "target" contains an IP prefix and the prefix length is strictly less than
+  the length of the IP address in bits, the lower bits of the IP address that
+  are not covered by the prefix length MUST all be set to 0.
+
 * "ipproto" MUST represent a decimal integer between 0 and 255 inclusive, or
   the wildcard value "*".
 
@@ -518,7 +522,10 @@ or equal to the length of the IP Address field, in bits. If the prefix length
 is equal to the length of the IP address, the receiver of this capsule is
 allowed to send packets from a single source address. If the prefix length is
 less than the length of the IP address, the receiver of this capsule is allowed
-to send packets from any source address that falls within the prefix.
+to send packets from any source address that falls within the prefix. If the
+prefix length is strictly less than the length of the IP address in bits, the
+lower bits of the IP Address field that are not covered by the prefix length
+MUST all be set to 0.
 {: spacing="compact"}
 
 If any of the capsule fields are malformed upon reception, the receiver of the
@@ -595,7 +602,9 @@ IP Prefix Length:
 
 : Length of the IP Prefix requested, in bits, encoded as an unsigned 8-bit
 integer. MUST be less than or equal to the length of the IP Address field, in
-bits.
+bits. If the prefix length is strictly less than the length of the IP address
+in bits, the lower bits of the IP Address field that are not covered by the
+prefix length MUST all be set to 0.
 {: spacing="compact"}
 
 If the IP address is all-zero (0.0.0.0 or ::), this indicates that the sender
