@@ -1123,7 +1123,7 @@ number in the scope of its request, indicating that it only needs to
 communicate with a single host. The IP proxy is able to perform DNS resolution
 on behalf of the client and allocate a specific outbound socket for the client
 instead of allocating an entire IP address to the client. In this regard, the
-request is similar to a traditional CONNECT proxy request.
+request is similar to a regular CONNECT proxy request.
 
 The IP proxy assigns a single IPv6 address to the client (2001:db8:1234::a) and
 a route to a single IPv6 host (2001:db8:3456::b), scoped to SCTP. The client
