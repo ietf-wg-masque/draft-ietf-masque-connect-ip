@@ -1353,7 +1353,7 @@ need to be noted that as this specification does not allow DSCP as a selector
 for the traffic matching the Connect-IP request.
 
 If a client or IP proxy with a connection containing an IP proxying request
-stream and uses datagram and disables congestion control for this stream a
+stream and uses HTTP datagrams and disables congestion control for this stream, a
 client or proxy MAY translate the DSCP field value from the tunneled traffic to
 the outer IP header for the QUIC packet containing the datagram. Coalescing of
 multiple datagrams in one QUIC packet MAY only be done if the the IP packets
