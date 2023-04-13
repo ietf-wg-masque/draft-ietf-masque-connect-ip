@@ -908,7 +908,8 @@ In order to receive these errors, endpoints need to be prepared to receive ICMP
 packets. If an endpoint does not send ROUTE_ADVERTISEMENT capsules, such as a
 client opening an IP flow through an IP proxy, it SHOULD process proxied ICMP
 packets from its peer in order to receive these errors. Note that ICMP messages
-can originate from a source address different from that of the IP proxying peer.
+can originate from a source address different from that of the IP proxying
+peer, and also from outside the target if scoping is in use (see {{scope}}).
 
 # Examples
 
