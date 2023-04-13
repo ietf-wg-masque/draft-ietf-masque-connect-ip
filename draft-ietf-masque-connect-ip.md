@@ -815,7 +815,7 @@ if the packet matches the routes mapped for an IP tunnel, and performs the same
 forwarding checks as above before transmitting the packet over HTTP Datagrams.
 
 When IP proxying endpoints forward IP packets between different links, they
-will decrement the IP Hop Count (or TTL) upon encapsulation but not
+will decrement the IP Hop Count (or TTL) upon encapsulation, but not upon
 decapsulation. In other words, the Hop Count is decremented right before an IP
 packet is transmitted in an HTTP Datagram. This prevents infinite loops in the
 presence of routing loops, and matches the choices in IPsec {{?IPSEC=RFC4301}}.
