@@ -1331,7 +1331,7 @@ and outer IP headers does not apply because the outer connection will react
 correctly to congestion notifications if it uses ECN. The inner traffic can
 also use ECN, independently of whether it is in use on the outer connection.
 
-## Diffserv Considerations
+## Diffserv Considerations {#dscp-consideration}
 
 Tunneled IP packets can have Diffserv Code Points (DSCP) {{!DSCP=RFC2474}}
 set in the traffic class IP header field to request a particular per-hop
@@ -1409,6 +1409,15 @@ the client whose scoping matches the invoking packet.
 Since there are known risks with some IPv6 extension headers (e.g.,
 {{?ROUTING-HDR=RFC5095}}), implementers need to follow the latest guidance
 regarding handling of IPv6 extension headers.
+
+Client or Proxies that support marking DSCP through to encapsulating
+datagram carrying packets, see {{dscp-consideration}}, needs to be
+aware that this will expose end-to-end flow level information to an
+on-path observer between the client and proxy. The marking through of
+DSCP will result in that one common aggregate over the connection
+becomes multiple aggregates, one per DSCP used. Potentially exposing a
+single end-to-end flow. Thus, if the goal of IP proxying over HTTP is
+privacy related then marking DSCP through is not recommended.
 
 # IANA Considerations
 
