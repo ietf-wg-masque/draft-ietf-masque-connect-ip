@@ -1348,7 +1348,7 @@ equally within that transport connection. The client or proxy MUST NOT copy the
 DSCP field from the inner IP header to the outer IP header of the packet
 carrying this packet. Instead, an application intending to use IP proxying with
 different DSCP will have to establish multiple connections to a proxy, one per
-each DSCP to be used, and requesting proxying of these flows specifically. It
+each DSCP to be used. It
 need to be noted that as this specification does not allow DSCP as a selector
 for the traffic matching the Connect-IP request.
 
