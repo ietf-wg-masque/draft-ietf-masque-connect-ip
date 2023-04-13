@@ -1343,7 +1343,7 @@ ingress and egress.
 
 If a client or IP proxy with a connection containing an IP Proxying request
 stream is using congestion control for that stream, regardless of whether HTTP datagrams or
-capsules are used, all traffic independent of DSCP marking will be treated
+capsules are used, all traffic without of DSCP markings will be treated
 equally within that transport connection. The client or proxy MUST NOT copy the
 DSCP field from the inner IP header to the outer IP header of the packet
 carrying this packet. Instead an application intending to use IP proxying with
