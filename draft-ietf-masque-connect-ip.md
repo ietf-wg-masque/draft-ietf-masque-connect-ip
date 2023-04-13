@@ -1346,7 +1346,7 @@ stream is using congestion control for that stream, regardless of whether HTTP d
 capsules are used, all traffic without of DSCP markings will be treated
 equally within that transport connection. The client or proxy MUST NOT copy the
 DSCP field from the inner IP header to the outer IP header of the packet
-carrying this packet. Instead an application intending to use IP proxying with
+carrying this packet. Instead, an application intending to use IP proxying with
 different DSCP will have to establish multiple transport connections, one per
 each DSCP to be used, and requesting proxying of these flows specifically. It
 need to be noted that as this specification does not allow DSCP as a selector
