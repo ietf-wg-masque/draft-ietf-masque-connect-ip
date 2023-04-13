@@ -1342,15 +1342,15 @@ differentiated treatment of the tunneled IP packets on the path between the
 ingress and egress.
 
 If a client or IP proxy with a connection containing an IP Proxying request
-stream is using congestion control for that stream, regardless of whether HTTP datagrams or
-capsules are used, all traffic without of DSCP markings will be treated
-equally within that transport connection. The client or proxy MUST NOT copy the
-DSCP field from the inner IP header to the outer IP header of the packet
-carrying this packet. Instead, an application intending to use IP proxying with
-different DSCP will have to establish multiple connections to a proxy, one per
-each DSCP to be used. It
-need to be noted that as this specification does not allow DSCP as a selector
-for the traffic matching the Connect-IP request.
+stream is using congestion control for that stream, regardless of whether HTTP
+datagrams or capsules are used, all traffic without of DSCP markings will be
+treated equally within that transport connection. The client or proxy MUST NOT
+copy the DSCP field from the inner IP header to the outer IP header of the
+packet carrying this packet. Instead, an application intending to use IP
+proxying with different DSCP will have to establish multiple connections to a
+proxy, one per each DSCP to be used. It needs to be noted that the Connect-IP
+request per current specification does not define a way for a scoped request
+that use DSCP as a traffic selector.
 
 If a client or IP proxy with a connection containing an IP proxying request
 stream and uses HTTP datagrams and disables congestion control for this stream, a
