@@ -1342,7 +1342,7 @@ differentiated treatment of the tunneled IP packets on the path between the
 ingress and egress.
 
 If a client or IP proxy with a connection containing an IP Proxying request
-stream are using congestion control for that stream, independent if datagram or
+stream is using congestion control for that stream, regardless of whether HTTP datagrams or
 capsules are used, all traffic independent of DSCP marking will be treated
 equally within that transport connection. The client or proxy MUST NOT copy the
 DSCP field from the inner IP header to the outer IP header of the packet
