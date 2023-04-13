@@ -1333,13 +1333,12 @@ also use ECN, independently of whether it is in use on the outer connection.
 
 ## Diffserv Considerations {#dscp-consideration}
 
-Tunneled IP packets can have Diffserv Code Points (DSCP) {{!DSCP=RFC2474}}
-set in the traffic class IP header field to request a particular per-hop
-behavior. If a client or IP proxy handling an IP proxying request is configured as part
-of a diffserv domain, it MAY implement traffic
-differentiation. However, the use of HTTP can limit the possibilities for
-differentiated treatment of the tunneled IP packets on the path between the
-ingress and egress.
+Tunneled IP packets can have Diffserv Code Points (DSCP) {{!DSCP=RFC2474}} set
+in the traffic class IP header field to request a particular per-hop
+behavior. If a client or IP proxy handling an IP proxying request is configured
+as part of a diffserv domain, it MAY implement traffic differentiation. However,
+the use of HTTP can limit the possibilities for differentiated treatment of the
+tunneled IP packets on the path between the ingress and egress.
 
 If a client or IP proxy with a connection containing an IP Proxying request
 stream is using congestion control for that stream, regardless of whether HTTP
@@ -1353,14 +1352,14 @@ request per current specification does not define a way for a scoped request
 that use DSCP as a traffic selector.
 
 If a client or IP proxy with a connection containing an IP proxying request
-stream and uses HTTP datagrams and disables congestion control for this stream, a
-client or proxy MAY translate the DSCP field value from the tunneled traffic to
-the outer IP header for the QUIC packet containing the datagram. Coalescing of
-multiple datagrams in one QUIC packet MAY only be done if the the IP packets
-encapsulated in each datagram have the same DSCP or an equivalent traffic
-class. Note: If the client or IP proxy can copy or needs to translate the DSCP
-value depends if the tunnel ingress and egress are in the same differentiated
-service domain or different ones.
+stream and uses HTTP datagrams and disables congestion control for this stream,
+a client or proxy MAY translate the DSCP field value from the tunneled traffic
+to the outer IP header for the QUIC packet containing the datagram
+frame. Coalescing of multiple datagrams in one QUIC packet MAY only be done if
+the the IP packets encapsulated in each datagram have the same DSCP or an
+equivalent traffic class. Note: If the client or IP proxy can copy or needs to
+translate the DSCP value depends if the tunnel ingress and egress are in the
+same differentiated service domain or different ones.
 
 # Security Considerations
 
