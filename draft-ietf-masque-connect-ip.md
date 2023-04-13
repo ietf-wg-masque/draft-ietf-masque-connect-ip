@@ -1516,7 +1516,6 @@ production before publication MUST use the following temporary codepoints
 instead: 0x2575D601 for ADDRESS_ASSIGN, 0x2575D602 for ADDRESS_REQUEST, and
 0x2575D603 for ROUTE_ADVERTISEMENT.
 
-
 --- back
 
 # Acknowledgments
