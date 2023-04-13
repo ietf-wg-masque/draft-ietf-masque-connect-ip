@@ -229,7 +229,7 @@ IP proxies MUST validate whether the decoded "target" and "ipproto" variables
 meet the requirements in {{scope}}. If they do not, the IP proxy MUST treat the
 request as malformed; see {{Section 8.1.1 of H2}} and {{Section 4.1.2 of H3}}.
 If the "target" variable is a DNS name, the IP proxy MUST perform DNS
-resolution (to query the corresponding IPv4 and/or IPv6 addresses via A and/or
+resolution (to obtain the corresponding IPv4 and/or IPv6 addresses via A and/or
 AAAA records) before replying to the HTTP request. If errors occur during this
 process, the IP proxy MUST reject the request and SHOULD send details using an
 appropriate Proxy-Status header field {{!PROXY-STATUS=RFC9209}}. For example,
