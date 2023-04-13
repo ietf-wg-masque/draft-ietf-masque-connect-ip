@@ -1298,10 +1298,10 @@ SHOULD behave similarly with regard to the ROUTE_ADVERTISEMENT capsule.
 
 Bursty traffic can often lead to temporally-correlated packet losses; in turn,
 this can lead to suboptimal responses from congestion controllers in protocols
-running inside the tunnel. To avoid this, endpoints SHOULD strive to avoid
-increasing burstiness of IP traffic; they SHOULD NOT queue packets in order to
-increase batching beyond the minimal amount required to take advantage of
-hardware offloads.
+running inside the tunnel. To avoid this, IP proxying endpoints SHOULD strive
+to avoid increasing burstiness of IP traffic; they SHOULD NOT queue packets in
+order to increase batching beyond the minimal amount required to take advantage
+of hardware offloads.
 
 When the protocol running inside the tunnel uses congestion control (e.g.,
 {{TCP}} or {{QUIC}}), the proxied traffic will incur at least two nested
