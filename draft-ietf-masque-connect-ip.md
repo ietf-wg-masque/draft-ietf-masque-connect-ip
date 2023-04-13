@@ -940,7 +940,7 @@ IP proxy. Such VPN setups can be either full-tunnel or split-tunnel.
 In this case, the client does not specify any scope in its request. The IP
 proxy assigns the client an IPv4 address (192.0.2.11) and a full-tunnel route
 of all IPv4 addresses (0.0.0.0/0). The client can then send to any IPv4 host
-using a source address in its assigned prefix.
+using its assigned address as its source address.
 
 ~~~
 [[ From Client ]]             [[ From IP Proxy ]]
@@ -1015,10 +1015,14 @@ route is restricted to 192.0.2.0/24, rather than 0.0.0.0/0.
                               Capsule Type = ROUTE_ADVERTISEMENT
                               (IP Version = 4
                                Start IP Address = 192.0.2.0
+                               End IP Address = 192.0.2.41
+                               IP Protocol = 0) // Any
+                              (IP Version = 4
+                               Start IP Address = 192.0.2.43
                                End IP Address = 192.0.2.255
                                IP Protocol = 0) // Any
 ~~~
-{: #fig-split-tunnel title="VPN Split-Tunnel Capsule Example"}
+{: #fig-split-tunnel title="VPN Split-Tunnel Example"}
 
 ## Site-to-Site VPN
 
