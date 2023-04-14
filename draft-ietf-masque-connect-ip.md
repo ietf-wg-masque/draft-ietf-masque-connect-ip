@@ -1338,7 +1338,7 @@ in the traffic class IP header field to request a particular per-hop
 behavior. If a client or IP proxy handling an IP proxying request is configured
 as part of a Differentiated Services domain, it MAY implement traffic differentiation. However,
 the use of HTTP can limit the possibilities for differentiated treatment of the
-tunneled IP packets on the path between the ingress and egress.
+tunneled IP packets on the path between the IP proxying endpoints.
 
 If a client or IP proxy with a connection containing an IP Proxying request
 stream is using congestion control for that stream, regardless of whether HTTP
