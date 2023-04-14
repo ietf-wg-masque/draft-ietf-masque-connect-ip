@@ -1335,8 +1335,8 @@ also use ECN, independently of whether it is in use on the outer connection.
 
 Tunneled IP packets can have Differentiated Services Code Points (DSCP) {{!DSCP=RFC2474}} set
 in the traffic class IP header field to request a particular per-hop
-behavior. If a client or IP proxy handling an IP proxying request is configured
-as part of a Differentiated Services domain, it MAY implement traffic differentiation. However,
+behavior. If a client or IP proxy is configured as part of a Differentiated Services
+domain, it MAY implement traffic differentiation based on these markings. However,
 the use of HTTP can limit the possibilities for differentiated treatment of the
 tunneled IP packets on the path between the IP proxying endpoints.
 
