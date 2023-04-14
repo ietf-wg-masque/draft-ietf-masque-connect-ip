@@ -1353,30 +1353,30 @@ also use ECN, independently of whether it is in use on the outer connection.
 
 ## Differentiated Services Considerations {#dscp-considerations}
 
-Tunneled IP packets can have Differentiated Services Code Points (DSCP) {{!DSCP=RFC2474}} set
-in the traffic class IP header field to request a particular per-hop
-behavior. If a client or IP proxy is configured as part of a Differentiated Services
-domain, it MAY implement traffic differentiation based on these markings. However,
-the use of HTTP can limit the possibilities for differentiated treatment of the
-tunneled IP packets on the path between the IP proxying endpoints.
+Tunneled IP packets can have Differentiated Services Code Points (DSCP)
+{{!DSCP=RFC2474}} set in the traffic class IP header field to request a
+particular per-hop behavior. If a client or IP proxy is configured as part of a
+Differentiated Services domain, it MAY implement traffic differentiation based
+on these markings. However, the use of HTTP can limit the possibilities for
+differentiated treatment of the tunneled IP packets on the path between the IP
+proxying endpoints.
 
-If tunneled packets are subject to congestion control by the outer
-connection, the tunneled packets need to be treated equally regardless of
-their DSCP markings to not disrupt the congestion controller. In this scenario, the client or proxy MUST NOT
-copy the DSCP field from the inner IP header to the outer IP header of the
-packet carrying this packet. Instead, an application would need to use
-separate connections to the proxy, one for each DSCP. Note that this
-document does not define a way for requests to scope to particular DSCP
-values; such support is left to future extensions.
+If tunneled packets are subject to congestion control by the outer connection,
+the tunneled packets need to be treated equally regardless of their DSCP
+markings to not disrupt the congestion controller. In this scenario, the client
+or proxy MUST NOT copy the DSCP field from the inner IP header to the outer IP
+header of the packet carrying this packet. Instead, an application would need
+to use separate connections to the proxy, one for each DSCP. Note that this
+document does not define a way for requests to scope to particular DSCP values;
+such support is left to future extensions.
 
-If tunneled packets use QUIC datagrams and are not subject to congestion control
-by the outer connection, the IP proxying endpoints MAY translate
-the DSCP field value from the tunneled traffic
-to the outer IP header. IP proxying endpoints MUST NOT coalesce multiple inner
-packets into the same outer packet unless they have the same DSCP marking or an
-equivalent traffic class. Note that the ability to translate DSCP values is
-dependent on the tunnel ingress and egress belonging to the same
-differentiated service domain or not.
+If tunneled packets use QUIC datagrams and are not subject to congestion
+control by the outer connection, the IP proxying endpoints MAY translate the
+DSCP field value from the tunneled traffic to the outer IP header. IP proxying
+endpoints MUST NOT coalesce multiple inner packets into the same outer packet
+unless they have the same DSCP marking or an equivalent traffic class. Note
+that the ability to translate DSCP values is dependent on the tunnel ingress
+and egress belonging to the same differentiated service domain or not.
 
 # Security Considerations
 
@@ -1427,10 +1427,11 @@ Implementers will benefit from reading the guidance in
 extension headers (e.g., {{?ROUTING-HDR=RFC5095}}), implementers need to follow
 the latest guidance regarding handling of IPv6 extension headers.
 
-Transferring DSCP markings from inner to outer packets (see {{dscp-considerations}})
-exposes end-to-end flow level information to an on-path observer between the IP
-proxying endpoints. This can potentially expose a single end-to-end flow. Because of
-this, such use of DSCP in privacy-sensitive contexts is NOT RECOMMENDED.
+Transferring DSCP markings from inner to outer packets (see
+{{dscp-considerations}}) exposes end-to-end flow level information to an
+on-path observer between the IP proxying endpoints. This can potentially expose
+a single end-to-end flow. Because of this, such use of DSCP in
+privacy-sensitive contexts is NOT RECOMMENDED.
 
 # IANA Considerations
 
