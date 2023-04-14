@@ -1315,10 +1315,11 @@ of hardware offloads.
 
 When the protocol running inside the tunnel uses congestion control (e.g.,
 {{TCP}} or {{QUIC}}), the proxied traffic will incur at least two nested
-congestion controllers. The outer HTTP connection MAY disable congestion
-control if it knows that the inner packets belong to congestion-controlled
-connections. Implementers will benefit from reading the guidance in
-{{Section 3.1.11 of ?UDP-USAGE=RFC8085}}.
+congestion controllers. When tunneled packets are sent using QUIC DATAGRAM
+frames, the outer HTTP connection MAY disable congestion control for those
+packets if it knows that the inner packets belong to congestion-controlled
+connections. Implementers will benefit from reading the guidance in {{Section
+3.1.11 of ?UDP-USAGE=RFC8085}}.
 
 When the protocol running inside the tunnel uses loss recovery (e.g., {{TCP}}
 or {{QUIC}}), and the outer HTTP connection runs over TCP, the proxied traffic
