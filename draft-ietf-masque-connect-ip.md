@@ -1342,7 +1342,7 @@ tunneled IP packets on the path between the IP proxying endpoints.
 
 If tunneled packets are subject to congestion control by the outer
 connection, the tunneled packets need to be treated equally regardless of
-their DSCP markings to not disrupt the congestion controller. The client or proxy MUST NOT
+their DSCP markings to not disrupt the congestion controller. In this scenario, the client or proxy MUST NOT
 copy the DSCP field from the inner IP header to the outer IP header of the
 packet carrying this packet. Instead, an application would need to use
 separate connections to the proxy, one for each DSCP. Note that this
