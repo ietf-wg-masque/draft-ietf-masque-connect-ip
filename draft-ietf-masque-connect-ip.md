@@ -1354,9 +1354,8 @@ that use DSCP as a traffic selector.
 If a client or IP proxy with a connection containing an IP proxying request
 stream and uses HTTP datagrams and disables congestion control for this stream,
 a client or proxy MAY translate the DSCP field value from the tunneled traffic
-to the outer IP header for the QUIC packet containing the datagram
-frame. Coalescing of multiple datagrams in one QUIC packet MAY only be done if
-the the IP packets encapsulated in each datagram have the same DSCP or an
+to the outer IP header. IP proxying endpoints MUST NOT coalesce multiple inner
+packets into the same outer packet unless they have the same DSCP marking or an
 equivalent traffic class. Note: If the client or IP proxy can copy or needs to
 translate the DSCP value depends if the tunnel ingress and egress are in the
 same differentiated service domain or different ones.
