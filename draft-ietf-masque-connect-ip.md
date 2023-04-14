@@ -1344,11 +1344,10 @@ If tunneled packets are subject to congestion control by the outer
 connection, the tunneled packets need to be treated equally regardless of
 their DSCP markings to not disrupt the congestion controller. The client or proxy MUST NOT
 copy the DSCP field from the inner IP header to the outer IP header of the
-packet carrying this packet. Instead, an application intending to use IP
-proxying with different DSCP will have to establish multiple connections to a
-proxy, one per each DSCP to be used. It needs to be noted that the Connect-IP
-request per current specification does not define a way for a scoped request
-that use DSCP as a traffic selector.
+packet carrying this packet. Instead, an application would need to use
+separate connections to the proxy, one for each DSCP. Note that this
+document does not define a way for requests to scope to particular DSCP
+values; such support is left to future extensions.
 
 If tunneled packets are not subject to congestion control by the outer
 connection, and uses QUIC datagrams, the IP proxying endpoint MAY translate
