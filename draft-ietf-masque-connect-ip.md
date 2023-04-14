@@ -452,14 +452,6 @@ IP proxies MAY perform access control using the scoping information provided by
 the client: if the client is not authorized to access any of the destinations
 included in the scope, then the IP proxy can immediately fail the request.
 
-Note that IP protocol numbers represent both upper layers (as defined in
-{{Section 2 of !IPv6=RFC8200}}, examples include TCP and UDP) and IPv6
-extension headers (as defined in {{Section 4 of IPv6}}, examples include
-Fragment and Options headers). IP proxies MAY reject requests to scope to
-protocol numbers that are used for extension headers. Upon receiving packets,
-implementations that support scoping by IP protocol number MUST walk the chain
-of extensions to find the matching IP protocol number.
-
 ## Capsules
 
 This document defines multiple new capsule types that allow endpoints to
@@ -638,7 +630,7 @@ Note that the ordering of Requested Addresses does not carry any semantics.
 Similarly, the Request ID is only meant as a unique identifier, it does not
 convey any priority or importance.
 
-### ROUTE_ADVERTISEMENT Capsule
+### ROUTE_ADVERTISEMENT Capsule {#route-adv}
 
 The ROUTE_ADVERTISEMENT capsule (see {{iana-types}} for the value of the
 capsule type) allows an endpoint to communicate to its peer that it is willing
@@ -731,6 +723,20 @@ protocol set to zero and the other set to non-zero. Endpoints MUST NOT send a
 ROUTE_ADVERTISEMENT capsule with routes that overlap in such a way. Validating
 this requirement is OPTIONAL, but if an endpoint detects the violation, it MUST
 abort the IP proxying request stream.
+
+## IPv6 Extension Headers
+
+Both request scoping (see {{scope}}) and the ROUTE_ADVERTISEMENT capsule (see
+{{route-adv}}) use IP protocol numbers. These numbers represent both upper
+layers (as defined in {{Section 2 of !IPv6=RFC8200}}, examples include TCP and
+UDP) and IPv6 extension headers (as defined in {{Section 4 of IPv6}}, examples
+include Fragment and Options headers). IP proxies MAY reject requests to scope
+to protocol numbers that are used for extension headers. Upon receiving
+packets, implementations that support scoping or routing by IP protocol number
+MUST walk the chain of extensions to find the matching IP protocol number. Note
+that the ROUTE_ADVERTISEMENT capsule uses IP protocol number 0 to indicate that
+all protocols are allowed, it does not restrict the route to the IPv6
+Hop-by-Hop Options Header ({{Section 4.3 of IPv6}}).
 
 # Context Identifiers
 
