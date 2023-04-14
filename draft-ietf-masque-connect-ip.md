@@ -1331,7 +1331,7 @@ and outer IP headers does not apply because the outer connection will react
 correctly to congestion notifications if it uses ECN. The inner traffic can
 also use ECN, independently of whether it is in use on the outer connection.
 
-## Diffserv Considerations {#dscp-consideration}
+## Differentiated Services Considerations {#dscp-considerations}
 
 Tunneled IP packets can have Diffserv Code Points (DSCP) {{!DSCP=RFC2474}} set
 in the traffic class IP header field to request a particular per-hop
