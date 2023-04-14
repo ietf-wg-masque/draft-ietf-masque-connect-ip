@@ -1349,8 +1349,8 @@ separate connections to the proxy, one for each DSCP. Note that this
 document does not define a way for requests to scope to particular DSCP
 values; such support is left to future extensions.
 
-If tunneled packets are not subject to congestion control by the outer
-connection, and uses QUIC datagrams, the IP proxying endpoint MAY translate
+If tunneled packets use QUIC datagrams and are not subject to congestion control
+by the outer connection, the IP proxying endpoints MAY translate
 the DSCP field value from the tunneled traffic
 to the outer IP header. IP proxying endpoints MUST NOT coalesce multiple inner
 packets into the same outer packet unless they have the same DSCP marking or an
