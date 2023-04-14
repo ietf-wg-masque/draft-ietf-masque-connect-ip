@@ -1409,14 +1409,10 @@ Since there are known risks with some IPv6 extension headers (e.g.,
 {{?ROUTING-HDR=RFC5095}}), implementers need to follow the latest guidance
 regarding handling of IPv6 extension headers.
 
-Client or Proxies that support marking DSCP through to encapsulating
-datagram carrying packets, see {{dscp-consideration}}, needs to be
-aware that this will expose end-to-end flow level information to an
-on-path observer between the client and proxy. The marking through of
-DSCP will result in that one common aggregate over the connection
-becomes multiple aggregates, one per DSCP used. Potentially exposing a
-single end-to-end flow. Thus, if the goal of IP proxying over HTTP is
-privacy related then marking DSCP through is not recommended.
+Transferring DSCP markings from inner to outer packets (see {{dscp-considerations}})
+exposes end-to-end flow level information to an on-path observer between the IP
+proxying endpoints. This can potentially expose a single end-to-end flow. Because of
+this, such use of DSCP in privacy-sensitive contexts is NOT RECOMMENDED.
 
 # IANA Considerations
 
