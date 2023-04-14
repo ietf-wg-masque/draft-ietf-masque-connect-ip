@@ -1340,10 +1340,9 @@ as part of a Differentiated Services domain, it MAY implement traffic differenti
 the use of HTTP can limit the possibilities for differentiated treatment of the
 tunneled IP packets on the path between the IP proxying endpoints.
 
-If a client or IP proxy with a connection containing an IP Proxying request
-stream is using congestion control for that stream, regardless of whether HTTP
-datagrams or capsules are used, all traffic without of DSCP markings will be
-treated equally within that transport connection. The client or proxy MUST NOT
+If tunneled packets are subject to congestion control by the outer 
+connection, the tunneled packets need to be treated equally regardless of 
+their DSCP markings to not disrupt the congestion controller. The client or proxy MUST NOT
 copy the DSCP field from the inner IP header to the outer IP header of the
 packet carrying this packet. Instead, an application intending to use IP
 proxying with different DSCP will have to establish multiple connections to a
@@ -1351,9 +1350,9 @@ proxy, one per each DSCP to be used. It needs to be noted that the Connect-IP
 request per current specification does not define a way for a scoped request
 that use DSCP as a traffic selector.
 
-If a client or IP proxy with a connection containing an IP proxying request
-stream and uses HTTP datagrams and disables congestion control for this stream,
-a client or proxy MAY translate the DSCP field value from the tunneled traffic
+If tunneled packets are not subject to congestion control by the outer 
+connection, and uses QUIC datagrams, the IP proxying endpoint MAY translate 
+the DSCP field value from the tunneled traffic
 to the outer IP header. IP proxying endpoints MUST NOT coalesce multiple inner
 packets into the same outer packet unless they have the same DSCP marking or an
 equivalent traffic class. Note: If the client or IP proxy can copy or needs to
