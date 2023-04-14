@@ -1354,9 +1354,9 @@ by the outer connection, the IP proxying endpoints MAY translate
 the DSCP field value from the tunneled traffic
 to the outer IP header. IP proxying endpoints MUST NOT coalesce multiple inner
 packets into the same outer packet unless they have the same DSCP marking or an
-equivalent traffic class. Note: If the client or IP proxy can copy or needs to
-translate the DSCP value depends if the tunnel ingress and egress are in the
-same differentiated service domain or different ones.
+equivalent traffic class. Note that the ability to translate DSCP values is
+dependent on the tunnel ingress and egress belonging to the same
+differentiated service domain or not.
 
 # Security Considerations
 
