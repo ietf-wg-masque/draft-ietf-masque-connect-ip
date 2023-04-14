@@ -1333,7 +1333,7 @@ also use ECN, independently of whether it is in use on the outer connection.
 
 ## Differentiated Services Considerations {#dscp-considerations}
 
-Tunneled IP packets can have Diffserv Code Points (DSCP) {{!DSCP=RFC2474}} set
+Tunneled IP packets can have Differentiated Services Code Points (DSCP) {{!DSCP=RFC2474}} set
 in the traffic class IP header field to request a particular per-hop
 behavior. If a client or IP proxy handling an IP proxying request is configured
 as part of a diffserv domain, it MAY implement traffic differentiation. However,
