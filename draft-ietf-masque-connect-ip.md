@@ -418,7 +418,8 @@ ipproto:
 "Assigned Internet Protocol Numbers" IANA registry {{IANA-PN}}. If present, it
 specifies that a client only wants to proxy a specific IP protocol for this
 request. If the value is "\*", or the variable is not included, the client is
-requesting to use any IP protocol.
+requesting to use any IP protocol. ICMP traffic is always allowed, regardless
+of the value of this field.
 {: spacing="compact"}
 
 Using the terms IPv6address, IPv4address, and reg-name from {{URI}}, the
