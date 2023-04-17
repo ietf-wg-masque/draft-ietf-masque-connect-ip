@@ -1318,8 +1318,8 @@ When the protocol running inside the tunnel uses congestion control (e.g.,
 {{TCP}} or {{QUIC}}), the proxied traffic will incur at least two nested
 congestion controllers. When tunneled packets are sent using QUIC DATAGRAM
 frames, the outer HTTP connection MAY disable congestion control for those
-packets if it knows that the inner packets belong to congestion-controlled
-connections. Implementers will benefit from reading the guidance in {{Section
+packets that contain only QUIC DATAGRAM frames encapsulating IP packets.
+Implementers will benefit from reading the guidance in {{Section
 3.1.11 of ?UDP-USAGE=RFC8085}}.
 
 When the protocol running inside the tunnel uses loss recovery (e.g., {{TCP}}
