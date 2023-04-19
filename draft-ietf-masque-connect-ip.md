@@ -77,6 +77,21 @@ informative:
     title: "Protocol Numbers"
     date: false
     target: "https://www.iana.org/assignments/protocol-numbers"
+  TCP-MELTDOWN:
+    author:
+      -
+        name: Osamu Honda
+      -
+        name: Hiroyuki Ohsaki
+      -
+        name: Makoto Imase
+      -
+        name: Mika Ishizuka
+      -
+        name: Junichi Murayama
+    title: "Understanding TCP over TCP: effects of TCP tunneling on end-to-end throughput and latency"
+    date: 2005
+    target: "https://doi.org/10.1117/12.630496"
 
 --- abstract
 
@@ -1316,7 +1331,9 @@ of hardware offloads.
 
 When the protocol running inside the tunnel uses congestion control (e.g.,
 {{TCP}} or {{QUIC}}), the proxied traffic will incur at least two nested
-congestion controllers. When tunneled packets are sent using QUIC DATAGRAM
+congestion controllers. Nested congestion controlers can lead to
+pathological behavior, such as in the case of "TCP meltdown"
+{{TCP-MELTDOWN}}. When tunneled packets are sent using QUIC DATAGRAM
 frames, the outer HTTP connection MAY disable congestion control for those
 packets that contain only QUIC DATAGRAM frames encapsulating IP packets.
 Implementers will benefit from reading the guidance in {{Section
