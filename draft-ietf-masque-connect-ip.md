@@ -838,7 +838,7 @@ DATAGRAM frames. It is also possible for a proxied IP packet to span multiple
 outer packets, because a DATAGRAM capsule can be split across multiple QUIC or
 TCP packets.
 
-## Router Operation
+## Routing Operation
 
 The requirements in this section are a repetition of requirements that apply to
 IP routers in general, and might not apply to implementations of IP proxying
