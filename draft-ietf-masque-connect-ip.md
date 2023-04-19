@@ -210,7 +210,7 @@ HTTP-DGRAM}}), IP proxying requests do not carry any message content.
 Similarly, successful IP proxying responses also do not carry any message
 content.
 
-IP proxying over HTTP MUST use TLS or QUIC encryption, or another equivalent
+IP proxying over HTTP MUST be operated over TLS or QUIC encryption, or another equivalent
 encryption protocol, to provide confidentiality, integrity, and authentication.
 
 ## IP Proxy Handling
