@@ -212,8 +212,9 @@ HTTP-DGRAM}}), IP proxying requests do not carry any message content.
 Similarly, successful IP proxying responses also do not carry any message
 content.
 
-IP proxying over HTTP MUST be operated over TLS or QUIC encryption, or another equivalent
-encryption protocol, to provide confidentiality, integrity, and authentication.
+IP proxying over HTTP MUST be operated over TLS or QUIC encryption, or another
+equivalent encryption protocol, to provide confidentiality, integrity, and
+authentication.
 
 ## IP Proxy Handling
 
@@ -692,7 +693,8 @@ IP Protocol:
 encoded as an unsigned 8-bit integer. If the value is 0, all protocols are
 allowed. If the value is not 0, it represents an allowable next header value
 carried in IP headers that are directly sent in HTTP datagrams (the outermost
-IP headers). ICMP traffic is always allowed, regardless of the value of this field.
+IP headers). ICMP traffic is always allowed, regardless of the value of this
+field.
 {: spacing="compact"}
 
 If any of the capsule fields are malformed upon reception, the receiver of the
