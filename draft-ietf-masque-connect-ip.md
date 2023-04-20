@@ -120,9 +120,11 @@ see {{iana-uri}}.
 {::boilerplate bcp14-tagged}
 
 In this document, we use the term "IP proxy" to refer to the HTTP server that
-responds to the IP proxying request. If there are HTTP intermediaries (as
-defined in {{Section 3.7 of HTTP}}) between the client and the proxy, those are
-referred to as "intermediaries" in this document.
+responds to the IP proxying request. The term "client" is used in the HTTP
+sense; the client constructs the IP proxying request. If there are HTTP
+intermediaries (as defined in {{Section 3.7 of HTTP}}) between the client and
+the IP proxy, those are referred to as "intermediaries" in this document. The
+term "IP proxying endpoints" refers to both the client and the IP proxy.
 
 This document uses terminology from {{!QUIC=RFC9000}}. Where this document
 defines protocol types, the definition format uses the notation from {{Section
@@ -1348,7 +1350,7 @@ of the dropped packet; see {{Section 3.2 of ICMPv6}}.
 
 ## ECN Considerations
 
-If a client or IP proxy with a connection containing an IP Proxying request
+If an IP proxying endpoint with a connection containing an IP Proxying request
 stream disables congestion control, it cannot signal Explicit Congestion
 Notification (ECN) {{!ECN=RFC3168}} support on that outer connection. That is,
 the QUIC sender MUST mark all IP headers with the Not-ECT codepoint for QUIC
@@ -1366,20 +1368,20 @@ also use ECN, independently of whether it is in use on the outer connection.
 
 Tunneled IP packets can have Differentiated Services Code Points (DSCP)
 {{!DSCP=RFC2474}} set in the traffic class IP header field to request a
-particular per-hop behavior. If a client or IP proxy is configured as part of a
-Differentiated Services domain, it MAY implement traffic differentiation based
-on these markings. However, the use of HTTP can limit the possibilities for
-differentiated treatment of the tunneled IP packets on the path between the IP
-proxying endpoints.
+particular per-hop behavior. If an IP proxying endpoint is configured as part
+of a Differentiated Services domain, it MAY implement traffic differentiation
+based on these markings. However, the use of HTTP can limit the possibilities
+for differentiated treatment of the tunneled IP packets on the path between the
+IP proxying endpoints.
 
 If tunneled packets are subject to congestion control by the outer connection,
 the tunneled packets need to be treated equally regardless of their DSCP
-markings to not disrupt the congestion controller. In this scenario, the client
-or proxy MUST NOT copy the DSCP field from the inner IP header to the outer IP
-header of the packet carrying this packet. Instead, an application would need
-to use separate connections to the proxy, one for each DSCP. Note that this
-document does not define a way for requests to scope to particular DSCP values;
-such support is left to future extensions.
+markings to not disrupt the congestion controller. In this scenario, the IP
+proxying endpoint MUST NOT copy the DSCP field from the inner IP header to the
+outer IP header of the packet carrying this packet. Instead, an application
+would need to use separate connections to the proxy, one for each DSCP. Note
+that this document does not define a way for requests to scope to particular
+DSCP values; such support is left to future extensions.
 
 If tunneled packets use QUIC datagrams and are not subject to congestion
 control by the outer connection, the IP proxying endpoints MAY translate the
@@ -1396,14 +1398,14 @@ that permits sending to arbitrary hosts, regardless of whether tunnels are
 scoped to specific hosts or not. Bad actors could abuse this capability to send
 traffic and have it attributed to the IP proxy. HTTP servers that support IP
 proxying SHOULD restrict its use to authenticated users. Depending on the
-deployment, possible authentication mechanisms include mutual TLS between
-clients and proxies, HTTP-based authentication via the HTTP Authorization
-header {{HTTP}}, or even bearer tokens. Proxies can enforce policies for
-authenticated users to further constrain client behavior or deal with possible
-abuse. For example, proxies can rate limit individual clients that send an
-excessively large amount of traffic through the proxy. As another example,
-proxies can restrict address (prefix) assignment to clients based on certain
-client attributes such as geographic location.
+deployment, possible authentication mechanisms include mutual TLS between IP
+proxying endpoints, HTTP-based authentication via the HTTP Authorization header
+{{HTTP}}, or even bearer tokens. Proxies can enforce policies for authenticated
+users to further constrain client behavior or deal with possible abuse. For
+example, proxies can rate limit individual clients that send an excessively
+large amount of traffic through the proxy. As another example, proxies can
+restrict address (prefix) assignment to clients based on certain client
+attributes such as geographic location.
 
 Address assignment can have privacy implications for endpoints. For example, if
 a proxy partitions its address space by the number of authenticated clients and
