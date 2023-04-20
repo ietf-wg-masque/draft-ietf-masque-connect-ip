@@ -423,8 +423,10 @@ ipproto:
 "Assigned Internet Protocol Numbers" IANA registry {{IANA-PN}}. If present, it
 specifies that a client only wants to proxy a specific IP protocol for this
 request. If the value is "\*", or the variable is not included, the client is
-requesting to use any IP protocol. ICMP traffic is always allowed, regardless
-of the value of this field.
+requesting to use any IP protocol. The IP protocol indicated in the "ipproto"
+variable represents an allowable next header value carried in IP headers that
+are directly sent in HTTP datagrams (the outermost IP headers). ICMP traffic
+is always allowed, regardless of the value of this field.
 {: spacing="compact"}
 
 Using the terms IPv6address, IPv4address, and reg-name from {{URI}}, the
@@ -688,7 +690,9 @@ IP Protocol:
 
 : The Internet Protocol Number for traffic that can be sent to this range,
 encoded as an unsigned 8-bit integer. If the value is 0, all protocols are
-allowed. ICMP traffic is always allowed, regardless of the value of this field.
+allowed. If the value is not 0, it represents an allowable next header value
+carried in IP headers that are directly sent in HTTP datagrams (the outermost
+IP headers). ICMP traffic is always allowed, regardless of the value of this field.
 {: spacing="compact"}
 
 If any of the capsule fields are malformed upon reception, the receiver of the
@@ -739,10 +743,11 @@ UDP) and IPv6 extension headers (as defined in {{Section 4 of IPv6}}, examples
 include Fragment and Options headers). IP proxies MAY reject requests to scope
 to protocol numbers that are used for extension headers. Upon receiving
 packets, implementations that support scoping or routing by IP protocol number
-MUST walk the chain of extensions to find the matching IP protocol number. Note
-that the ROUTE_ADVERTISEMENT capsule uses IP protocol number 0 to indicate that
-all protocols are allowed, it does not restrict the route to the IPv6
-Hop-by-Hop Options Header ({{Section 4.3 of IPv6}}).
+MUST walk the chain of extensions to find outermost non-extension IP protocol
+number to match against the scoping rule. Note that the ROUTE_ADVERTISEMENT
+capsule uses IP protocol number 0 to indicate that all protocols are allowed,
+it does not restrict the route to the IPv6 Hop-by-Hop Options Header
+({{Section 4.3 of IPv6}}).
 
 # Context Identifiers
 
