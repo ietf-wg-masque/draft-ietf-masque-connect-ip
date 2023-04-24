@@ -1392,9 +1392,11 @@ based on these markings. However, the use of HTTP can limit the possibilities
 for differentiated treatment of the tunneled IP packets on the path between the
 IP proxying endpoints.
 
-If tunneled packets are subject to congestion control by the outer connection,
-the tunneled packets need to be treated equally regardless of their DSCP
-markings to not disrupt the congestion controller. In this scenario, the IP
+When a connection is congestion-controlled, marking packets with different DSCP
+can lead to reordering between them, and that can in turn lead the congestion
+controller to perform poorly. If tunneled packets are subject to congestion
+control by the outer connection, they need to avoid carrying different DSCP
+markings to prevent this situation. In this scenario, the IP
 proxying endpoint MUST NOT copy the DSCP field from the inner IP header to the
 outer IP header of the packet carrying this packet. Instead, an application
 would need to use separate connections to the proxy, one for each DSCP. Note
