@@ -1397,12 +1397,12 @@ different DSCP can lead to reordering between them, and that can in turn lead
 the underlying transport connection's congestion controller to perform poorly.
 If tunneled packets are subject to congestion control by the outer connection,
 they need to avoid carrying DSCP markings that are not equivalent in forwarding
-behavior to prevent this situation. In this scenario, the IP
-proxying endpoint MUST NOT copy the DSCP field from the inner IP header to the
-outer IP header of the packet carrying this packet. Instead, an application
-would need to use separate connections to the proxy, one for each DSCP. Note
-that this document does not define a way for requests to scope to particular
-DSCP values; such support is left to future extensions.
+behavior to prevent this situation. In this scenario, the IP proxying endpoint
+MUST NOT copy the DSCP field from the inner IP header to the outer IP header of
+the packet carrying this packet. Instead, an application would need to use
+separate connections to the proxy, one for each DSCP. Note that this document
+does not define a way for requests to scope to particular DSCP values; such
+support is left to future extensions.
 
 If tunneled packets use QUIC datagrams and are not subject to congestion
 control by the outer connection, the IP proxying endpoints MAY translate the
