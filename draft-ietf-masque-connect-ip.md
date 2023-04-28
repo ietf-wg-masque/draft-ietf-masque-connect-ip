@@ -1397,7 +1397,7 @@ different DSCP can lead to reordering between them, and that can in turn lead
 the underlying transport connection's congestion controller to perform poorly.
 If tunneled packets are subject to congestion control by the outer connection,
 they need to avoid carrying DSCP markings that are not equivalent in forwarding
-behaviour to prevent this situation. In this scenario, the IP
+behavior to prevent this situation. In this scenario, the IP
 proxying endpoint MUST NOT copy the DSCP field from the inner IP header to the
 outer IP header of the packet carrying this packet. Instead, an application
 would need to use separate connections to the proxy, one for each DSCP. Note
