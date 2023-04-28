@@ -1394,7 +1394,7 @@ IP proxying endpoints.
 
 When an HTTP connection is congestion-controlled, marking packets with
 different DSCP can lead to reordering between them, and that can in turn lead
-the HTTP connection's congestion controller to perform poorly. If tunneled
+the underlying transport connection's congestion controller to perform poorly. If tunneled
 packets are subject to congestion control by the outer connection, they need to
 avoid carrying DSCP markings that are not equivalent in forwarding behaviour to
 prevent this situation. In this scenario, the IP
