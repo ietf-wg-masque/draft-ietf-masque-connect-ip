@@ -4,8 +4,8 @@ docname: draft-ietf-masque-connect-ip-latest
 v: 3
 submissiontype: IETF
 category: std
-area: Transport
-wg: MASQUE
+area: tsv
+wg: masque
 number: 9484
 date: 2023-09
 consensus: true
@@ -81,7 +81,7 @@ informative:
 --- abstract
 
 This document describes how to proxy IP packets in HTTP. This protocol is
-similar to UDP proxying in HTTP, but allows transmitting arbitrary IP packets.
+similar to UDP proxying in HTTP but allows transmitting arbitrary IP packets.
 More specifically, this document defines a protocol that allows an HTTP client
 to create an IP tunnel through an HTTP server that acts as an IP proxy. This
 document updates RFC 9298.
@@ -98,7 +98,7 @@ IP protocols {{IANA-PN}} nor convey fields of the IP header.
 
 This document describes a protocol for tunnelling IP through an HTTP server
 acting as an IP-specific proxy over HTTP. This can be used for various use
-cases such as remote access VPN, site-to-site VPN, secure point-to-point
+cases, such as remote access VPN, site-to-site VPN, secure point-to-point
 communication, or general-purpose packet tunnelling.
 
 IP proxying operates similarly to UDP proxying {{?CONNECT-UDP=RFC9298}},
@@ -108,11 +108,11 @@ Template {{!TEMPLATE=RFC6570}}, as described in {{client-config}}.
 
 This protocol supports all existing versions of HTTP by using HTTP Datagrams
 {{!HTTP-DGRAM=RFC9297}}. When using HTTP/2 {{H2}} or HTTP/3 {{H3}}, it uses
-HTTP Extended CONNECT as described in {{!EXT-CONNECT2=RFC8441}} and
-{{!EXT-CONNECT3=RFC9220}}. When using HTTP/1.x {{H1}}, it uses HTTP Upgrade as
+HTTP Extended CONNECT, as described in {{!EXT-CONNECT2=RFC8441}} and
+{{!EXT-CONNECT3=RFC9220}}. When using HTTP/1.x {{H1}}, it uses HTTP Upgrade, as
 defined in {{Section 7.8 of HTTP}}.
 
-This document updates {{CONNECT-UDP}} to change the "masque" well-known URI,
+This document updates {{CONNECT-UDP}} to change the "masque" well-known URI;
 see {{iana-uri}}.
 
 # Conventions and Definitions
@@ -141,8 +141,8 @@ entire connection.
 Clients are configured to use IP proxying over HTTP via a URI Template
 {{!TEMPLATE=RFC6570}}. The URI Template MAY contain two variables: "target" and
 "ipproto"; see {{scope}}. The optionality of the variables needs to be
-considered when defining the template so that either the variable is
-self-identifying or it is possible to exclude it in the syntax.
+considered when defining the template so that the variable is either
+self-identifying or possible to exclude in the syntax.
 
 Examples are shown below:
 
@@ -158,8 +158,8 @@ The following requirements apply to the URI Template:
 
 * The URI Template MUST be a level 3 template or lower.
 
-* The URI Template MUST be in absolute form, and MUST include non-empty scheme,
-  authority and path components.
+* The URI Template MUST be in absolute form and MUST include non-empty scheme,
+  authority, and path components.
 
 * The path component of the URI Template MUST start with a slash "/".
 
@@ -170,7 +170,7 @@ The following requirements apply to the URI Template:
   their values MUST NOT be empty. Clients can instead use "\*" to indicate
   wildcard or no-preference values; see {{scope}}.
 
-* The URI Template MUST NOT contain any non-ASCII unicode characters and MUST
+* The URI Template MUST NOT contain any non-ASCII Unicode characters and MUST
   only contain ASCII characters in the range 0x21-0x7E inclusive (note that
   percent-encoding is allowed; see Section 2.1 of {{!URI=RFC3986}}).
 
@@ -205,7 +205,7 @@ To initiate an IP tunnel associated with a single HTTP stream, a client issues
 a request containing the "connect-ip" upgrade token.
 
 When sending its IP proxying request, the client SHALL perform URI Template
-expansion to determine the path and query of its request, see {{client-config}}.
+expansion to determine the path and query of its request; see {{client-config}}.
 
 By virtue of the definition of the Capsule Protocol (see {{Section 3.2 of
 HTTP-DGRAM}}), IP proxying requests do not carry any message content.
@@ -220,13 +220,13 @@ authentication.
 
 Upon receiving an IP proxying request:
 
- * if the recipient is configured to use another HTTP proxy, it will act as an
+ * If the recipient is configured to use another HTTP proxy, it will act as an
    intermediary by forwarding the request to another HTTP server. Note that
    such intermediaries may need to re-encode the request if they forward it
    using a version of HTTP that is different from the one used to receive it,
    as the request encoding differs by version (see below).
 
- * otherwise, the recipient will act as an IP proxy. The IP proxy can choose to
+ * Otherwise, the recipient will act as an IP proxy. The IP proxy can choose to
    reject the IP proxying request. Otherwise, it extracts the optional "target"
    and "ipproto" variables from the URI it has reconstructed from the request
    headers, decodes their percent-encoding, and establishes an IP tunnel.
@@ -239,8 +239,8 @@ resolution (to obtain the corresponding IPv4 and/or IPv6 addresses via A and/or
 AAAA records) before replying to the HTTP request. If errors occur during this
 process, the IP proxy MUST reject the request and SHOULD send details using an
 appropriate Proxy-Status header field {{!PROXY-STATUS=RFC9209}}. For example,
-if DNS resolution returns an error, the proxy can use the `dns_error` Proxy
-Error Type from {{Section 2.3.2 of PROXY-STATUS}}.
+if DNS resolution returns an error, the proxy can use the `dns_error` proxy
+error type from {{Section 2.3.2 of PROXY-STATUS}}.
 
 The lifetime of the IP forwarding tunnel is tied to the IP proxying request
 stream. The IP proxy MUST maintain all IP address and route assignments
@@ -263,16 +263,16 @@ network-to-network routing.
 When using HTTP/1.1 {{H1}}, an IP proxying request will meet the following
 requirements:
 
-* the method SHALL be "GET".
+* The method SHALL be "GET".
 
-* the request SHALL include a single Host header field containing the host
+* The request SHALL include a single Host header field containing the host
   and optional port of the IP proxy.
 
-* the request SHALL include a Connection header field with value "Upgrade"
-  (note that this requirement is case-insensitive as per {{Section 7.6.1 of
+* The request SHALL include a Connection header field with value "Upgrade"
+  (note that this requirement is case-insensitive, as per {{Section 7.6.1 of
   HTTP}}).
 
-* the request SHALL include an Upgrade header field with value "connect-ip".
+* The request SHALL include an Upgrade header field with value "connect-ip".
 
 An IP proxying request that does not conform to these restrictions is
 malformed. The recipient of such a malformed request MUST respond with an error
@@ -297,16 +297,16 @@ Capsule-Protocol: ?1
 The server indicates a successful response by replying with the following
 requirements:
 
-* the HTTP status code on the response SHALL be 101 (Switching Protocols).
+* The HTTP status code on the response SHALL be 101 (Switching Protocols).
 
-* the response SHALL include a Connection header field with value "Upgrade"
-  (note that this requirement is case-insensitive as per {{Section 7.6.1 of
+* The response SHALL include a Connection header field with value "Upgrade"
+  (note that this requirement is case-insensitive, as per {{Section 7.6.1 of
   HTTP}}).
 
-* the response SHALL include a single Upgrade header field with value
+* The response SHALL include a single Upgrade header field with value
   "connect-ip".
 
-* the response SHALL meet the requirements of HTTP responses that start the
+* The response SHALL meet the requirements of HTTP responses that start the
   Capsule Protocol; see {{Section 3.2 of HTTP-DGRAM}}.
 
 If any of these requirements are not met, the client MUST treat this proxying
@@ -325,8 +325,8 @@ Capsule-Protocol: ?1
 ## HTTP/2 and HTTP/3 Requests {#req23}
 
 When using HTTP/2 {{H2}} or HTTP/3 {{H3}}, IP proxying requests use HTTP
-Extended CONNECT. This requires that servers send an HTTP Setting as specified
-in {{EXT-CONNECT2}} and {{EXT-CONNECT3}} and that requests use HTTP
+Extended CONNECT. This requires that servers send an HTTP Setting, as specified
+in {{EXT-CONNECT2}} and {{EXT-CONNECT3}}, and that requests use HTTP
 pseudo-header fields with the following requirements:
 
 * The :method pseudo-header field SHALL be "CONNECT".
@@ -367,9 +367,9 @@ capsule-protocol = ?1
 The server indicates a successful response by replying with the following
 requirements:
 
-* the HTTP status code on the response SHALL be in the 2xx (Successful) range.
+* The HTTP status code on the response SHALL be in the 2xx (Successful) range.
 
-* the response SHALL meet the requirements of HTTP responses that start the
+* The response SHALL meet the requirements of HTTP responses that start the
   Capsule Protocol; see {{Section 3.2 of HTTP-DGRAM}}.
 
 If any of these requirements are not met, the client MUST treat this proxying
@@ -407,8 +407,8 @@ target:
 : The variable "target" contains a hostname or IP prefix of a specific host to
 which the client wants to proxy packets. If the "target" variable is not
 specified or its value is "\*", the client is requesting to communicate with
-any allowable host. "target" supports using DNS names, IPv6 prefixes and IPv4
-prefixes. Note that IPv6 scoped addressing zone identifiers ({{!RFC6874}}) are
+any allowable host. "target" supports using DNS names, IPv6 prefixes, and IPv4
+prefixes. Note that IPv6 scoped addressing zone identifiers ({{!IPv6-ZONE-ID=RFC6874}}) are
 not supported. If the target is an IP prefix (IP address optionally followed by
 a percent-encoded slash followed by the prefix length in bits), the request
 will only support a single IP version. If the target is a hostname, the IP
