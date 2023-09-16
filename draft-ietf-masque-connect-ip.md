@@ -408,7 +408,7 @@ target:
 which the client wants to proxy packets. If the "target" variable is not
 specified or its value is "\*", the client is requesting to communicate with
 any allowable host. "target" supports using DNS names, IPv6 prefixes, and IPv4
-prefixes. Note that IPv6 scoped addressing zone identifiers ({{!IPv6-ZONE-ID=RFC6874}}) are
+prefixes. Note that IPv6 scoped addressing zone identifiers {{!IPv6-ZONE-ID=RFC6874}} are
 not supported. If the target is an IP prefix (IP address optionally followed by
 a percent-encoded slash followed by the prefix length in bits), the request
 will only support a single IP version. If the target is a hostname, the IP
@@ -731,7 +731,7 @@ requirements, it MUST abort the IP proxying request stream.
 
 Since setting the IP protocol to zero indicates all protocols are allowed, the
 requirements above make it possible for two routes to overlap when one has its IP
-protocol set to zero and the other set to non-zero. Endpoints MUST NOT send a
+protocol set to zero and the other has it set to non-zero. Endpoints MUST NOT send a
 ROUTE_ADVERTISEMENT capsule with routes that overlap in such a way. Validating
 this requirement is OPTIONAL, but if an endpoint detects the violation, it MUST
 abort the IP proxying request stream.
@@ -745,7 +745,7 @@ UDP) and IPv6 extension headers (as defined in {{Section 4 of IPv6}}, with examp
 include Fragment and Options headers). IP proxies MAY reject requests to scope
 to protocol numbers that are used for extension headers. Upon receiving
 packets, implementations that support scoping or routing by Internet Protocol Number
-MUST walk the chain of extensions to find outermost non-extension Internet Protocol
+MUST walk the chain of extensions to find the outermost non-extension Internet Protocol
 Number to match against the scoping rule. Note that the ROUTE_ADVERTISEMENT
 capsule uses Internet Protocol Number 0 to indicate that all protocols are allowed;
 it does not restrict the route to the IPv6 Hop-by-Hop Options header
@@ -897,7 +897,7 @@ bytes). This can be accomplished using various techniques:
   QUIC connection that IP proxying is running over. (Assuming QUIC version 1 is
   in use, the overhead is 1 byte for the type, 20 bytes for the maximal connection ID length, 4
   bytes for the maximal packet number length, 1 byte for the DATAGRAM frame type, 8 bytes
-  for the maximal quarter stream ID, one byte for the zero Context ID, and 16 bytes for
+  for the maximal Quarter Stream ID, 1 byte for the zero Context ID, and 16 bytes for
   the Authenticated Encryption with Associated Data (AEAD) authentication tag,
   for a total of 51 bytes of overhead, which
   corresponds to padding QUIC INITIAL packets to 1331 bytes or more.)
@@ -1350,7 +1350,7 @@ Implementers will benefit from reading the guidance in {{Section
 When the protocol running inside the tunnel uses loss recovery (e.g., {{TCP}}
 or {{QUIC}}) and the outer HTTP connection runs over TCP, the proxied traffic
 will incur at least two nested loss recovery mechanisms. This can reduce
-performance as both can sometimes independently retransmit the same data. To
+performance, as both can sometimes independently retransmit the same data. To
 avoid this, IP proxying SHOULD be performed over HTTP/3 to allow leveraging the
 QUIC DATAGRAM frame.
 
@@ -1375,7 +1375,7 @@ stream disables congestion control, it cannot signal Explicit Congestion
 Notification (ECN) {{!ECN=RFC3168}} support on that outer connection. That is,
 the QUIC sender MUST mark all IP headers with the Not ECN-Capable Transport (Not-ECT) codepoint for QUIC
 packets that are outside of congestion control. The endpoint can still report
-ECN feedback via QUIC ACK_ECN frames or the TCP ECE bit, as the peer might not
+ECN feedback via QUIC ACK_ECN frames or the TCP ECN-Echo (ECE) bit, as the peer might not
 have disabled congestion control.
 
 Conversely, if congestion control is not disabled on the outer congestion, the
@@ -1473,7 +1473,7 @@ privacy-sensitive contexts is NOT RECOMMENDED.
 
 ## HTTP Upgrade Token Registration
 
-IANA has registered "connect-ip" in the "HTTP Upgrade Token" Registry
+IANA has registered "connect-ip" in the "HTTP Upgrade Tokens" registry
 maintained at <[](https://www.iana.org/assignments/http-upgrade-tokens)>.
 
 Value:
@@ -1496,13 +1496,14 @@ References:
 ## MASQUE URI Suffixes Registry Creation
 
 IANA has created the "MASQUE URI Suffixes" registry maintained at
-<[](https://www.iana.org/assignments/masque/)>. The registration policy for
-this registry is Expert Review; see {{Section 4.5 of !IANA-POLICY=RFC8126}}.
-This new registry governs the path segment that immediately follows "masque" in
-paths that start with "/.well-known/masque/"; see
+<[](https://www.iana.org/assignments/masque)>. The registration policy is
+Expert Review; see {{Section 4.5 of !IANA-POLICY=RFC8126}}. This new registry
+governs the path segment that immediately follows "masque" in paths that start
+with "/.well-known/masque/"; see
 <[](https://www.iana.org/assignments/well-known-uris)> for the registration of
-"masque" in the "Well-Known URIs" registry. This new registry contains three
-columns:
+"masque" in the "Well-Known URIs" registry.
+
+This new registry contains three columns:
 
 Path Segment:
 
@@ -1541,7 +1542,7 @@ in the "Well-Known URIs" registry maintained at
 IANA has updated the "Reference" field to include this
 document and has replaced the "Related Information" field with
 "For sub-suffix allocations, see the registry at
-<[](https://www.iana.org/assignments/masque/)>.".
+<[](https://www.iana.org/assignments/masque)>.".
 
 ## HTTP Capsule Types Registrations {#iana-types}
 
@@ -1577,6 +1578,7 @@ Contact:
 Notes:
 
 : None
+{: spacing="compact"}
 
 --- back
 
