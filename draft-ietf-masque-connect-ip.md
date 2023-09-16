@@ -175,7 +175,7 @@ The following requirements apply to the URI Template:
   percent-encoding is allowed; see Section 2.1 of {{!URI=RFC3986}}).
 
 * The URI Template MUST NOT use Reserved Expansion ("+" operator), Fragment
-  Expansion ("#" operator), Label Expansion with Dot- Prefix, Path Segment
+  Expansion ("#" operator), Label Expansion with Dot-Prefix, Path Segment
   Expansion with Slash-Prefix, nor Path-Style Parameter Expansion with
   Semicolon-Prefix.
 
@@ -420,21 +420,21 @@ for which the IP proxy also sends an Assigned Address.
 
 ipproto:
 
-: The variable "ipproto" contains an IP protocol number, as defined in the
+: The variable "ipproto" contains an Internet Protocol Number; see the defined list in the
 "Assigned Internet Protocol Numbers" IANA registry {{IANA-PN}}. If present, it
 specifies that a client only wants to proxy a specific IP protocol for this
 request. If the value is "\*", or the variable is not included, the client is
 requesting to use any IP protocol. The IP protocol indicated in the "ipproto"
 variable represents an allowable next header value carried in IP headers that
-are directly sent in HTTP datagrams (the outermost IP headers). ICMP traffic
+are directly sent in HTTP Datagrams (the outermost IP headers). ICMP traffic
 is always allowed, regardless of the value of this field.
-{: spacing="compact"}
+{: newline="true" spacing="normal"}
 
 Using the terms IPv6address, IPv4address, and reg-name from {{URI}}, the
 "target" and "ipproto" variables MUST adhere to the format in
 {{target-format}}, using notation from {{!ABNF=RFC5234}}. Additionally:
 
-* if "target" contains an IPv6 literal or prefix, the colons (":") MUST be
+* If "target" contains an IPv6 literal or prefix, the colons (":") MUST be
   percent-encoded. For example, if the target host is "2001:db8::42", it will
   be encoded in the URI as "2001%3Adb8%3A%3A42".
 
@@ -446,7 +446,7 @@ Using the terms IPv6address, IPv4address, and reg-name from {{URI}}, the
   the length of the IP address in bits, the lower bits of the IP address that
   are not covered by the prefix length MUST all be set to 0.
 
-* "ipproto" MUST represent a decimal integer between 0 and 255 inclusive, or
+* "ipproto" MUST represent a decimal integer between 0 and 255 inclusive or
   the wildcard value "*".
 
 ~~~ ascii-art
@@ -509,7 +509,7 @@ Otherwise, this field SHALL be zero.
 IP Version:
 
 : IP Version of this address assignment, encoded as an unsigned 8-bit integer.
-MUST be either 4 or 6.
+It MUST be either 4 or 6.
 
 IP Address:
 
@@ -521,7 +521,7 @@ IP Prefix Length:
 
 : The number of bits in the IP address that are used to define the prefix that
 is being assigned, encoded as an unsigned 8-bit integer. This MUST be less than
-or equal to the length of the IP Address field, in bits. If the prefix length
+or equal to the length of the IP Address field in bits. If the prefix length
 is equal to the length of the IP address, the receiver of this capsule is
 allowed to send packets from a single source address. If the prefix length is
 less than the length of the IP address, the receiver of this capsule is allowed
@@ -529,24 +529,24 @@ to send packets from any source address that falls within the prefix. If the
 prefix length is strictly less than the length of the IP address in bits, the
 lower bits of the IP Address field that are not covered by the prefix length
 MUST all be set to 0.
-{: spacing="compact"}
+{: newline="true" spacing="normal"}
 
 If any of the capsule fields are malformed upon reception, the receiver of the
-capsule MUST follow the error handling procedure defined in {{Section 3.3 of
+capsule MUST follow the error-handling procedure defined in {{Section 3.3 of
 HTTP-DGRAM}}.
 
 If an ADDRESS_ASSIGN capsule does not contain an address that was previously
-transmitted in another ADDRESS_ASSIGN capsule, that indicates that the address
+transmitted in another ADDRESS_ASSIGN capsule, it indicates that the address
 has been removed. An ADDRESS_ASSIGN capsule can also be empty, indicating that
 all addresses have been removed.
 
 In some deployments of IP proxying in HTTP, an endpoint needs to be assigned an
 address by its peer before it knows what source address to set on its own
-packets. For example, in the Remote Access VPN case ({{example-remote}}) the
+packets. For example, in the remote access VPN case ({{example-remote}}), the
 client cannot send IP packets until it knows what address to use. In these
 deployments, the endpoint that is expecting an address assignment MUST send an
 ADDRESS_REQUEST capsule. This isn't required if the endpoint does not need any
-address assignment, for example when it is configured out-of-band with static
+address assignment, for example, when it is configured out-of-band with static
 addresses.
 
 While ADDRESS_ASSIGN capsules are commonly sent in response to ADDRESS_REQUEST
@@ -608,7 +608,7 @@ integer. MUST be less than or equal to the length of the IP Address field, in
 bits. If the prefix length is strictly less than the length of the IP address
 in bits, the lower bits of the IP Address field that are not covered by the
 prefix length MUST all be set to 0.
-{: spacing="compact"}
+{: newline="true" spacing="normal"}
 
 If the IP address is all-zero (0.0.0.0 or ::), this indicates that the sender
 is requesting an address of that address family but does not have a preference
@@ -695,7 +695,7 @@ allowed. If the value is not 0, it represents an allowable next header value
 carried in IP headers that are directly sent in HTTP datagrams (the outermost
 IP headers). ICMP traffic is always allowed, regardless of the value of this
 field.
-{: spacing="compact"}
+{: newline="true" spacing="normal"}
 
 If any of the capsule fields are malformed upon reception, the receiver of the
 capsule MUST follow the error handling procedure defined in {{Section 3.3 of
@@ -814,7 +814,7 @@ Payload:
 
 : The payload of the datagram, whose semantics depend on value of the previous
 field. Note that this field can be empty.
-{: spacing="compact"}
+{: newline="true" spacing="normal"}
 
 IP packets are encoded using HTTP Datagrams with the Context ID set to zero.
 When the Context ID is set to zero, the Payload field contains a full IP packet
