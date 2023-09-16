@@ -470,8 +470,8 @@ these new capsules.
 ### ADDRESS_ASSIGN Capsule
 
 The ADDRESS_ASSIGN capsule (see {{iana-types}} for the value of the capsule
-type) allows an endpoint to inform its peer of the list of IP addresses or
-prefixes it has assigned to it. Every capsule contains the full list of IP
+type) allows an endpoint to assign its peer a list of IP addresses or prefixes.
+Every capsule contains the full list of IP
 prefixes currently assigned to the receiver. Any of these addresses can be used
 as the source address on IP packets originated by the receiver of this capsule.
 
