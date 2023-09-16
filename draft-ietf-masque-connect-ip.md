@@ -458,7 +458,7 @@ ipproto = 1*3DIGIT / "*"
 {: #target-format title="URI Template Variable Format"}
 
 IP proxies MAY perform access control using the scoping information provided by
-the client: if the client is not authorized to access any of the destinations
+the client, i.e., if the client is not authorized to access any of the destinations
 included in the scope, then the IP proxy can immediately fail the request.
 
 ## Capsules
@@ -587,13 +587,13 @@ Request ID:
 
 : Request identifier, encoded as a variable-length integer. This is the
 identifier of this specific address request. Each request from a given endpoint
-carries a different identifier. Request IDs MUST NOT be reused by an endpoint,
+carries a different identifier. Request IDs MUST NOT be reused by an endpoint
 and MUST NOT be zero.
 
 IP Version:
 
 : IP Version of this address request, encoded as an unsigned 8-bit integer.
-MUST be either 4 or 6.
+It MUST be either 4 or 6.
 
 IP Address:
 
@@ -603,8 +603,8 @@ IP Address field SHALL have a length of 128 bits.
 
 IP Prefix Length:
 
-: Length of the IP Prefix requested, in bits, encoded as an unsigned 8-bit
-integer. MUST be less than or equal to the length of the IP Address field, in
+: Length of the IP Prefix requested in bits, encoded as an unsigned 8-bit
+integer. It MUST be less than or equal to the length of the IP Address field in
 bits. If the prefix length is strictly less than the length of the IP address
 in bits, the lower bits of the IP Address field that are not covered by the
 prefix length MUST all be set to 0.
@@ -616,17 +616,17 @@ for a specific address. In that scenario, the prefix length still indicates the
 sender's preference for the prefix length it is requesting.
 
 If any of the capsule fields are malformed upon reception, the receiver of the
-capsule MUST follow the error handling procedure defined in {{Section 3.3 of
+capsule MUST follow the error-handling procedure defined in {{Section 3.3 of
 HTTP-DGRAM}}.
 
 Upon receiving the ADDRESS_REQUEST capsule, an endpoint SHOULD assign one or
-more IP addresses to its peer, and then respond with an ADDRESS_ASSIGN capsule
+more IP addresses to its peer and then respond with an ADDRESS_ASSIGN capsule
 to inform the peer of the assignment. For each Requested Address, the receiver
 of the ADDRESS_REQUEST capsule SHALL respond with an Assigned Address with a
 matching Request ID. If the requested address was assigned, the IP Address and
 IP Prefix Length fields in the Assigned Address response SHALL be set to the
 assigned values. If the requested address was not assigned, the IP address
-SHALL be all-zero and the IP Prefix Length SHALL be the maximum length
+SHALL be all-zero, and the IP Prefix Length SHALL be the maximum length
 (0.0.0.0/32 or ::/128) to indicate that no address was assigned. These address
 rejections SHOULD NOT be included in subsequent ADDRESS_ASSIGN capsules. Note
 that other Assigned Address entries that do not correspond to any Request ID
