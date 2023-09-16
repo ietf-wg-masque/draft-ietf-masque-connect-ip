@@ -1491,7 +1491,7 @@ Expected Version Tokens:
 References:
 
 : RFC 9484
-{: spacing="compact"}
+{: spacing="compact" newline="false"}
 
 ## MASQUE URI Suffixes Registry Creation
 
@@ -1518,7 +1518,7 @@ Description:
 Reference:
 
 : An optional reference defining the use of the entry.
-{: spacing="compact"}
+{: spacing="compact" newline="false"}
 
 The registry's initial entries are as follows:
 
@@ -1578,7 +1578,7 @@ Contact:
 Notes:
 
 : None
-{: spacing="compact"}
+{: spacing="compact" newline="false"}
 
 --- back
 
