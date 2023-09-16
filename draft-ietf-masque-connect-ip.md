@@ -636,7 +636,7 @@ If an endpoint receives an ADDRESS_REQUEST capsule that contains zero Requested
 Addresses, it MUST abort the IP proxying request stream.
 
 Note that the ordering of Requested Addresses does not carry any semantics.
-Similarly, the Request ID is only meant as a unique identifier, it does not
+Similarly, the Request ID is only meant as a unique identifier; it does not
 convey any priority or importance.
 
 ### ROUTE_ADVERTISEMENT Capsule {#route-adv}
@@ -644,10 +644,10 @@ convey any priority or importance.
 The ROUTE_ADVERTISEMENT capsule (see {{iana-types}} for the value of the
 capsule type) allows an endpoint to communicate to its peer that it is willing
 to route traffic to a set of IP address ranges. This indicates that the sender
-has an existing route to each address range, and notifies its peer that if the
+has an existing route to each address range and notifies its peer that, if the
 receiver of the ROUTE_ADVERTISEMENT capsule sends IP packets for one of these
 ranges in HTTP Datagrams, the sender of the capsule will forward them along its
-preexisting route. Any address which is in one of the address ranges can be
+preexisting route. Any address that is in one of the address ranges can be
 used as the destination address on IP packets originated by the receiver of
 this capsule.
 
@@ -677,7 +677,7 @@ Each IP Address Range contains the following fields:
 
 IP Version:
 
-: IP Version of this range, encoded as an unsigned 8-bit integer. MUST be
+: IP Version of this range, encoded as an unsigned 8-bit integer. It MUST be
 either 4 or 6.
 
 Start IP Address and End IP Address:
@@ -692,13 +692,13 @@ IP Protocol:
 : The Internet Protocol Number for traffic that can be sent to this range,
 encoded as an unsigned 8-bit integer. If the value is 0, all protocols are
 allowed. If the value is not 0, it represents an allowable next header value
-carried in IP headers that are directly sent in HTTP datagrams (the outermost
+carried in IP headers that are sent directly in HTTP Datagrams (the outermost
 IP headers). ICMP traffic is always allowed, regardless of the value of this
 field.
 {: newline="true" spacing="normal"}
 
 If any of the capsule fields are malformed upon reception, the receiver of the
-capsule MUST follow the error handling procedure defined in {{Section 3.3 of
+capsule MUST follow the error-handling procedure defined in {{Section 3.3 of
 HTTP-DGRAM}}.
 
 Upon receiving the ROUTE_ADVERTISEMENT capsule, an endpoint MAY update its
@@ -718,10 +718,10 @@ ordered; this places the burden on the sender and makes verification by the
 receiver much simpler. If an IP Address Range A precedes an IP Address Range B
 in the same ROUTE_ADVERTISEMENT capsule, they MUST follow these requirements:
 
-* IP Version of A MUST be less than or equal to IP Version of B
+* The IP Version of A MUST be less than or equal to the IP Version of B.
 
 * If the IP Version of A and B are equal, the IP Protocol of A MUST be less
-  than or equal to IP Protocol of B.
+  than or equal to the IP Protocol of B.
 
 * If the IP Version and IP Protocol of A and B are both equal, the End IP
   Address of A MUST be strictly less than the Start IP Address of B.
@@ -730,7 +730,7 @@ If an endpoint receives a ROUTE_ADVERTISEMENT capsule that does not meet these
 requirements, it MUST abort the IP proxying request stream.
 
 Since setting the IP protocol to zero indicates all protocols are allowed, the
-requirements above make it possible for two routes to overlap when one has IP
+requirements above make it possible for two routes to overlap when one has its IP
 protocol set to zero and the other set to non-zero. Endpoints MUST NOT send a
 ROUTE_ADVERTISEMENT capsule with routes that overlap in such a way. Validating
 this requirement is OPTIONAL, but if an endpoint detects the violation, it MUST
@@ -739,16 +739,16 @@ abort the IP proxying request stream.
 ## IPv6 Extension Headers
 
 Both request scoping (see {{scope}}) and the ROUTE_ADVERTISEMENT capsule (see
-{{route-adv}}) use IP protocol numbers. These numbers represent both upper
-layers (as defined in {{Section 2 of !IPv6=RFC8200}}, examples include TCP and
-UDP) and IPv6 extension headers (as defined in {{Section 4 of IPv6}}, examples
+{{route-adv}}) use Internet Protocol Numbers. These numbers represent both upper
+layers (as defined in {{Section 2 of !IPv6=RFC8200}}, with examples that include TCP and
+UDP) and IPv6 extension headers (as defined in {{Section 4 of IPv6}}, with examples that
 include Fragment and Options headers). IP proxies MAY reject requests to scope
 to protocol numbers that are used for extension headers. Upon receiving
-packets, implementations that support scoping or routing by IP protocol number
-MUST walk the chain of extensions to find outermost non-extension IP protocol
-number to match against the scoping rule. Note that the ROUTE_ADVERTISEMENT
-capsule uses IP protocol number 0 to indicate that all protocols are allowed,
-it does not restrict the route to the IPv6 Hop-by-Hop Options Header
+packets, implementations that support scoping or routing by Internet Protocol Number
+MUST walk the chain of extensions to find outermost non-extension Internet Protocol
+Number to match against the scoping rule. Note that the ROUTE_ADVERTISEMENT
+capsule uses Internet Protocol Number 0 to indicate that all protocols are allowed;
+it does not restrict the route to the IPv6 Hop-by-Hop Options header
 ({{Section 4.3 of IPv6}}).
 
 # Context Identifiers
@@ -788,9 +788,9 @@ datagram and the packet containing the registration message during transmission.
 
 When associated with IP proxying request streams, the HTTP Datagram Payload
 field of HTTP Datagrams (see {{HTTP-DGRAM}}) has the format defined in
-{{dgram-format}}. Note that when HTTP Datagrams are encoded using QUIC DATAGRAM
+{{dgram-format}}. Note that, when HTTP Datagrams are encoded using QUIC DATAGRAM
 frames, the Context ID field defined below directly follows the Quarter Stream
-ID field which is at the start of the QUIC DATAGRAM frame payload:
+ID field that is at the start of the QUIC DATAGRAM frame payload:
 
 ~~~
 IP Proxying HTTP Datagram Payload {
@@ -805,7 +805,7 @@ The IP Proxying HTTP Datagram Payload contains the following fields:
 Context ID:
 
 : A variable-length integer that contains the value of the Context ID. If an
-HTTP/3 datagram which carries an unknown Context ID is received, the receiver
+HTTP/3 datagram that carries an unknown Context ID is received, the receiver
 SHALL either drop that datagram silently or buffer it temporarily (on the order
 of a round trip) while awaiting the registration of the corresponding Context
 ID.
@@ -818,14 +818,14 @@ field. Note that this field can be empty.
 
 IP packets are encoded using HTTP Datagrams with the Context ID set to zero.
 When the Context ID is set to zero, the Payload field contains a full IP packet
-(from the IP Version field until the last byte of the IP Payload).
+(from the IP Version field until the last byte of the IP payload).
 
 # IP Packet Handling
 
 This document defines a tunneling mechanism that is conceptually an IP link.
 However, because links are attached to IP routers, implementations might need
 to handle some of the responsibilities of IP routers if they do not delegate
-them to another implementation such as a kernel.
+them to another implementation, such as a kernel.
 
 ## Link Operation
 
@@ -837,7 +837,7 @@ are not used in such interfaces, and neither is neighbor discovery.
 
 Clients MAY optimistically start sending proxied IP packets before receiving
 the response to its IP proxying request, noting however that those may not be
-processed by the IP proxy if it responds to the request with a failure, or if
+processed by the IP proxy if it responds to the request with a failure or if
 the datagrams are received by the IP proxy before the request. Since receiving
 addresses and routes is required in order to know that a packet can be sent
 through the tunnel, such optimistic packets might be dropped by the IP proxy if
@@ -845,7 +845,7 @@ it chooses to provide different addressing or routing information than what the
 client assumed.
 
 Note that it is possible for multiple proxied IP packets to be encapsulated in
-the same outer packet, for example because a QUIC packet can carry two QUIC
+the same outer packet, for example, because a QUIC packet can carry two QUIC
 DATAGRAM frames. It is also possible for a proxied IP packet to span multiple
 outer packets, because a DATAGRAM capsule can be split across multiple QUIC or
 TCP packets.
@@ -853,7 +853,7 @@ TCP packets.
 ## Routing Operation
 
 The requirements in this section are a repetition of requirements that apply to
-IP routers in general, and might not apply to implementations of IP proxying
+IP routers in general and might not apply to implementations of IP proxying
 that rely on external software for routing.
 
 When an endpoint receives an HTTP Datagram containing an IP packet, it will
@@ -862,19 +862,19 @@ address validation), check their routing table to pick an outbound interface,
 and then send the IP packet on that interface or pass it to a local
 application. The endpoint can also choose to drop any received packets instead
 of forwarding them. If a received IP packet fails any correctness or policy
-checks, that is a forwarding error, not a protocol violation as far as IP
+checks, that is a forwarding error, not a protocol violation, as far as IP
 proxying is concerned; see {{error-signal}}. IP proxying endpoints MAY
 implement additional filtering policies on the IP packets they forward.
 
 In the other direction, when an endpoint receives an IP packet, it checks to see
-if the packet matches the routes mapped for an IP tunnel, and performs the same
+if the packet matches the routes mapped for an IP tunnel and performs the same
 forwarding checks as above before transmitting the packet over HTTP Datagrams.
 
 When IP proxying endpoints forward IP packets between different links, they
-will decrement the IP Hop Count (or TTL) upon encapsulation, but not upon
+will decrement the IP Hop Count (or TTL) upon encapsulation but not upon
 decapsulation. In other words, the Hop Count is decremented right before an IP
 packet is transmitted in an HTTP Datagram. This prevents infinite loops in the
-presence of routing loops, and matches the choices in IPsec {{?IPSEC=RFC4301}}.
+presence of routing loops and matches the choices in IPsec {{?IPSEC=RFC4301}}.
 This does not apply to IP packets generated by the IP proxying endpoint itself.
 
 Implementers need to ensure that they do not forward any link-local traffic
@@ -884,32 +884,33 @@ addresses.
 
 IPv6 requires that every link have an MTU of at least 1280 bytes {{IPv6}}.
 Since IP proxying in HTTP conveys IP packets in HTTP Datagrams and those can in
-turn be sent in QUIC DATAGRAM frames which cannot be fragmented
+turn be sent in QUIC DATAGRAM frames that cannot be fragmented
 {{!DGRAM=RFC9221}}, the MTU of an IP tunnel can be limited by the MTU of the
 QUIC connection that IP proxying is operating over. This can lead to situations
 where the IPv6 minimum link MTU is violated. IP proxying endpoints that operate
 as routers and support IPv6 MUST ensure that the IP tunnel link MTU is at least
-1280 (i.e., that they can send HTTP Datagrams with payloads of at least 1280
+1280 bytes (i.e., that they can send HTTP Datagrams with payloads of at least 1280
 bytes). This can be accomplished using various techniques:
 
-* if both IP proxying endpoints know for certain that HTTP intermediaries are
+* If both IP proxying endpoints know for certain that HTTP intermediaries are
   not in use, the endpoints can pad the QUIC INITIAL packets of the outer
   QUIC connection that IP proxying is running over. (Assuming QUIC version 1 is
-  in use, the overhead is 1 byte type, 20 bytes maximal connection ID length, 4
-  bytes maximal packet number length, 1 byte DATAGRAM frame type, 8 bytes
-  maximal quarter stream ID, one byte for the zero Context ID, and 16 bytes for
-  the AEAD authentication tag, for a total of 51 bytes of overhead which
+  in use, the overhead is 1 byte for the type, 20 bytes for the maximal connection ID length, 4
+  bytes for the maximal packet number length, 1 byte for the DATAGRAM frame type, 8 bytes
+  for the maximal quarter stream ID, one byte for the zero Context ID, and 16 bytes for
+  the Authenticated Encryption with Associated Data (AEAD) authentication tag,
+  for a total of 51 bytes of overhead, which
   corresponds to padding QUIC INITIAL packets to 1331 bytes or more.)
 
 * IP proxying endpoints can also send ICMPv6 echo requests with 1232 bytes of
   data to ascertain the link MTU and tear down the tunnel if they do not
   receive a response. Unless endpoints have an out-of-band means of
-  guaranteeing that the previous techniques is sufficient, they MUST use this
+  guaranteeing that the previous techniques are sufficient, they MUST use this
   method. If an endpoint does not know an IPv6 address of its peer, it can send
-  the ICMPv6 echo request to the link local all nodes multicast address
+  the ICMPv6 echo request to the link-local all nodes multicast address
   (ff02::1).
 
-If an endpoint is using QUIC DATAGRAM frames to convey IPv6 packets, and it
+If an endpoint is using QUIC DATAGRAM frames to convey IPv6 packets and it
 detects that the QUIC MTU is too low to allow sending 1280 bytes, it MUST abort
 the IP proxying request stream.
 
@@ -918,20 +919,20 @@ the IP proxying request stream.
 Since IP proxying endpoints often forward IP packets onwards to other network
 interfaces, they need to handle errors in the forwarding process. For example,
 forwarding can fail if the endpoint does not have a route for the destination
-address, or if it is configured to reject a destination prefix by policy, or if
+address, if it is configured to reject a destination prefix by policy, or if
 the MTU of the outgoing link is lower than the size of the packet to be
 forwarded. In such scenarios, IP proxying endpoints SHOULD use ICMP
 {{!ICMP=RFC0792}} {{!ICMPv6=RFC4443}} to signal the forwarding error to its
 peer by generating ICMP packets and sending them using HTTP Datagrams.
 
 Endpoints are free to select the most appropriate ICMP errors to send. Some
-examples that are relevant for IP proxying include:
+examples that are relevant for IP proxying include the following:
 
 - For invalid source addresses, send Destination Unreachable ({{Section 3.1 of
   ICMPv6}}) with code 5, "Source address failed ingress/egress policy".
 
 - For unroutable destination addresses, send Destination Unreachable ({{Section
-  3.1 of ICMPv6}}) with a code 0, "No route to destination", or code 1,
+  3.1 of ICMPv6}}) with code 0, "No route to destination", or code 1,
   "Communication with destination administratively prohibited".
 
 - For packets that cannot fit within the MTU of the outgoing link, send Packet
@@ -942,7 +943,7 @@ packets. If an endpoint does not send ROUTE_ADVERTISEMENT capsules, such as a
 client opening an IP flow through an IP proxy, it SHOULD process proxied ICMP
 packets from its peer in order to receive these errors. Note that ICMP messages
 can originate from a source address different from that of the IP proxying
-peer, and also from outside the target if scoping is in use (see {{scope}}).
+peer and also from outside the target if scoping is in use (see {{scope}}).
 
 # Examples
 
@@ -953,7 +954,7 @@ some of the ways in which IP proxying in HTTP can be used.
 ## Remote Access VPN {#example-remote}
 
 The following example shows a point-to-network VPN setup, where a client
-receives a set of local addresses, and can send to any remote host through the
+receives a set of local addresses and can send to any remote host through the
 IP proxy. Such VPN setups can be either full-tunnel or split-tunnel.
 
 ~~~ aasvg
@@ -1061,7 +1062,7 @@ corporate network such that all machines on those networks can communicate. In
 this example, the IP proxying client is attached to the branch office network
 192.0.2.0/24, and the IP proxy is attached to the corporate network
 203.0.113.0/24. There are legacy clients on the branch office network that only
-allow maintenance requests from machines on their subnet, so the IP Proxy is
+allow maintenance requests from machines on their subnet, so the IP proxy is
 provisioned with an IP address from that subnet.
 
 ~~~ aasvg
@@ -1073,14 +1074,14 @@ provisioned with an IP address from that subnet.
 192.0.2.3 <--+   +--------+             +-------+   +---> 203.0.113.7
 
 ~~~
-{: #diagram-s2s title="Site-to-site VPN Example"}
+{: #diagram-s2s title="Site-to-Site VPN Example"}
 
 In this case, the client does not specify any scope in its request. The IP
 proxy assigns the client an IPv4 address (203.0.113.100) and a split-tunnel
 route to the corporate network (203.0.113.0/24). The client assigns the IP
 proxy an IPv4 address (192.0.2.200) and a split-tunnel route to the branch
 office network (192.0.2.0/24). This allows hosts on both networks to
-communicate with each other, and allows the IP proxy to perform maintenance on
+communicate with each other and allows the IP proxy to perform maintenance on
 legacy hosts in the branch office. Note that IP proxying endpoints will
 decrement the IP Hop Count (or TTL) when encapsulating forwarded packets, so
 protocols that require that field be set to 255 will not function.
@@ -1145,16 +1146,17 @@ Payload = Encapsulated IP Packet
                               Context ID = 0
                               Payload = Encapsulated IP Packet
 ~~~
-{: #fig-s2s title="Site-to-site VPN Capsule Example"}
+{: #fig-s2s title="Site-to-Site VPN Capsule Example"}
 
 ## IP Flow Forwarding
 
 The following example shows an IP flow forwarding setup, where a client
-requests to establish a forwarding tunnel to target.example.com using SCTP (IP
-protocol 132), and receives a single local address and remote address it can
+requests to establish a forwarding tunnel to target.example.com using the
+Stream Control Transmission Protocol (SCTP) (IP
+protocol 132) and receives a single local address and remote address it can
 use for transmitting packets. A similar approach could be used for any other IP
 protocol that isn't easily proxied with existing HTTP methods, such as ICMP,
-ESP, etc.
+Encapsulating Security Payload (ESP), etc.
 
 ~~~ aasvg
 
@@ -1167,15 +1169,15 @@ ESP, etc.
 ~~~
 {: #diagram-flow title="Proxied Flow Setup"}
 
-In this case, the client specfies both a target hostname and an IP protocol
-number in the scope of its request, indicating that it only needs to
+In this case, the client specifies both a target hostname and an Internet Protocol
+Number in the scope of its request, indicating that it only needs to
 communicate with a single host. The IP proxy is able to perform DNS resolution
 on behalf of the client and allocate a specific outbound socket for the client
 instead of allocating an entire IP address to the client. In this regard, the
 request is similar to a regular CONNECT proxy request.
 
 The IP proxy assigns a single IPv6 address to the client (2001:db8:1234::a) and
-a route to a single IPv6 host (2001:db8:3456::b), scoped to SCTP. The client
+a route to a single IPv6 host (2001:db8:3456::b) scoped to SCTP. The client
 can send and receive SCTP IP packets to the remote host.
 
 ~~~
@@ -1231,8 +1233,8 @@ Payload = Encapsulated SCTP/IP Packet
 The following example shows a setup where a client is proxying UDP packets
 through an IP proxy in order to control connection establishment racing through
 an IP proxy, as defined in Happy Eyeballs {{?HEv2=RFC8305}}. This example is a
-variant of the proxied flow, but highlights how IP-level proxying can enable
-new capabilities even for TCP and UDP.
+variant of the proxied flow but highlights how IP-level proxying can enable
+new capabilities, even for TCP and UDP.
 
 ~~~ aasvg
 
@@ -1246,8 +1248,8 @@ new capabilities even for TCP and UDP.
 ~~~
 {: #diagram-racing title="Proxied Connection Racing Setup"}
 
-As with proxied flows, the client specifies both a target hostname and an IP
-protocol number in the scope of its request. When the IP proxy performs DNS
+As with proxied flows, the client specifies both a target hostname and an Internet
+Protocol Number in the scope of its request. When the IP proxy performs DNS
 resolution on behalf of the client, it can send the various remote address
 options to the client as separate routes. It can also ensure that the client
 has both IPv4 and IPv6 addresses assigned.
@@ -1330,7 +1332,7 @@ SHOULD behave similarly with regard to the ROUTE_ADVERTISEMENT capsule.
 
 # Performance Considerations
 
-Bursty traffic can often lead to temporally-correlated packet losses; in turn,
+Bursty traffic can often lead to temporally correlated packet losses; in turn,
 this can lead to suboptimal responses from congestion controllers in protocols
 running inside the tunnel. To avoid this, IP proxying endpoints SHOULD strive
 to avoid increasing burstiness of IP traffic; they SHOULD NOT queue packets in
@@ -1346,7 +1348,7 @@ Implementers will benefit from reading the guidance in {{Section
 3.1.11 of ?UDP-USAGE=RFC8085}}.
 
 When the protocol running inside the tunnel uses loss recovery (e.g., {{TCP}}
-or {{QUIC}}), and the outer HTTP connection runs over TCP, the proxied traffic
+or {{QUIC}}) and the outer HTTP connection runs over TCP, the proxied traffic
 will incur at least two nested loss recovery mechanisms. This can reduce
 performance as both can sometimes independently retransmit the same data. To
 avoid this, IP proxying SHOULD be performed over HTTP/3 to allow leveraging the
@@ -1368,11 +1370,11 @@ of the dropped packet; see {{Section 3.2 of ICMPv6}}.
 
 ## ECN Considerations
 
-If an IP proxying endpoint with a connection containing an IP Proxying request
+If an IP proxying endpoint with a connection containing an IP proxying request
 stream disables congestion control, it cannot signal Explicit Congestion
 Notification (ECN) {{!ECN=RFC3168}} support on that outer connection. That is,
-the QUIC sender MUST mark all IP headers with the Not-ECT codepoint for QUIC
-packets which are outside of congestion control. The endpoint can still report
+the QUIC sender MUST mark all IP headers with the Not ECN-Capable Transport (Not-ECT) codepoint for QUIC
+packets that are outside of congestion control. The endpoint can still report
 ECN feedback via QUIC ACK_ECN frames or the TCP ECE bit, as the peer might not
 have disabled congestion control.
 
@@ -1384,7 +1386,7 @@ also use ECN, independently of whether it is in use on the outer connection.
 
 ## Differentiated Services Considerations {#dscp-considerations}
 
-Tunneled IP packets can have Differentiated Services Code Points (DSCP)
+Tunneled IP packets can have Differentiated Services Code Points (DSCPs)
 {{!DSCP=RFC2474}} set in the traffic class IP header field to request a
 particular per-hop behavior. If an IP proxying endpoint is configured as part
 of a Differentiated Services domain, it MAY implement traffic differentiation
@@ -1393,7 +1395,7 @@ for differentiated treatment of the tunneled IP packets on the path between the
 IP proxying endpoints.
 
 When an HTTP connection is congestion-controlled, marking packets with
-different DSCP can lead to reordering between them, and that can in turn lead
+different DSCPs can lead to reordering between them, and that can in turn lead
 the underlying transport connection's congestion controller to perform poorly.
 If tunneled packets are subject to congestion control by the outer connection,
 they need to avoid carrying DSCP markings that are not equivalent in forwarding
@@ -1410,7 +1412,7 @@ DSCP field value from the tunneled traffic to the outer IP header. IP proxying
 endpoints MUST NOT coalesce multiple inner packets into the same outer packet
 unless they have the same DSCP marking or an equivalent traffic class. Note
 that the ability to translate DSCP values is dependent on the tunnel ingress
-and egress belonging to the same differentiated service domain or not.
+and egress belonging to the same Differentiated Service domain or not.
 
 # Security Considerations
 
@@ -1426,7 +1428,7 @@ users to further constrain client behavior or deal with possible abuse. For
 example, proxies can rate limit individual clients that send an excessively
 large amount of traffic through the proxy. As another example, proxies can
 restrict address (prefix) assignment to clients based on certain client
-attributes such as geographic location.
+attributes, such as geographic location.
 
 Address assignment can have privacy implications for endpoints. For example, if
 a proxy partitions its address space by the number of authenticated clients and
@@ -1436,18 +1438,18 @@ Avoiding such tracking vectors may be important for certain proxy deployments.
 Proxies SHOULD avoid persistent per-client address (prefix) assignment when
 possible.
 
-Falsifying IP source addresses in sent traffic has been common for denial of
-service attacks. Implementations of this mechanism need to ensure that they do
+Falsifying IP source addresses in sent traffic has been common for
+denial-of-service attacks. Implementations of this mechanism need to ensure that they do
 not facilitate such attacks. In particular, there are scenarios where an
 endpoint knows that its peer is only allowed to send IP packets from a given
 prefix. For example, that can happen through out-of-band configuration
-information, or when allowed prefixes are shared via ADDRESS_ASSIGN capsules.
+information or when allowed prefixes are shared via ADDRESS_ASSIGN capsules.
 In such scenarios, endpoints MUST follow the recommendations from
 {{!BCP38=RFC2827}} to prevent source address spoofing.
 
 Limiting request scope (see {{scope}}) allows two clients to share one of the
-proxy's external IP addresses if their requests are scoped to different IP
-protocol numbers. If the proxy receives an ICMP packet destined for that
+proxy's external IP addresses if their requests are scoped to different Internet
+Protocol Numbers. If the proxy receives an ICMP packet destined for that
 external IP address, it has the option to forward it back to the clients.
 However, some of these ICMP packets carry part of the original IP packet that
 triggered the ICMP response. Forwarding such packets can accidentally divulge
@@ -1464,16 +1466,15 @@ the latest guidance regarding handling of IPv6 extension headers.
 Transferring DSCP markings from inner to outer packets (see
 {{dscp-considerations}}) exposes end-to-end flow level information to an
 on-path observer between the IP proxying endpoints. This can potentially expose
-a single end-to-end flow. Because of this, such use of DSCP in
+a single end-to-end flow. Because of this, such use of DSCPs in
 privacy-sensitive contexts is NOT RECOMMENDED.
 
 # IANA Considerations
 
-## HTTP Upgrade Token
+## HTTP Upgrade Token Registration
 
-This document will request IANA to register "connect-ip" in the HTTP Upgrade
-Token Registry maintained at
-<[](https://www.iana.org/assignments/http-upgrade-tokens)>.
+IANA has registered "connect-ip" in the "HTTP Upgrade Token" Registry
+maintained at <[](https://www.iana.org/assignments/http-upgrade-tokens)>.
 
 Value:
 
@@ -1489,16 +1490,18 @@ Expected Version Tokens:
 
 References:
 
-: This document
+: RFC 9484
 {: spacing="compact"}
 
-## Creation of the MASQUE URI Suffixes Registry {#iana-suffix}
+## MASQUE URI Suffixes Registry Creation
 
-This document requests that IANA create a new "MASQUE URI Suffixes" registry
-maintained at IANA_URL_TBD. This new registry governs the path segment that
-immediately follows "masque" in paths that start with "/.well-known/masque/",
-see <[](https://www.iana.org/assignments/well-known-uris)> for the registration
-of "masque" in the "Well-Known URIs" registry. This new registry contains three
+IANA has created the "MASQUE URI Suffixes" registry maintained at
+<[](https://www.iana.org/assignments/masque/)>. The registration policy for
+this registry is Expert Review; see {{Section 4.5 of !IANA-POLICY=RFC8126}}.
+This new registry governs the path segment that immediately follows "masque" in
+paths that start with "/.well-known/masque/"; see
+<[](https://www.iana.org/assignments/well-known-uris)> for the registration of
+"masque" in the "Well-Known URIs" registry. This new registry contains three
 columns:
 
 Path Segment:
@@ -1514,58 +1517,54 @@ Description:
 Reference:
 
 : An optional reference defining the use of the entry.
+{: spacing="compact"}
 
-The registration policy for this registry is Expert Review; see
-{{Section 4.5 of !IANA-POLICY=RFC8126}}.
+The registry's initial entries are as follows:
 
-There are initially two entries in this registry:
-
-| Path Segment |  Description |   Reference   |
-|:-------------|:-------------|:--------------|
-|      udp     | UDP Proxying |   RFC 9298    |
-|      ip      |  IP Proxying | This Document |
-{: #iana-suffixes-table title="New MASQUE URI Suffixes"}
+| Path Segment |  Description | Reference |
+|:-------------|:-------------|:----------|
+| udp          | UDP Proxying | RFC 9298  |
+| ip           | IP Proxying  | RFC 9484  |
+{: #iana-suffixes-table title="MASQUE URI Suffixes Registry"}
 
 Designated experts for this registry are advised that they should approve all
 requests as long as the expert believes that both (1) the requested Path
 Segment will not conflict with existing or expected future IETF work and (2)
 the use case is relevant to proxying.
 
-## Updates to masque Well-Known URI {#iana-uri}
+## Updates to masque Well-Known URI Registration {#iana-uri}
 
-This document will request IANA to update the entry for the "masque"
-URI suffix in the "Well-Known URIs" registry maintained at
+IANA has updated the entry for the "masque" URI suffix
+in the "Well-Known URIs" registry maintained at
 <[](https://www.iana.org/assignments/well-known-uris)>.
 
-IANA is requested to update the "Reference" field to include this
-document in addition to previous values from that field.
+IANA has updated the "Reference" field to include this
+document and has replaced the "Related Information" field with
+"For sub-suffix allocations, see the registry at
+<[](https://www.iana.org/assignments/masque/)>.".
 
-IANA is requested to replace the "Related Information" field with
-"For sub-suffix allocations, see registry at IANA_URL_TBD." where
-IANA_URL_TBD is the URL of the new registry described in {{iana-suffix}}.
+## HTTP Capsule Types Registrations {#iana-types}
 
-## Capsule Type Registrations {#iana-types}
-
-This document requests IANA to add the following values to the "HTTP Capsule
+IANA has added the following values to the "HTTP Capsule
 Types" registry maintained at
-<[](https://www.iana.org/assignments/http-capsule-protocol)>.
+<[](https://www.iana.org/assignments/masque)>.
 
-| Value |    Capsule Type     |     Description     |
-|:------|:--------------------|:--------------------|
-| 0x01  |   ADDRESS_ASSIGN    | Address Assignment  |
-| 0x02  |   ADDRESS_REQUEST   | Address Request     |
-| 0x03  | ROUTE_ADVERTISEMENT | Route Advertisement |
+| Value |    Capsule Type     |
+|:------|:--------------------|
+| 0x01  | ADDRESS_ASSIGN      |
+| 0x02  | ADDRESS_REQUEST     |
+| 0x03  | ROUTE_ADVERTISEMENT |
 {: #iana-capsules-table title="New Capsules"}
 
 All of these new entries use the following values for these fields:
 
 Status:
 
-: provisional (permanent when this document is approved)
+: permanent
 
 Reference:
 
-: This Document
+: RFC 9484
 
 Change Controller:
 
@@ -1577,23 +1576,15 @@ Contact:
 
 Notes:
 
-: Empty
-
-RFC Editor: please remove the rest of this subsection before publication.
-
-Since this document has not yet been published, it might still change before
-publication as RFC. Any implementer that wishes to deploy IP proxying in
-production before publication MUST use the following temporary codepoints
-instead: 0x2575D601 for ADDRESS_ASSIGN, 0x2575D602 for ADDRESS_REQUEST, and
-0x2575D603 for ROUTE_ADVERTISEMENT.
+: None
 
 --- back
 
 # Acknowledgments
 {:numbered="false"}
 
-The design of this method was inspired by discussions in the MASQUE working
-group around {{?PROXY-REQS=I-D.ietf-masque-ip-proxy-reqs}}. The authors would
+The design of this method was inspired by discussions in the MASQUE Working
+Group around {{?PROXY-REQS=I-D.ietf-masque-ip-proxy-reqs}}. The authors would
 like to thank participants in those discussions for their feedback.
 Additionally, {{{Mike Bishop}}}, {{{Lucas Pardue}}}, and {{{Alejandro Sedeño}}}
 provided valuable feedback on the document.
