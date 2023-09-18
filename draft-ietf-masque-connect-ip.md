@@ -1471,7 +1471,7 @@ privacy-sensitive contexts is NOT RECOMMENDED.
 
 # IANA Considerations
 
-## HTTP Upgrade Token Registration
+## HTTP Upgrade Token Registration {#http-upgrade-token}
 
 IANA has registered "connect-ip" in the "HTTP Upgrade Tokens" registry
 maintained at <[](https://www.iana.org/assignments/http-upgrade-tokens)>.
@@ -1493,7 +1493,7 @@ References:
 : RFC 9484
 {: spacing="compact" newline="false"}
 
-## MASQUE URI Suffixes Registry Creation
+## MASQUE URI Suffixes Registry Creation {#iana-suffix}
 
 IANA has created the "MASQUE URI Suffixes" registry maintained at
 <[](https://www.iana.org/assignments/masque)>. The registration policy is
