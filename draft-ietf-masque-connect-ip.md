@@ -469,15 +469,15 @@ these new capsules.
 
 ### ADDRESS_ASSIGN Capsule
 
-The ADDRESS_ASSIGN capsule (see {{iana-types}} for the value of the capsule
-type) allows an endpoint to assign its peer a list of IP addresses or prefixes.
+The ADDRESS_ASSIGN capsule (capsule type 0x01)
+allows an endpoint to assign its peer a list of IP addresses or prefixes.
 Every capsule contains the full list of IP
 prefixes currently assigned to the receiver. Any of these addresses can be used
 as the source address on IP packets originated by the receiver of this capsule.
 
 ~~~
 ADDRESS_ASSIGN Capsule {
-  Type (i) = ADDRESS_ASSIGN,
+  Type (i) = 0x01,
   Length (i),
   Assigned Address (..) ...,
 }
@@ -554,14 +554,14 @@ capsules, endpoints MAY send ADDRESS_ASSIGN capsules unprompted.
 
 ### ADDRESS_REQUEST Capsule {#addr_req}
 
-The ADDRESS_REQUEST capsule (see {{iana-types}} for the value of the capsule
-type) allows an endpoint to request assignment of IP addresses from its peer.
+The ADDRESS_REQUEST capsule (capsule type 0x02)
+allows an endpoint to request assignment of IP addresses from its peer.
 The capsule allows the endpoint to optionally indicate a preference for which
 address it would get assigned.
 
 ~~~
 ADDRESS_REQUEST Capsule {
-  Type (i) = ADDRESS_REQUEST,
+  Type (i) = 0x02,
   Length (i),
   Requested Address (..) ...,
 }
@@ -641,8 +641,8 @@ convey any priority or importance.
 
 ### ROUTE_ADVERTISEMENT Capsule {#route-adv}
 
-The ROUTE_ADVERTISEMENT capsule (see {{iana-types}} for the value of the
-capsule type) allows an endpoint to communicate to its peer that it is willing
+The ROUTE_ADVERTISEMENT capsule (capsule type 0x03)
+allows an endpoint to communicate to its peer that it is willing
 to route traffic to a set of IP address ranges. This indicates that the sender
 has an existing route to each address range and notifies its peer that, if the
 receiver of the ROUTE_ADVERTISEMENT capsule sends IP packets for one of these
@@ -653,7 +653,7 @@ this capsule.
 
 ~~~
 ROUTE_ADVERTISEMENT Capsule {
-  Type (i) = ROUTE_ADVERTISEMENT,
+  Type (i) = 0x03,
   Length (i),
   IP Address Range (..) ...,
 }
