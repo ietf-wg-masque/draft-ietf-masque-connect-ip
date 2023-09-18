@@ -172,7 +172,7 @@ The following requirements apply to the URI Template:
 
 * The URI Template MUST NOT contain any non-ASCII Unicode characters and MUST
   only contain ASCII characters in the range 0x21-0x7E inclusive (note that
-  percent-encoding is allowed; see Section 2.1 of {{!URI=RFC3986}}).
+  percent-encoding is allowed; see {{Section 2.1 of !URI=RFC3986}}).
 
 * The URI Template MUST NOT use Reserved Expansion ("+" operator), Fragment
   Expansion ("#" operator), Label Expansion with Dot-Prefix, Path Segment
