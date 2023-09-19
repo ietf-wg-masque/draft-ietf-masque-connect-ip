@@ -1,0 +1,2977 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2022-01-23T01:07:37.710438+00:00",
+  "repo": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    },
+    {
+      "name": "needs author",
+      "description": "",
+      "color": "fef2c0"
+    },
+    {
+      "name": "needs discussion",
+      "description": "",
+      "color": "D175F2"
+    },
+    {
+      "name": "ready to move on?",
+      "description": "",
+      "color": "c5def5"
+    },
+    {
+      "name": "related-document",
+      "description": "",
+      "color": "bfd4f2"
+    },
+    {
+      "name": "has PR",
+      "description": "",
+      "color": "0E8A16"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "MDU6SXNzdWU5OTAzOTY2NjE=",
+      "title": "What is an \"IP forwarding path\"?",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/1",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "DavidSchinazi"
+      ],
+      "labels": [],
+      "body": "The draft currently mentions an \"IP forwarding path\" (or elsewhere a \"path for proxying IP packets\") without defining what that term means. It's ambiguous because \"path\" is a [well-defined term in HTTP](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3). I'd propose we replace this use of the word \"path\" with the word \"tunnel\" which is [well-defined for CONNECT](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-semantics-18#section-9.3.6).",
+      "createdAt": "2021-09-07T22:18:32Z",
+      "updatedAt": "2021-09-14T14:11:26Z",
+      "closedAt": "2021-09-14T14:11:26Z",
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, \"IP forwarding tunnel\" sounds fine to me.",
+          "createdAt": "2021-09-07T23:28:21Z",
+          "updatedAt": "2021-09-07T23:28:21Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes tunnel is good. Or maybe association in the context of handling state st the proxy.",
+          "createdAt": "2021-09-14T11:26:35Z",
+          "updatedAt": "2021-09-14T11:26:35Z"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "MDU6SXNzdWU5OTA0MDA1MzU=",
+      "title": "Path or query?",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/2",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "DavidSchinazi"
+      ],
+      "labels": [
+        "has PR"
+      ],
+      "body": "Section 3.1 (Limiting Request Scope) uses the term [path](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3) but then it talks about variables which are part of the [query](https://datatracker.ietf.org/doc/html/rfc3986#section-3.4), not the path. Do we mean query here, or am I misunderstanding? As a reminder, the \":path\" pseudo-header [in h2](https://datatracker.ietf.org/doc/html/rfc7540#section-8.1.2.3) and h3 contains both the path and the query separated by a question mark.",
+      "createdAt": "2021-09-07T22:27:40Z",
+      "updatedAt": "2021-10-12T02:40:35Z",
+      "closedAt": "2021-10-12T02:40:35Z",
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, this should be the query part of the :path pseudo-header",
+          "createdAt": "2021-09-07T23:28:50Z",
+          "updatedAt": "2021-09-07T23:28:50Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Can I propose we close this issue out entirely in favor of switching to headers as per #7? Then we avoid the confusion around what \"path\" is here. I've left some thoughts on the philosophy of path in my comment there.",
+          "createdAt": "2021-09-08T21:57:55Z",
+          "updatedAt": "2021-09-08T21:57:55Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'd like the target hostname to be in the same place for CONNECT-UDP and CONNECT-IP...",
+          "createdAt": "2021-10-07T18:16:13Z",
+          "updatedAt": "2021-10-07T18:16:13Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "MDU6SXNzdWU5OTA0MDUzMzM=",
+      "title": "Missing ROUTE_REJECTION capsule",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/3",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "DavidSchinazi"
+      ],
+      "labels": [
+        "has PR"
+      ],
+      "body": "The current version of the draft contains the ROUTE_ADVERTISEMENT capsule but is missing the ROUTE_REJECTION capsule. It's very common for networks to want to advertise routes such as \"I can handle all of IPv4 space minus RFC 1918 space\" and that becomes incredibly painful if you don't have a way to subtract prefixes. An alternate solution is to use an address start/address end encoding like [IKEv2 traffic selectors](https://datatracker.ietf.org/doc/html/rfc7296#section-3.13.1), but if we want to use a prefix-based encoding we need a way to cut out holes from prefixes.",
+      "createdAt": "2021-09-07T22:37:13Z",
+      "updatedAt": "2021-10-12T02:40:21Z",
+      "closedAt": "2021-10-12T02:40:21Z",
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Oh, is that what the rejection capsule was for? I guess I'd just rather have the route advertisement itself provide a list of exceptions, rather than tying it to a separate capsule?",
+          "createdAt": "2021-09-07T23:30:05Z",
+          "updatedAt": "2021-09-07T23:30:05Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, that would also work. This is just a matter of encoding.",
+          "createdAt": "2021-09-07T23:38:54Z",
+          "updatedAt": "2021-09-07T23:38:54Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The nice thing about the rejection capsule is it allows you to remove announcements that were previous present without having to re-send a full routing table. I would prefer keeping it, as it allows for more efficient transmission of information. (I disagree it's just a matter of encoding.)",
+          "createdAt": "2021-09-08T22:54:25Z",
+          "updatedAt": "2021-09-08T22:54:25Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Actually sending a full routing table seems like the safer way to go. And given you don\u2019t do that very often, I don\u2019t think we need to worry about overhead.",
+          "createdAt": "2021-09-14T11:36:36Z",
+          "updatedAt": "2021-09-14T11:36:36Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I will disagree with my co-author. I think the basic case for what in most cases are the equivalent to the default route for a host on a LAN segment would be good to have in a reasonable compact form. I think the question to ask here is if we in general need a mechanism to specify an IP prefix with one or more carved out sub-prefixes. I that requirement may apply to both advertising and rejecting/removing a prefix. In the removing maybe it is possible to specify the whole prefix without carve out sub-prefixes.",
+          "createdAt": "2021-09-17T10:10:21Z",
+          "updatedAt": "2021-09-17T10:10:21Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Maybe call with ROUTE_WITHDRAW instead of reject",
+          "createdAt": "2021-10-06T23:43:35Z",
+          "updatedAt": "2021-10-06T23:43:35Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "ROUTE_WITHDRAW sounds good to me.",
+          "createdAt": "2021-10-07T02:59:31Z",
+          "updatedAt": "2021-10-07T02:59:31Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "MDU6SXNzdWU5OTA0MDY2NTU=",
+      "title": "SETTINGS in example are confusing",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/4",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "DavidSchinazi"
+      ],
+      "labels": [],
+      "body": "I'm confused by the use of `SETTINGS_ENABLE_CONNECT_[..]` in the example. It makes me wonder if this document is defining a new setting that I don't know about. Can we instead just spell out `SETTINGS_ENABLE_CONNECT_PROTOCOL`?",
+      "createdAt": "2021-09-07T22:40:35Z",
+      "updatedAt": "2021-09-14T21:59:31Z",
+      "closedAt": "2021-09-14T21:59:31Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I just noticed that this comes from RFC 8441, still would rather we spell out the name of the setting :)",
+          "createdAt": "2021-09-07T23:21:34Z",
+          "updatedAt": "2021-09-07T23:21:34Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, I took it from RFC 8441. I don't particularly care about the style here.",
+          "createdAt": "2021-09-07T23:30:26Z",
+          "updatedAt": "2021-09-07T23:30:26Z"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "MDU6SXNzdWU5OTA0MDgxMzk=",
+      "title": "What does the URI path represent?",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/5",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "DavidSchinazi"
+      ],
+      "labels": [
+        "has PR"
+      ],
+      "body": "(This is related to #2, and here I'm assuming that Section 3.1 meant query and not path.)\r\n\r\nWhat does the URI path represent? The examples use a path of `/vpn` and `/proxy`. Is the intention to let deployments decide what a path means? That makes sense to me but we should mention it.",
+      "createdAt": "2021-09-07T22:44:30Z",
+      "updatedAt": "2021-10-12T02:40:35Z",
+      "closedAt": "2021-10-12T02:40:35Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Perhaps all we need is a reference to [how those are defined for the http and https schemes](https://www.rfc-editor.org/rfc/rfc7230.html#section-2.7.1):\r\n\r\n> The hierarchical path component and optional query component serve as an identifier for a potential target resource within that origin server's name space.",
+          "createdAt": "2021-09-07T23:25:59Z",
+          "updatedAt": "2021-09-07T23:25:59Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The `/vpn` and `/proxy` examples were just arbitrary names that were examples of paths the proxies could run on. Adding a reference and explaining these are examples sounds good.",
+          "createdAt": "2021-09-07T23:31:10Z",
+          "updatedAt": "2021-09-07T23:31:10Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "COLLABORATOR",
+          "body": "To my understanding we currently don't specify multiple different functionalities based on the URI path component. Therefore we can work without any type of well-known URI suffix https://www.iana.org/assignments/well-known-uris/well-known-uris.xhtml#well-known-uris-1 and the discovery procedure here is that the MASQUE client need to be configured/supplied with a base URI that gives the proxy as host component, and the path that is relevant on that proxy to invoke the MASQUE service. So unless we want to something more advance I think we can just make clear that the masque service resource is identified however the proxy want it to be. ",
+          "createdAt": "2021-09-17T10:20:16Z",
+          "updatedAt": "2021-09-17T10:20:16Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think that having MASQUE be able to work with any URI is a feature, and whether someone else down the line wants to make an auto-discovery for MASQUE-based proxies, either with .well-known or some other mechanism, should be a separate discussion (and likely separate document).",
+          "createdAt": "2021-09-17T17:40:10Z",
+          "updatedAt": "2021-09-17T17:40:10Z"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "MDU6SXNzdWU5OTA0MDg4ODM=",
+      "title": "Explain limiting request scope",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/6",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [
+        "has PR"
+      ],
+      "body": "The protocol contains a mechanism that allows limiting the scope of the request, but doesn't explain why it would be desirable to do so. Can we add text explaining when a client would want to limit itself, and how a server can leverage this information?",
+      "createdAt": "2021-09-07T22:46:26Z",
+      "updatedAt": "2021-10-12T20:02:22Z",
+      "closedAt": "2021-10-12T20:02:22Z",
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Sure. I think the examples provide some insight here, but we should spell it out.",
+          "createdAt": "2021-09-07T23:31:36Z",
+          "updatedAt": "2021-09-07T23:31:36Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I still think that reasoning about this as a differ mode of operation helps. Depending on the use case, you either always or never want to limit the scope of your requests. There might be use case where both is used but I think the common mode of operation might be doing one or the other. In any case I agree that providing more reasoning is useful. Maybe this is part of an applicability section?",
+          "createdAt": "2021-09-14T11:41:22Z",
+          "updatedAt": "2021-09-14T11:41:22Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, I think explaining a bit for what mechanism makes sense in which usages would help a lot. ",
+          "createdAt": "2021-09-17T10:11:09Z",
+          "updatedAt": "2021-09-17T10:11:09Z"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "MDU6SXNzdWU5OTA0MTE2NzU=",
+      "title": "Are arbitrary query parameters allowed?",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/7",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "DavidSchinazi"
+      ],
+      "labels": [
+        "has PR"
+      ],
+      "body": "Is it legal to send a CONNECT-IP request where `:path = /proxy?target=target.example.com&ipproto=1&foo=bar` ?\r\n\r\nThe more I think about this, the more I think that the target and ipproto would be better conveyed by two new HTTP headers instead of query parameters. Is there value in having these present in the URI?",
+      "createdAt": "2021-09-07T22:53:21Z",
+      "updatedAt": "2021-10-20T18:31:06Z",
+      "closedAt": "2021-10-12T02:40:35Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "From reading [the definition of the query](https://www.rfc-editor.org/rfc/rfc7230.html#section-2.7.1) I'm even more inclined to use a header instead.",
+          "createdAt": "2021-09-07T23:26:41Z",
+          "updatedAt": "2021-09-07T23:26:41Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yup, I'm fine spelling this as headers too! (That's more like the original Ericsson doc)\r\n\r\nThe reason I tried with the parameters is that it was a suggestion we had from Erik Nygren, etc, from one of the initial requests to use Extended Connect. This seems like something to ask the working group.",
+          "createdAt": "2021-09-08T00:05:00Z",
+          "updatedAt": "2021-09-08T00:05:00Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think this would fall into the category of URI-template, like what's done for DoH GET requests. So it should be allowed.",
+          "createdAt": "2021-09-08T00:05:32Z",
+          "updatedAt": "2021-09-08T00:05:32Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Using a URI template would be easier to reason about than the current text, so I'd be in favor of that if we decided to go with path/query instead of a new header.",
+          "createdAt": "2021-09-08T00:39:56Z",
+          "updatedAt": "2021-09-08T00:39:56Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yeah, I should have spelled it out as a template ",
+          "createdAt": "2021-09-08T01:45:50Z",
+          "updatedAt": "2021-09-08T01:45:50Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thinking about this some more, I feel like we should avoid specifying meaning to components of path, including the query-params. I think we should move target and ipproto to headers (as David suggested), and allow path to be application defined. I was thinking of path to be more like /my-cool/proxy/with-auth, like an HTML, content to set \"personality\", not a way to specify core operating parameters like these.",
+          "createdAt": "2021-09-08T21:56:54Z",
+          "updatedAt": "2021-09-08T21:56:54Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think the question we should answer is: Do we want the target/ip_proto in the URI?\r\n\r\nThe way I'm visualizing this is that you could configure your client to use a given proxy by typing in a URI into the client software (e.g. `https://vpnprovider.example.com/david?egress=ohio`) - whereas the target/ip_proto are dynamic components that are picked by my proxy software in response to what networking the OS needs to do.\r\n\r\nAll this to say that the more I think about it the more I think headers are preferable",
+          "createdAt": "2021-09-08T22:13:39Z",
+          "updatedAt": "2021-09-08T22:13:39Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I agree to David\u2019s last comment that target and ip_proto are rather parameters that are set by the proxy software and therefore I also tend to prefer headers. It also seems we would potential otherwise overload the URI scheme too much that still could be useful for other information (as in David\u2019s example above)",
+          "createdAt": "2021-09-14T11:32:34Z",
+          "updatedAt": "2021-09-14T11:32:34Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I frankly don't understand the implications of either of choices to give an opinion here. I don't know if hedaers will be easier or harder to get through intermediaries? \r\n\r\nI think maybe the best way forward on this issue is to actually write it up and post to the mailing list.",
+          "createdAt": "2021-09-17T10:04:47Z",
+          "updatedAt": "2021-09-17T10:04:47Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Both headers and query params are equally easy to get through intermediaries in my experience. I would prefer we try to hash this out among ourselves before going to the mailing list.",
+          "createdAt": "2021-09-17T17:37:30Z",
+          "updatedAt": "2021-09-17T17:37:30Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I don't want to reopen this issue or open another issue because I think this is fine (for now). But I just want to quickly ask what we actually decided on this and why. The implicit question here was if we should use query parameters or headers. I assume the answer is that we use query parameters because we wanted to align with the UDP connect draft and can raise this issue again in the workgroup (for both docs) if needed? Or what was the reason for having this as part of the query instead of headers?",
+          "createdAt": "2021-10-20T15:52:10Z",
+          "updatedAt": "2021-10-20T15:52:10Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes when we met a few weeks ago we decided to go with an URI template to align with CONNECT-UDP for now. We can always revisit this later",
+          "createdAt": "2021-10-20T18:31:06Z",
+          "updatedAt": "2021-10-20T18:31:06Z"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "MDU6SXNzdWU5OTA0MTI5Njg=",
+      "title": "Why do ADDRESS_ASSIGN and ADDRESS_REQUEST contain an IP Protocol field?",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/8",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "I understand the value of the IP Protocol field on the ROUTE_ADVERTISEMENT capsule, but not on ADDRESS_ASSIGN or ADDRESS_REQUEST. What purpose does it serve?",
+      "createdAt": "2021-09-07T22:56:35Z",
+      "updatedAt": "2021-10-07T18:54:20Z",
+      "closedAt": "2021-10-07T18:54:20Z",
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think this is an important point\u2014we're asking for a scoped traffic selector that only needs to be able to route a specific protocol (like ICMP, UDP, TCP). This allows the endpoint to know if it can have the tunnel share an address with other requests that use a different protocol.",
+          "createdAt": "2021-09-08T00:06:36Z",
+          "updatedAt": "2021-09-08T00:06:36Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The ADDRESS_ASSIGN and ADDRESS_REQUEST capsules are not about traffic selectors, they're about configuration. Using terminology from RFC 7296:\r\n\r\n* ROUTE_ADVERTISEMENT maps to an IKEv2 Traffic Selector (i.e. I'll accept to forward your packets if they're destined to this IP prefix and IP proto)\r\n* ADDRESS_ASSIGN maps to an IKEv2 Configuration Payload with Configuration Attribute Type set to INTERNAL_IP6_ADDRESS (i.e. here is an address you can use to refer to yourself)\r\n\r\nI think it might make sense to add a new ROUTE_REQUEST capsule that would emulate what you're describing (i.e. please tell me if you're willing to forward packets to this IP prefix and protocol), but we shouldn't overload ADDRESS_REQUEST for this purpose. If you look at the Proxied ICMP Flow Example that's currently in the spec, everything still works if you remove the IP Protocol field from ADDRESS_ASSIGN.\r\n\r\nAnother potential feature we could possibly add is \"this IP address I'm assigning to you is tied to this traffic selector that I just advertised\" but I'm not sure we need that.",
+          "createdAt": "2021-09-08T00:51:18Z",
+          "updatedAt": "2021-09-08T00:51:18Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I guess I would question then if we need separate concepts for address configuration and traffic selectors. The fact that things like IKE have them separated is a source of confusion at times. There\u2019s a difference between local and remote still\u2014what is allowed to send from, versus send to, but they could have common field definitions? ",
+          "createdAt": "2021-09-08T01:44:52Z",
+          "updatedAt": "2021-09-08T01:44:52Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Address assignment and what addresses I can send from are separate concepts: assignment implies that I'll reply to packets sent to this address.\r\n\r\nBut back to my original question, IP packets contain one IP Protocol field not two (there are no separate source and destination IP Protocol fields), so I don't see the need for that on the \"send from\" side, we only need it on the \"send to\" side. What breaks if we remove the IP Protocol field from ADDRESS_ASSIGN and ADDRESS_REQUEST?",
+          "createdAt": "2021-09-08T02:25:50Z",
+          "updatedAt": "2021-09-08T02:25:50Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The reason I feel it is important is that the address assignment may be specific to that protocol, if the address is used for other things on other protocols. For example, I could have an address I use for many other clients for outbound CONNECT requests, which I also allow one client to use for an ICMP message to a particular destination. \r\n\r\nNow, technically, you could make sure to only provide the ICMP client with routes to destinations that are also marked for ICMP, but it feels like the protocol is keeping open the possibility to request on this same HTTP request a route that has an entirely different protocol, using the same address. So, I\u2019d like to know on the client if the proxy has granted me a general purpose IP address, or a limited use one. ",
+          "createdAt": "2021-09-08T04:43:10Z",
+          "updatedAt": "2021-09-08T04:43:10Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Tying addresses to ip protocols feels like a half-solution. Architecturally, it would make more sense to tie the address to a full traffic selector (as in the ip protocol, but also the routes). I think it'll be more common for folks to want to convey \"use this IP to access this subnet\" than \"use this IP for this protocol\" so if we support one we should support both.\r\n\r\nBut for simplicity of the base spec, I'd rather we not have this for now because it makes it harder to reason about what address assignment means.",
+          "createdAt": "2021-09-08T18:08:02Z",
+          "updatedAt": "2021-09-08T18:08:02Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Taking a step back, I think having the ip protocol number in ROUTE_ADVERTISEMENT is already weird (at least, with that name). However, if we accept that IP protocol number needs to be present in the route advertisement, then I somewhat see the reasoning for having the address assignment/request have the parallel.\r\n\r\nThat said, I'm having a hard time seeing the use case for wanting to offer a route advertisement that is specific to a specific IP protocol --- why does that information need to be there? Presumably once you have a route, you can use it for all IP protocol numbers, and the thing that you need is an assigned address for use with a specific protocol? How would you use the routing information when an ipproto is attached? Are they separate tables, or do you first do a LPM on the IP range and then look at the permitted ipprotos for the destination?",
+          "createdAt": "2021-09-08T23:00:19Z",
+          "updatedAt": "2021-09-08T23:00:19Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I also see an security aspect here, where you want to configure you proxy to only allow forwarding of certain protocols (and the proxy will check the ip protocol field before forwarding)",
+          "createdAt": "2021-09-14T11:46:57Z",
+          "updatedAt": "2021-09-14T11:46:57Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I guess this comes into the area where we had specified a incoming traffic selector into the IP payload where a pattern, a byte offset and length where specified so that one could pick up for example UDP destination port. \r\n",
+          "createdAt": "2021-09-17T10:23:25Z",
+          "updatedAt": "2021-09-17T10:23:25Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'm not fond of the byte-offset design as it is brittle in the face of IPv6 with header extensions. That gets into the type of complexity that I feel we should be aiming to avoid in the base draft, and why we agreed that port multiplexing (or other protocol-specific concerns) were definitely out of scope.",
+          "createdAt": "2021-09-17T17:42:49Z",
+          "updatedAt": "2021-09-17T17:42:49Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Discussing this with @DavidSchinazi and @achernya initially, I think we can remove the IP protocol from the address assign/request capsules, but it should be on the route advertisement capsule.\r\n\r\nWe should also point out the footgun of allowing address reuse for ICMP and another protocol from another client.",
+          "createdAt": "2021-10-06T23:20:38Z",
+          "updatedAt": "2021-10-06T23:20:38Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Can you explain your reasoning for this conclusion?",
+          "createdAt": "2021-10-07T07:32:21Z",
+          "updatedAt": "2021-10-07T07:32:21Z"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "id": "MDU6SXNzdWU5OTA0MTQyMDQ=",
+      "title": "UDP Listen Flow Example doesn't work",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/9",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [
+        "has PR"
+      ],
+      "body": "I don't understand how the UDP Listen Flow Example works. Unless I'm missing something, for this example to work you would need a way to convey the client's UDP port number. Since we decided that this was out of scope, perhaps we should remove this example?",
+      "createdAt": "2021-09-07T22:59:54Z",
+      "updatedAt": "2021-10-12T20:02:23Z",
+      "closedAt": "2021-10-12T20:02:23Z",
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This example was more about saying we can do UDP listening on an address, but all ports. So, it's binding just the protocol and address. It is something that is begging for a port extension to scope down further, but it still shows how you can do protocol listening, without being a full IP tunnel. Essentially, saying \"I only implement user space UDP and can handle that, I don't want anything else\".",
+          "createdAt": "2021-09-08T00:08:59Z",
+          "updatedAt": "2021-09-08T00:08:59Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This is the first time I've ever heard of \"UDP listening on all ports\". I'm not saying it isn't useful, but perhaps our examples should be focused on use-cases that people have a clear use for?",
+          "createdAt": "2021-09-08T00:53:34Z",
+          "updatedAt": "2021-09-08T00:53:34Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "COLLABORATOR",
+          "body": "So our draft had mechanism for the client to specify traffic selectors for what it actually considers to be individual IP flows. Think about how the rules to create IPv6 flow label works. MASQUE would need something that allows the client to indicate the necessary traffic selector that results in a IP flow, without having the local API interaction that for examples enables an stack to convert sockets into flows. I think this is the question we have here. And I don't think IP proto/next header is sufficient selector here. ",
+          "createdAt": "2021-09-17T10:27:20Z",
+          "updatedAt": "2021-09-17T10:27:20Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "RFC 6437 seems to say \"Packet classifiers can use the triplet of Flow Label, Source Address, and Destination Address\" which suggests to me that source address + destination address are the scopes within which flow label is evaluated. As a result, I don't see what changes we'd need here to support flow labels? It seems fine to pass them through unmodified here. If some extension wanted to add further traffic selectors that limit things by flow label, that would be possible without adding anything to the base draft.",
+          "createdAt": "2021-09-17T17:46:20Z",
+          "updatedAt": "2021-09-17T17:46:20Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@achernya yes, for an on path device that does packet classification the flow label is scoped by the source and destination address. And that would be true in the case one only encapsulates whole IPv6 packets. However, as soon as the MASQUE endpoint becomes more flow aware one have to discuss a bit more on how this flow awareness is created. In endpoints the setting of IPv6 flow label is clearly created based on transport protocol flows. Also IPv6 flow labels could be a selector that would only work for IPv6. There is no IPv4 equivalent, and also what to do with zero flow label becomes interesting.  ",
+          "createdAt": "2021-09-27T12:59:35Z",
+          "updatedAt": "2021-09-27T12:59:35Z"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "MDU6SXNzdWU5OTE1OTk1Njk=",
+      "title": "Should ipproto request scope limiting be supported in this draft?",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/12",
+      "state": "CLOSED",
+      "author": "achernya",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "needs discussion"
+      ],
+      "body": "Looking at the current text in the draft, we have support for limiting scope to \r\n* target, which is a hostname or IP address\r\n* IP protocol number\r\n\r\nTarget clearly makes sense, as that limits the route advertisements and other components that we need to worry about, and allows multiplexing at least the 2-tuple (src, dst) IP addresses.\r\n\r\nIP protocol number being supported in this draft is less clear to me. In conjunction with target, it expands our scope to multiplexing 3-tuples (ipproto, src, dst), but that doesn't seem like enough utility over 2-tuple, since the protocols involved are almost always going to be ICMP, TCP, and UDP and I can imagine most users would want to do all of these together.\r\n\r\nGiven that we're already not supporting TCP/UDP port numbers in this draft, would it make sense to move ipproto out?",
+      "createdAt": "2021-09-08T23:07:23Z",
+      "updatedAt": "2021-10-07T18:00:20Z",
+      "closedAt": "2021-10-07T18:00:20Z",
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "IP protocol is in scope, since it is a field in the IP header, as discussed. That\u2019s the boundary we agreed on. ",
+          "createdAt": "2021-09-09T01:20:24Z",
+          "updatedAt": "2021-09-09T01:20:24Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This is also important to help implementations guarantee they don\u2019t need to handle other protocols they can\u2019t process, and allows for better reuse of addresses on proxies. ",
+          "createdAt": "2021-09-09T01:21:18Z",
+          "updatedAt": "2021-09-09T01:21:18Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "While I agree that the IP protocol is in scope, in scope doesn't mean we have to use it.\r\n\r\nMy concern is that we can't actually provide the better reuse of addresses on proxies with just protocol number, and we need deeper awareness of how the protocol works. Here's a counter example (and why I think we should defer this feature until we can get richer knowledge):\r\n\r\nUser connects to example.com, which has an A record for which there is no route. The gateway of the proxy produces an ICMP \"Destination unreachable\" message. If we have multiplexed the IP to have TCP for user A and ICMP for user B, we would incorrectly deliver the \"Destination unreachable\" message to the wrong user.\r\n\r\nTo fix this, the proxy would have to be aware of these protocols at a much deeper level, and introspect over them to be able to multiplex them further. In general because you can get ICMP messages in response to other IP protocol numbers, this multiplexing cannot be done with just protocol number. This is potentially the case for other protocols, but I don't know off the top of my head.\r\n\r\nIf we look at the ethernet header, it also contains a protocol number field (which is always IP4 or IP6 these days), but all ethernet switching is done using the MAC addresses. The same is true in the IP header for L3 networks, the src addr and dst addr is what's used by all the routers -- the fact that 3 tuple and 5 tuple hashing exists is an optimization to allow for better utilization across multiple links, but in many ways that's an abstraction violation that is taking advantage of an extension point (the protocol number) to do something nice.",
+          "createdAt": "2021-09-09T14:22:13Z",
+          "updatedAt": "2021-09-09T14:22:13Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, the ICMP case is one where a proxy would need to be careful.\r\n\r\nStepping back, if we look at the case where you're specifying _both_ a destination and a protocol, it seems pretty clear\u2014saying, I want to speak UDP to this particular host. That shouldn't necessarily stop someone from also speaking TCP to the same host using the same address. I'd prefer to have the specification define how IP protocol is specified, give the caveats about how it can be used (with the ICMP example), and let it be extended.\r\n\r\nThe line we agreed upon was to have the fields in the IP header be part of the core spec, and I think this clearly fits.",
+          "createdAt": "2021-09-09T15:33:27Z",
+          "updatedAt": "2021-09-09T15:33:27Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We also agreed that the core spec needs to be useful without extensions, and I am unconvinced that ipproto can be used safely without extensions, or without introducing a lot of complexity for ICMP. I think that is in and of itself a good case for considering deferring it.\r\n\r\nIf we do want to allow different concurrent users to use the same IP for TCP and UDP, we need to handle ICMP specially, even if we do not allow a 3rd user to claim the ICMP ipproto. At that point, we may as well go one step further, and support TCP and UDP's ports --- but we considered that out of scope.",
+          "createdAt": "2021-09-09T15:52:53Z",
+          "updatedAt": "2021-09-09T15:52:53Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'd like to understand what makes ip_proto useful \u2013 is anyone planning on building something that wouldn't be possible without ip_proto?",
+          "createdAt": "2021-09-09T19:33:25Z",
+          "updatedAt": "2021-09-09T19:33:25Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Regarding ICMP I think we anyway need to make sure we have a way to handle icmp correctly. Some of the icmp information are actually relevant for the proxy and therefore forwarding to the client blindly is not always right (except the client asked that explicitly)",
+          "createdAt": "2021-09-14T11:53:19Z",
+          "updatedAt": "2021-09-14T11:53:19Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I opened a new issue for ICMP handling #21. Further this issue is probably also related to #8.",
+          "createdAt": "2021-10-05T09:33:48Z",
+          "updatedAt": "2021-10-05T09:33:48Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Discussing this with @DavidSchinazi and @achernya initially, I think we can remove the IP protocol from the address assign/request capsules, but it should be on the route advertisement capsule.\r\n\r\nWe should also point out the footgun of allowing address reuse for ICMP and another protocol from another client.",
+          "createdAt": "2021-10-06T23:20:58Z",
+          "updatedAt": "2021-10-06T23:20:58Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Duping to #8 ",
+          "createdAt": "2021-10-07T18:00:20Z",
+          "updatedAt": "2021-10-07T18:00:20Z"
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "I_kwDOF_gakc47XMJf",
+      "title": "Is ROUTE_ADVERTISEMENT part of the base spec?",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/13",
+      "state": "CLOSED",
+      "author": "mirjak",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I would like to discuss this question a bit more before we submit the -00 version. Route advertising (and requesting) makes sense as a general concept to limit the destination address space, similarly as address requesting defines the source address space. However it is less clear to me if we need to support dynamic handling of routes in the base spec. I would assume that in many deployments the proxy has a fixed set of routes that are supported and that can be preconfigured and might be provided to the client together with the proxy address/proxy discovery. What exactly is the use case for handling this dynamically? And is that use case in scope for the base spec?",
+      "createdAt": "2021-09-14T12:01:47Z",
+      "updatedAt": "2021-10-07T17:49:17Z",
+      "closedAt": "2021-10-07T17:49:17Z",
+      "comments": [
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'm not sure what you mean by \"dynamic handling of routes in the base spec\" -- how else would you do it? The only way I can think of is a-priori out of band knowledge of what' reachable through the proxy, which would make the base spec not useful by itself.",
+          "createdAt": "2021-09-14T14:52:50Z",
+          "updatedAt": "2021-09-14T14:52:50Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@mirjak I think that some form of assigning the route is absolutely required if we want \"flow mode\", since it is what tells the client they have a specific route as opposed to a full tunnel.",
+          "createdAt": "2021-09-14T22:00:22Z",
+          "updatedAt": "2021-09-14T22:00:22Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think providing the reachability information is relevant part of the base spec. However, I am not convinced that the current proposal solves the flow mode, as it is not a sufficient selector for what is an IP flow in the sense of the IP flow label. ",
+          "createdAt": "2021-09-17T14:29:06Z",
+          "updatedAt": "2021-09-17T14:29:06Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Let's continue the IP flow label discussion on #9.",
+          "createdAt": "2021-09-17T17:47:48Z",
+          "updatedAt": "2021-09-17T17:47:48Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Discussing how this is important for a happy eyeballs case: the route advertisement tells you the remote addresses that a hostname resolved to. Note, we could also have a v4 address assignment and v6 address assignment for this.",
+          "createdAt": "2021-10-07T17:33:54Z",
+          "updatedAt": "2021-10-07T17:33:54Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Tracking this with #25 ",
+          "createdAt": "2021-10-07T17:49:17Z",
+          "updatedAt": "2021-10-07T17:49:17Z"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "I_kwDOF_gakc47kiBC",
+      "title": "Addressing use case assumptions",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/14",
+      "state": "CLOSED",
+      "author": "gloinul",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [
+        "has PR"
+      ],
+      "body": "I continue to struggle with our difference in how we consider IP addressing and assumption on IP topology. I can't really determine which functionality is necessary to support the use cases. \r\n\r\nI think it would actually help if we actually detailed a couple of IP addressing examples for some use cases as an appendix to the draft. I am willing to help write such text.\r\n\r\n\r\n```\r\n                        Target Address --+\r\n                                          \\\r\n   +--------+           +--------+         \\ +--------+\r\n   |        |  Path #1  |        | Path #2  V|        |\r\n   | Client |<--------->|  Proxy |<--------->| Target |\r\n   |        |          ^|        |^          |        |\r\n   +--------+         / +--------+ \\         +--------+\r\n                     /              \\\r\n                    /                +-- Proxy's external address\r\n                   /\r\n                  +-- Proxy's service address\r\n\r\n```\r\nIn this figure, are there any cases where we need to provide an proxy's external address to the client, rather than having the proxy act as a router of all addresses assigned to client's for packet arriving on its right side interface. The reason I ask, is in many tunnel protocols one can actually ping so to say the remote side of the tunnel, we haven't discussed if that should be possible. \r\n\r\nAlso the discussion around the default route, in many cases that corresponds to all addresses except the subnet's IP range for a leaf network. \r\n\r\nI do think we would all be helped by actually drawing a couple of pictures and include subnet addresses in these to clarify the assumptions of the roles.\r\n",
+      "createdAt": "2021-09-17T14:41:37Z",
+      "updatedAt": "2021-10-12T20:02:22Z",
+      "closedAt": "2021-10-12T20:02:22Z",
+      "comments": [
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "In QBONE today, the proxy's service address (aka \"frontend address\") acts as a normal reachable IP. If you wish to reach the proxy through the tunnel/flow, we provide a link-local address. In many cases, the proxy does not have a single external address that it can use as per your diagram, so it doesn't make sense to provide it. In general, I think modelling the proxy as having a single external address is detrimental. In the full tunnel mode, the proxy does not need to have any external address at all, as it may be making network routing advertisements on behalf of its clients. In the flow-based mode, it likely has more than 1 address onto which requests are mapped.",
+          "createdAt": "2021-09-17T17:51:48Z",
+          "updatedAt": "2021-09-17T17:51:48Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@achernya I think you are confirming my point quite well. In flow-based mode, for a single flow the above picture represents terminology that is useful. However, I am not disagreeing with you on the VPN case where the model likely as you say you have a network, likely a IPv4 private address network, or an IPv6 subnet. Where the former will need a NAT device for external reachability. My point is that unless we actually draw up a couple of representing use cases when it comes to address usages we are going to miss things, or at least spend more time talking past each other about why a particular functionality is necessary. That is why I am advocating that we spend some time at least drawing these deployment cases. ",
+          "createdAt": "2021-09-27T13:05:30Z",
+          "updatedAt": "2021-09-27T13:05:30Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think that adding multiple diagrams to the document that show some example use cases would be helpful.",
+          "createdAt": "2021-09-27T16:36:56Z",
+          "updatedAt": "2021-09-27T16:36:56Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I support diagrams; my comment above was merely pointing out some issues with the initial proposed diagram and explaining some prior art in the space.",
+          "createdAt": "2021-09-28T15:49:59Z",
+          "updatedAt": "2021-09-28T15:49:59Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Adding details and diagrams to expand the examples section would help here.",
+          "createdAt": "2021-10-07T17:09:39Z",
+          "updatedAt": "2021-10-07T17:09:39Z"
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "I_kwDOF_gakc47kix0",
+      "title": "Do ADDRESS_ASSIGN Capsule support assigning an address range?",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/15",
+      "state": "CLOSED",
+      "author": "gloinul",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "It is unclear to me if ADDRESS_ASSIGN only support assigning only a single address or a whole range. And if there is a difference between assigning the whole range to a client's usage versus specific addresses that will actually be processed out of this range, by using future requests?\r\n\r\n",
+      "createdAt": "2021-09-17T14:44:40Z",
+      "updatedAt": "2021-10-07T17:14:22Z",
+      "closedAt": "2021-10-07T17:14:22Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The ADDRESS_ASSIGN capsule contains an `IP Prefix Length` field which allows conveying either a single address, or a prefix (i.e. a whole range of addresses).\r\n\r\n@gloinul I'm not sure I understand what you meant by \"specific addresses that will actually be processed out of this range\" though, can you clarify?",
+          "createdAt": "2021-09-17T15:54:57Z",
+          "updatedAt": "2021-09-17T15:54:57Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The goal is to support both single addresses and ranges. You can do disjoint ranges by using multiple ADDRESS_ASSIGN messages (although I expect use cases for such to be rare).\r\n\r\nIf an entire range is assigned, e.g., an IPv6 /64, then the client is free to use any address in that range (or all of them), and the proxy MUST drop any packets with a source address outside of the range(s) assigned to that client.",
+          "createdAt": "2021-09-17T17:53:56Z",
+          "updatedAt": "2021-09-17T17:53:56Z"
+        },
+        {
+          "author": "gloinul",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@DavidSchinazi looking at this again, I think my question is about if there is assumptions on how different addresses within a prefix given to a MASQUE client will be used. For example is there an assumed gateway address? Are the MASQUE peers actually addressable on the inside so to say of the tunnel. Can the MASQUE client ping the MASQUE server's tunnel egress? Or is the tunnel totally transparent and its insider have no presence in IP land?",
+          "createdAt": "2021-09-27T13:10:38Z",
+          "updatedAt": "2021-09-27T13:10:38Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I think my question is about if there is assumptions on how different addresses within a prefix given to a MASQUE client will be used.\r\n\r\nThe goal was to avoid assumptions and leave choices like this up to the individual implementation/deployment. We did assume that ADDRESS_ASSIGN addresses are to be used inside the tunnel - so that needs to be spelled out explicitly - but otherwise most questions about addressing are a matter of policy.\r\n\r\n> For example is there an assumed gateway address?\r\n\r\nGateway addresses are a concept that exists for L2 networks and is not necessary in the setting of a virtual network without any L2 layer. On traditional networks, the purpose of the gateway address is to give the client an identifier it can use ARP/ND to find a MAC address for because that's the L2 destination address it'll use on all off-network destination IPs. But here there is no L2 and no MAC addresses involved, so there's no need for a gateway address.\r\n\r\n> Are the MASQUE peers actually addressable on the inside so to say of the tunnel.\r\n\r\nThe addresses exchanged by ADDRESS_ASSIGN are meant to be usable inside the tunnel - but you're right that we should spell that out explicitly.\r\n\r\n> Can the MASQUE client ping the MASQUE server's tunnel egress? Or is the tunnel totally transparent and its insider have no presence in IP land?\r\n\r\nI think that's a matter of local policy that's not specific to CONNECT-IP. Today on the Internet some routers will respond to ping (and do proper ICMP handling so that traceroute works, etc.) while others will not do any of those things but still forward packets. A CONNECT-IP endpoint is just a router in this context and it's free to choose its local policy regarding ICMP handling.\r\n\r\n",
+          "createdAt": "2021-09-27T16:34:51Z",
+          "updatedAt": "2021-09-27T16:34:51Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This might be related to #3 ",
+          "createdAt": "2021-10-05T09:53:27Z",
+          "updatedAt": "2021-10-05T09:53:27Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Discussed on call, and the ability to assign a prefix does allow a single address or a range. Future extensions could add more semantics to explain the meaning of the addresses.",
+          "createdAt": "2021-10-07T17:13:25Z",
+          "updatedAt": "2021-10-07T17:13:25Z"
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "I_kwDOF_gakc47kjXW",
+      "title": "ROUTE_ADVERTISEMENT Capsule needs clarification of fields",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/16",
+      "state": "CLOSED",
+      "author": "gloinul",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [
+        "has PR"
+      ],
+      "body": "I think the field description needs updates. The IP adress is after all an prefix that is masked by the specified number of bits. That is not quite clear yet. \r\n\r\nHowever, I think the question if this range should support excluding one or more sub-ranges needs to be sorted out also. ",
+      "createdAt": "2021-09-17T14:46:49Z",
+      "updatedAt": "2021-10-12T01:14:29Z",
+      "closedAt": "2021-10-12T01:14:29Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I think the field description needs updates. The IP adress is after all an prefix that is masked by the specified number of bits. That is not quite clear yet.\r\n\r\nThe specification of the `IP Prefix Length` field currently states `Length of the IP Prefix of the advertised route, in bits. MUST be lesser or equal to the length of the IP Address field, in bits.`. Is that unclear? If so, can you help provide text to help make it clearer?\r\n\r\n> However, I think the question if this range should support excluding one or more sub-ranges needs to be sorted out also.\r\n\r\nAgreed, that's discussed in #3\r\n\r\n",
+          "createdAt": "2021-09-17T15:57:36Z",
+          "updatedAt": "2021-09-17T15:57:36Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Editorial clarification that the prefix in the advertisement applies to the address in the advertisement, which is a remote prefix that the client is allowed to send to.",
+          "createdAt": "2021-10-07T17:15:51Z",
+          "updatedAt": "2021-10-07T17:15:51Z"
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "I_kwDOF_gakc48kHJg",
+      "title": "Add separate discussion about ICMP handling",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/21",
+      "state": "OPEN",
+      "author": "mirjak",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "related-document"
+      ],
+      "body": "There might be ICMP messages that are relevant to the proxy and should be handled by the proxy, mainly in flow mode. This needs additional discussion in the draft.",
+      "createdAt": "2021-10-05T09:32:53Z",
+      "updatedAt": "2021-10-20T18:23:45Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Can you please clarify which ICMP messages you think the proxy should be handling and in which operating mode of CONNECT-IP? ",
+          "createdAt": "2021-10-05T13:41:59Z",
+          "updatedAt": "2021-10-05T13:41:59Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "ICMP: *there are dragons here*. I'd like to see unified ICMP messaging capsule contexts that are shared between CONNECT-UDP and CONNECT-IP.",
+          "createdAt": "2021-10-07T17:21:44Z",
+          "updatedAt": "2021-10-07T17:21:44Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Proposing a separate document for this to go into more detail and solve the problem for various protocols.",
+          "createdAt": "2021-10-07T17:23:27Z",
+          "updatedAt": "2021-10-07T17:23:27Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Can we maybe at least state somewhere in the current doc that we will work on a separate doc for ICMP handling which then covers UDP as well?",
+          "createdAt": "2021-10-20T13:57:55Z",
+          "updatedAt": "2021-10-20T13:57:55Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I don't think we should write our intent to write another document into this document, but we should certainly discuss that when this document is presented at the next meeting.",
+          "createdAt": "2021-10-20T14:44:47Z",
+          "updatedAt": "2021-10-20T14:44:47Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "+1 to @achernya, it's not customary for an IETF draft to discuss a hypothetical non-existent other draft. We could add an informational reference when that other draft is written, but until then I don't think we need any text in this draft",
+          "createdAt": "2021-10-20T18:23:45Z",
+          "updatedAt": "2021-10-20T18:23:45Z"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOF_gakc48wxxR",
+      "title": "Consider allowing the target in the HTTP request to be a subnet",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/22",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "Instead of just an address / hostname, could we ask to open a tunnel to a prefix?",
+      "createdAt": "2021-10-06T22:58:14Z",
+      "updatedAt": "2021-11-02T22:25:07Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "gloinul",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Tommy, can you please clarify the reasoning why this functionality is useful. Specifying the target as a subnet would to my understanding compared to a general IP tunneling address just restrict that the client will never try to send IP packets to any IP addresses outside of this subnet. And thus potentially enable serving multiple masque clients using restricted targets to share the source IP address. Is that the intention? \r\n\r\nOr is the intention here to have the masque server potentially redirect to another instance based on the target in the request?",
+          "createdAt": "2021-10-21T13:05:23Z",
+          "updatedAt": "2021-10-21T13:05:23Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This came up in a discussion\u2014if we let you ask to connect to a specific hostname or address instead of all addresses (as we do today), we wondered if there was any need to connect to a subnet of addresses. This would be for connecting to an IPv6 /64, which is unique enough for a device, and doesn't require needing to assign an IP address exclusively to the client that is issuing the request.",
+          "createdAt": "2021-11-02T22:25:06Z",
+          "updatedAt": "2021-11-02T22:25:06Z"
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "id": "I_kwDOF_gakc480JFm",
+      "title": "Add happy eyeballs flow connect example",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/24",
+      "state": "CLOSED",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [
+        "has PR"
+      ],
+      "body": "",
+      "createdAt": "2021-10-07T17:44:13Z",
+      "updatedAt": "2021-10-12T20:02:23Z",
+      "closedAt": "2021-10-12T20:02:23Z",
+      "comments": []
+    },
+    {
+      "number": 25,
+      "id": "I_kwDOF_gakc480Jyp",
+      "title": "Editorial clarity around ADDRESS/ROUTE capsules",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/25",
+      "state": "CLOSED",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "achernya"
+      ],
+      "labels": [
+        "has PR"
+      ],
+      "body": "- We need to clearly state that ADDRESS_ASSIGN defines a set of addresses the receiver of the capsule can use as a source IP address on packets it generates\r\n- We need to clearly state that ROUTE_ADVERTISEMENT defines a set of addresses the receiver of the capsule can use as a destination IP address on packets it generates\r\n- Should we rename the capsules to make this relationship more clear in all use cases?",
+      "createdAt": "2021-10-07T17:47:47Z",
+      "updatedAt": "2021-10-18T15:15:03Z",
+      "closedAt": "2021-10-18T15:15:03Z",
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Let's bike shed the name here @DavidSchinazi @gloinul @mirjak ",
+          "createdAt": "2021-10-07T18:20:25Z",
+          "updatedAt": "2021-10-07T18:20:25Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "(to clarify Tommy's comment - if anyone comes up with a new name they like, they should post it here. If not, we'll go with advertisement and withdraw)",
+          "createdAt": "2021-10-07T18:21:44Z",
+          "updatedAt": "2021-10-07T18:21:44Z"
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "id": "I_kwDOF_gakc49Cp3r",
+      "title": "Description of capsules isn't quite aligned with latest HTTP Datagrams draft",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/31",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "DavidSchinazi"
+      ],
+      "labels": [],
+      "body": "The current text in this draft needs to be updated to match the changes from https://github.com/ietf-wg-masque/draft-ietf-masque-h3-datagram/pull/97. I'll write up a PR once existing conflicting PRs are merged.",
+      "createdAt": "2021-10-12T18:12:05Z",
+      "updatedAt": "2021-10-18T16:11:31Z",
+      "closedAt": "2021-10-18T16:11:31Z",
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@DavidSchinazi is this unblocked now?",
+          "createdAt": "2021-10-18T15:15:22Z",
+          "updatedAt": "2021-10-18T15:15:22Z"
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "id": "I_kwDOF_gakc49FyLd",
+      "title": "Explain behavior when handling multiple capsules of a given type",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/32",
+      "state": "CLOSED",
+      "author": "gloinul",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "DavidSchinazi"
+      ],
+      "labels": [
+        "has PR"
+      ],
+      "body": "I think the capsules description needs to be explicit if multiple capsules are allowed. I think there are different considerations depending on what type of capsules are used. \r\n\r\nThe authors have already discussed and concluded that multiple route_advertisement will be needed to allow to declare reachability of multiple prefix.\r\n\r\nI don''t know if multiple address_assign capsules are allowed. Allowing multiple allows multiple address ranges to be declared. However, that results that we also get the question if one need to withdraw source address prefixes.. ",
+      "createdAt": "2021-10-13T08:06:26Z",
+      "updatedAt": "2021-10-14T23:22:05Z",
+      "closedAt": "2021-10-14T23:22:05Z",
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, multiple capsules of each type are allowed. It does seem useful to clarify this, and what it means to receive multiple addresses and multiple routes (which are additive).\r\n\r\n@DavidSchinazi can you help write this?",
+          "createdAt": "2021-10-13T15:32:39Z",
+          "updatedAt": "2021-10-13T15:32:39Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Agreed, multiple capsules of all currently defined capsule types are allowed. For example, multiple ADDRESS_ASSIGN are needed to support a dual-stack tunnel. I'll write a PR.",
+          "createdAt": "2021-10-13T17:55:23Z",
+          "updatedAt": "2021-10-13T17:55:23Z"
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "id": "I_kwDOF_gakc49NV2N",
+      "title": "Semantics of overlapping routes are unclear",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/34",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "DavidSchinazi"
+      ],
+      "labels": [
+        "enhancement",
+        "has PR"
+      ],
+      "body": "As discussed in #33, turning a sequence of ROUTE_ADVERTISEMENT and ROUTE_WITHDRAWAL capsules into a functional routing table isn't as simple as initially expected. This is because two separate capsules can describe prefixes that are distinct but overlap. We should simplify the design or better explain the caveats.",
+      "createdAt": "2021-10-14T23:20:45Z",
+      "updatedAt": "2021-10-21T15:41:55Z",
+      "closedAt": "2021-10-21T15:41:55Z",
+      "comments": []
+    },
+    {
+      "number": 37,
+      "id": "I_kwDOF_gakc49kbcy",
+      "title": "Proxies SHOULD provide all routes for resolved addresses",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/37",
+      "state": "CLOSED",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [
+        "has PR"
+      ],
+      "body": "We should be clear that when a proxy resolves a hostname, it SHOULD give all results back as routes to the client (unless there is some policy to restrict it).\r\n\r\nCredit to @bemasc for proposing this [on the list](https://mailarchive.ietf.org/arch/msg/masque/YebmYEe4m0vGTunTdN3wgGXUNh8/)",
+      "createdAt": "2021-10-21T21:33:08Z",
+      "updatedAt": "2021-10-22T22:30:54Z",
+      "closedAt": "2021-10-22T22:30:54Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I agree",
+          "createdAt": "2021-10-21T21:42:17Z",
+          "updatedAt": "2021-10-21T21:42:17Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "NONE",
+          "body": "What is a client expected to do with this information?  Say I ask for the proxy to connect to example.com:443.  I get back a RA that includes the result of DNS lookups for example.com (maybe multiple RAs that include all the answers from A/AAAA records?).  Am I supposed to assume that this is the result of the DNS lookup?  How do I distinguish that from other RAs that might just advertise where I might be able send packets via the tunnel?\r\n\r\nIf the purpose of this is to provide name resolution, it is probably better to include an explicit signal.  It's a bit of a rathole, but a new capsule type seems fairly obvious.  That leads me to ask a whole bunch of questions about whether the proxy needs to supply a DNS service, ...",
+          "createdAt": "2021-10-22T00:09:52Z",
+          "updatedAt": "2021-10-22T00:09:52Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "NONE",
+          "body": "> Say I ask for the proxy to connect to example.com:443\r\n\r\nNit: there is no port number.\r\n\r\n> Am I supposed to assume that this is the result of the DNS lookup?\r\n\r\nThat's the status quo in this draft for hostname targets.  The implicit signal here doesn't bother me, since it's unambiguous.\r\n\r\nI'm also fine with dropping support for DNS targets, although I think it might be useful in some scenarios.",
+          "createdAt": "2021-10-22T01:56:20Z",
+          "updatedAt": "2021-10-22T01:56:20Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "NONE",
+          "body": "> there is no port number\r\n\r\nOf course.  I somehow got mislead by the first example: \"https://masque.example.org/{target}/{target_port}/\"",
+          "createdAt": "2021-10-22T03:08:07Z",
+          "updatedAt": "2021-10-22T03:08:07Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yeah, looks like that example had a copy paste error from CONNECT-UDP. \r\n\r\nI filed #38 ",
+          "createdAt": "2021-10-22T05:08:23Z",
+          "updatedAt": "2021-10-22T05:08:23Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The ability to specify a host to proxy to was important in our discussions for keeping parity with other proxying methods. ",
+          "createdAt": "2021-10-22T05:09:02Z",
+          "updatedAt": "2021-10-22T05:09:02Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Indeed, that was bad copy-pasta from me, my apologies. It's been fixed in the editor's copy.",
+          "createdAt": "2021-10-22T16:37:52Z",
+          "updatedAt": "2021-10-22T16:37:52Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@DavidSchinazi thanks!",
+          "createdAt": "2021-10-22T20:11:40Z",
+          "updatedAt": "2021-10-22T20:11:40Z"
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "I_kwDOF_gakc49lSM_",
+      "title": "URI example shouldn\u2019t include port",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/38",
+      "state": "CLOSED",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "DavidSchinazi"
+      ],
+      "labels": [],
+      "body": "The URI target example seems to have a copy paste error from connect UDP that has a port instead of a protocol",
+      "createdAt": "2021-10-22T05:07:49Z",
+      "updatedAt": "2021-10-22T16:37:23Z",
+      "closedAt": "2021-10-22T16:37:23Z",
+      "comments": []
+    },
+    {
+      "number": 42,
+      "id": "I_kwDOF_gakc4-cSLf",
+      "title": "Should we mention that servers need to send ADDRESS_ASSIGN?",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/42",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "From ekr:\r\n\r\nS 4.2.\r\nIs the server required to send ADDRESS_ASSIGN? If not, what is the\r\nclient supposed to use as it's source address? Also, what happens\r\nif you only get a v6 address but need to talk to a v4 endpoint,\r\nor vice versa.",
+      "createdAt": "2021-11-08T15:40:59Z",
+      "updatedAt": "2021-11-08T15:56:28Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "For traditional proxy/VPN cases, I think this is required.\r\n\r\nIt's possible the client could not get an address assign, and but a blank/bogus source IP that it expects a proxy to overwrite, but I don't think that's a good idea (and would also change the checksum values of higher-level protocols).\r\n\r\nProbably the best thing to say is that any peer that can send packets MUST first have received an ADDRESS_ASSIGN capsule.",
+          "createdAt": "2021-11-08T15:42:25Z",
+          "updatedAt": "2021-11-08T15:42:25Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think we should keep the text on these capsules bidirectional. In the consumer VPN scenario, the client isn't going to send anything until it has received an ADDRESS_ASSIGN capsule. But in that same scenario, the same property isn't true of the server.",
+          "createdAt": "2021-11-08T15:52:18Z",
+          "updatedAt": "2021-11-08T15:52:18Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I agree that we should have the text be bidirectional\u2014but I think just saying \"an endpoint can only send packets after it receives an ADDRESS_ASSIGN capsule\" meets that bill, right?",
+          "createdAt": "2021-11-08T15:54:35Z",
+          "updatedAt": "2021-11-08T15:54:35Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "But in the consumer VPN scenario, the client isn't sending an ADDRESS_ASSIGN to the server. So if we apply your \"an endpoint can only send packets after it receives an ADDRESS_ASSIGN capsule\", then the server can't send any packets",
+          "createdAt": "2021-11-08T15:56:27Z",
+          "updatedAt": "2021-11-08T15:56:27Z"
+        }
+      ]
+    },
+    {
+      "number": 43,
+      "id": "I_kwDOF_gakc4-cT55",
+      "title": "Error conditions for violating allowed routes / addresses",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/issues/43",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "What is the behavior when an endpoint sends a packet for which it didn\u2019t have an assigned source address or a valid destination route. Is this cause for dropping the packet silently, sending an error capsule, or closing the request stream with an error?\r\n\r\nClosing the stream too harshly may be problematic if the packet was valid in some previous routing table, but now is not.",
+      "createdAt": "2021-11-08T15:47:43Z",
+      "updatedAt": "2022-01-20T20:34:15Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think that's a policy decision that is out of scope for this document. Some deployments will most likely implement BCP38 filtering, but that's not required of all uses of this protocol.",
+          "createdAt": "2021-11-08T15:53:53Z",
+          "updatedAt": "2021-11-08T15:53:53Z"
+        },
+        {
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I agree it's a policy decision. In our implementation today we send and ICMP administratively prohibited and drop the packet. I would personally be comfortable with that being a SHOULD recommendation.",
+          "createdAt": "2022-01-20T20:34:14Z",
+          "updatedAt": "2022-01-20T20:34:14Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 10,
+      "id": "MDExOlB1bGxSZXF1ZXN0NzI5MDU2Mjg3",
+      "title": "IP forwarding tunnel, not path",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/10",
+      "state": "MERGED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #1 ",
+      "createdAt": "2021-09-08T00:29:22Z",
+      "updatedAt": "2021-09-14T14:11:26Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "9fa2bb45e19f2f5ebcf4b2856d1437db347ff12a",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "tunnel",
+      "headRefOid": "9876f16e22c59e7010753a1bdb3c171cd87bee30",
+      "closedAt": "2021-09-14T14:11:26Z",
+      "mergedAt": "2021-09-14T14:11:25Z",
+      "mergedBy": "DavidSchinazi",
+      "mergeCommit": {
+        "oid": "d90ec01c8ebbbd8a8eed447c3f3d714efb99e767"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzQ4NTU2MTA4",
+          "commit": {
+            "abbreviatedOid": "9876f16"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-09-08T01:46:26Z",
+          "updatedAt": "2021-09-08T01:46:26Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "id": "MDExOlB1bGxSZXF1ZXN0NzI5MDU4MjM0",
+      "title": "fix setting in example",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/11",
+      "state": "MERGED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #4 ",
+      "createdAt": "2021-09-08T00:32:05Z",
+      "updatedAt": "2021-09-14T21:59:32Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "9fa2bb45e19f2f5ebcf4b2856d1437db347ff12a",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "example_setting",
+      "headRefOid": "e893a96cd3f9d7a1714468d73a68fbcaf2962309",
+      "closedAt": "2021-09-14T21:59:32Z",
+      "mergedAt": "2021-09-14T21:59:31Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "6fab0a9b3cd7fcad0b0e599b858235034045d4b5"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzQ4NTU2MjIx",
+          "commit": {
+            "abbreviatedOid": "e893a96"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-09-08T01:46:43Z",
+          "updatedAt": "2021-09-08T01:46:43Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "id": "PR_kwDOF_gakc4s3V6V",
+      "title": "Remove IP proto from address assignment",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/23",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "Remove IP protocol from address assignment, keep it only in route advertisements\r\n\r\nCloses #12 \r\nCloses #8",
+      "createdAt": "2021-10-06T23:36:58Z",
+      "updatedAt": "2021-10-07T18:54:20Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "6fab0a9b3cd7fcad0b0e599b858235034045d4b5",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "tfpauly-patch-1",
+      "headRefOid": "73139c6fd6de6e69717c12b4fcc1e51c2b4f434e",
+      "closedAt": "2021-10-07T18:54:20Z",
+      "mergedAt": "2021-10-07T18:54:20Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "83889b3db807bb333d8f4708879fcde0f15d3878"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF_gakc4uGRLJ",
+          "commit": {
+            "abbreviatedOid": "73139c6"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-07T02:59:04Z",
+          "updatedAt": "2021-10-07T02:59:04Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "id": "PR_kwDOF_gakc4s6MYc",
+      "title": "Clarify prefix length meaning",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/26",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "Closes #16",
+      "createdAt": "2021-10-07T19:02:44Z",
+      "updatedAt": "2021-10-12T16:09:42Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "83889b3db807bb333d8f4708879fcde0f15d3878",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "tfpauly-patch-2",
+      "headRefOid": "7e9a349f9bd4988d3f238fc737144bf048687ea8",
+      "closedAt": "2021-10-12T01:14:29Z",
+      "mergedAt": "2021-10-12T01:14:28Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "bd5d35f28e4be7e4b873ff701a10390f74e4c0f5"
+      },
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@tfpauly @achernya Does this PR also close #25 ?",
+          "createdAt": "2021-10-07T19:37:50Z",
+          "updatedAt": "2021-10-07T19:37:50Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@DavidSchinazi not quite--it's a step, but there's more to do ",
+          "createdAt": "2021-10-07T19:40:31Z",
+          "updatedAt": "2021-10-07T19:40:31Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF_gakc4uJr6E",
+          "commit": {
+            "abbreviatedOid": "99907f4"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-07T19:07:12Z",
+          "updatedAt": "2021-10-07T19:07:12Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uMTtr",
+          "commit": {
+            "abbreviatedOid": "99907f4"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-08T12:57:52Z",
+          "updatedAt": "2021-10-08T12:59:02Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\n: The number of bits in the IP Address that are used to define the prefix\n```\n",
+              "createdAt": "2021-10-08T12:57:52Z",
+              "updatedAt": "2021-10-08T12:59:02Z"
+            },
+            {
+              "originalPosition": 7,
+              "body": "```suggestion\nthat is being assigned. This MUST be less than or equal to the length of the IP Address\n```\n",
+              "createdAt": "2021-10-08T12:58:26Z",
+              "updatedAt": "2021-10-08T12:59:02Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "id": "PR_kwDOF_gakc4s6Uto",
+      "title": "Introduce URI template",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/27",
+      "state": "MERGED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This matches what CONNECT-UDP does. We can always revisit and switch to headers later, but for now this should be clear and consistent.\r\n\r\nFixes #2 \r\nFixes #5 \r\nFixes #7",
+      "createdAt": "2021-10-07T19:55:08Z",
+      "updatedAt": "2021-10-12T16:09:22Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "4aed809efcc127f4b53c687aae01bbb2cef852a2",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "uri_template",
+      "headRefOid": "4aa3ca3394897cb8a9b13bfd4b45ecad94c60aa3",
+      "closedAt": "2021-10-12T02:40:36Z",
+      "mergedAt": "2021-10-12T02:40:35Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "006870be4986a5b95d9d057bf7fa7f08a0f2169c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF_gakc4uKaaa",
+          "commit": {
+            "abbreviatedOid": "4aa3ca3"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-07T23:33:47Z",
+          "updatedAt": "2021-10-07T23:34:11Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Hi, Bob.",
+              "createdAt": "2021-10-07T23:33:47Z",
+              "updatedAt": "2021-10-07T23:34:11Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "id": "PR_kwDOF_gakc4s6WFr",
+      "title": "Add ROUTE_WITHDRAWAL capsule",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/28",
+      "state": "MERGED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #3.",
+      "createdAt": "2021-10-07T20:03:14Z",
+      "updatedAt": "2021-10-12T16:09:17Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "4aed809efcc127f4b53c687aae01bbb2cef852a2",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "route_withdraw",
+      "headRefOid": "41cceb3ef17574312c4b0294fdb07af3a21ee8d7",
+      "closedAt": "2021-10-12T02:40:21Z",
+      "mergedAt": "2021-10-12T02:40:21Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "6c7d5a254df6d6e975207bd902f82ad0aad33fc6"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF_gakc4uKaXY",
+          "commit": {
+            "abbreviatedOid": "41cceb3"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-07T23:33:17Z",
+          "updatedAt": "2021-10-07T23:33:17Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "id": "PR_kwDOF_gakc4tDFoQ",
+      "title": "Expand examples, add diagrams",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/29",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "Closes #14\r\nCloses #6\r\nCloses #9\r\nCloses #24",
+      "createdAt": "2021-10-12T03:32:31Z",
+      "updatedAt": "2021-10-12T20:02:23Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "006870be4986a5b95d9d057bf7fa7f08a0f2169c",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "tfp/examples",
+      "headRefOid": "b9f69413fb08213da534228d0916f4ca6a2459e9",
+      "closedAt": "2021-10-12T20:02:23Z",
+      "mergedAt": "2021-10-12T20:02:22Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "1dc28e5bfb31a156009f92c04858ed3df2200d08"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF_gakc4uWL_B",
+          "commit": {
+            "abbreviatedOid": "9facebe"
+          },
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-12T15:49:23Z",
+          "updatedAt": "2021-10-12T15:49:23Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uWSTs",
+          "commit": {
+            "abbreviatedOid": "9facebe"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "This looks great. Minor comments inline.",
+          "createdAt": "2021-10-12T16:11:35Z",
+          "updatedAt": "2021-10-12T16:26:16Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "Can we also add the term \"full-tunnel\" somewhere in the preexisting paragraph below? I know it's mentioned under the diagram but I think seeing it in the TLDR for the example will help when scrolling through the examples.",
+              "createdAt": "2021-10-12T16:11:35Z",
+              "updatedAt": "2021-10-12T16:26:16Z"
+            },
+            {
+              "originalPosition": 28,
+              "body": "```suggestion\r\nthe client an IPv6 address prefix to the client (2001:db8::/64) and\r\n```",
+              "createdAt": "2021-10-12T16:12:44Z",
+              "updatedAt": "2021-10-12T16:26:16Z"
+            },
+            {
+              "originalPosition": 48,
+              "body": "```suggestion\r\n## IP Flow Forwarding\r\n```",
+              "createdAt": "2021-10-12T16:14:08Z",
+              "updatedAt": "2021-10-12T16:26:16Z"
+            },
+            {
+              "originalPosition": 49,
+              "body": "Given that we've agreed that \"ICMP, here be dragons\" can we perhaps use SCTP in this example instead of ICMP?",
+              "createdAt": "2021-10-12T16:14:59Z",
+              "updatedAt": "2021-10-12T16:26:16Z"
+            },
+            {
+              "originalPosition": 74,
+              "body": "```suggestion\r\nthe client. In this regard, the request is similar to a traditional\r\n```",
+              "createdAt": "2021-10-12T16:15:57Z",
+              "updatedAt": "2021-10-12T16:26:16Z"
+            },
+            {
+              "originalPosition": 77,
+              "body": "```suggestion\r\nThe server assigns a single IPv6 address to the client\r\n```",
+              "createdAt": "2021-10-12T16:16:39Z",
+              "updatedAt": "2021-10-12T16:26:16Z"
+            },
+            {
+              "originalPosition": 114,
+              "body": "This might make it clearer that address C can't talk to address F since they're different address families\r\n\r\n```suggestion\r\n+--------+ IP A         IP B +--------+ IP C\r\n|        |-------------------|        |<------------> IP E\r\n| Client |  IP C<->E, D<->F  | Server |\r\n|        |-------------------|        |<------------> IP F\r\n+--------+                   +--------+ IP D\r\n```",
+              "createdAt": "2021-10-12T16:20:26Z",
+              "updatedAt": "2021-10-12T16:26:16Z"
+            },
+            {
+              "originalPosition": 27,
+              "body": "I find the clause \"but is asking to open up a generic IP tunnel\" to be more confusing than helpful. It begs the question \"what's a generic IP tunnel?\". I think we could just remove it.\r\n```suggestion\r\nIn this case, the client does not specify any scope in its request.\r\nThe server assigns\r\n```",
+              "createdAt": "2021-10-12T16:22:51Z",
+              "updatedAt": "2021-10-12T16:26:16Z"
+            },
+            {
+              "originalPosition": 29,
+              "body": "I like that we have this full-tunnel example, can we also add a split-tunnel \"Corporate VPN\" example?",
+              "createdAt": "2021-10-12T16:24:09Z",
+              "updatedAt": "2021-10-12T16:26:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uWWl1",
+          "commit": {
+            "abbreviatedOid": "9facebe"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T16:28:09Z",
+          "updatedAt": "2021-10-12T16:28:09Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "I really like this text, but I don't think it's enough to resolve #6. I was hoping to see some motivation text in the \"Limiting Request Scope\" section, not just examples.",
+              "createdAt": "2021-10-12T16:28:09Z",
+              "updatedAt": "2021-10-12T16:28:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uWp7Y",
+          "commit": {
+            "abbreviatedOid": "976a03b"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T17:52:44Z",
+          "updatedAt": "2021-10-12T17:52:45Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "Added some text here, to explain it can be full or split tunnel, since I didn't want to entirely duplicate the section. I've added a short example of how the route capsule is different for split tunnel.",
+              "createdAt": "2021-10-12T17:52:44Z",
+              "updatedAt": "2021-10-12T17:52:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uWp9V",
+          "commit": {
+            "abbreviatedOid": "976a03b"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T17:52:53Z",
+          "updatedAt": "2021-10-12T17:52:53Z",
+          "comments": [
+            {
+              "originalPosition": 49,
+              "body": "Yup, switched!",
+              "createdAt": "2021-10-12T17:52:53Z",
+              "updatedAt": "2021-10-12T17:52:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uWqAg",
+          "commit": {
+            "abbreviatedOid": "976a03b"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T17:53:08Z",
+          "updatedAt": "2021-10-12T17:53:09Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "Please check the new text I added above.",
+              "createdAt": "2021-10-12T17:53:08Z",
+              "updatedAt": "2021-10-12T17:53:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uWrwO",
+          "commit": {
+            "abbreviatedOid": "976a03b"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T18:01:02Z",
+          "updatedAt": "2021-10-12T18:03:47Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "This doesn't quite capture why this is useful. Perhaps something along the lines of \"When the server knows that a request is scoped to a target host, it can leverage this information to optimize its resource allocation; for example, the server can assign the same public IP address to two CONNECT-IP requests that are scoped to different hosts.\"",
+              "createdAt": "2021-10-12T18:01:02Z",
+              "updatedAt": "2021-10-12T18:03:47Z"
+            },
+            {
+              "originalPosition": 9,
+              "body": "I think there's value in duplicating the section, because this is an example. Those two use-cases are distinct in the IP proxying requirements draft, so explicitly showing how two distinct use-cases are handled in stand-alone examples is useful. The fact that the two sections become very close to one another is even a plus: it shows that the protocol design allows component reuse. In other words, I think duplication in the normative text is bad, but not in examples.",
+              "createdAt": "2021-10-12T18:02:52Z",
+              "updatedAt": "2021-10-12T18:03:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uWzFS",
+          "commit": {
+            "abbreviatedOid": "976a03b"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T18:35:43Z",
+          "updatedAt": "2021-10-12T18:35:44Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "Conceptually, I agree, but I find it ugly to have so much (the diagram as well as most of the protocol exchange) duplicated. It makes me as a reader try to \"spot the difference\", which isn't there.",
+              "createdAt": "2021-10-12T18:35:43Z",
+              "updatedAt": "2021-10-12T18:35:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uWzhI",
+          "commit": {
+            "abbreviatedOid": "72abe45"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T18:37:53Z",
+          "updatedAt": "2021-10-12T18:37:53Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "I like that! Updated with minor edits to your suggestion.",
+              "createdAt": "2021-10-12T18:37:53Z",
+              "updatedAt": "2021-10-12T18:37:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uW6X2",
+          "commit": {
+            "abbreviatedOid": "b9f6941"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Latest text LGTM",
+          "createdAt": "2021-10-12T19:11:16Z",
+          "updatedAt": "2021-10-12T19:11:52Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "Fair enough. Having two separate capsule diagrams is a reasonable compromise for me.",
+              "createdAt": "2021-10-12T19:11:17Z",
+              "updatedAt": "2021-10-12T19:11:52Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "id": "PR_kwDOF_gakc4tFeoU",
+      "title": "Clarify ADDRESS_ASSIGN, ROUTE_ADVERTISEMENT roles",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/30",
+      "state": "MERGED",
+      "author": "achernya",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This change adds text that addresses conveyed by ADDRESS_ASSIGN can be\r\nused in the \"source address\" field of an IP packet, while addresses\r\nconveyed by ROUTE_ADVERTISEMENT can be used in the \"destination\r\naddress\" field.\r\n\r\nWhile we're here, also add a small clarification when a prefix is\r\nassigned/advertised that *any* of these addresses can be used in the\r\nsource/destination field, respectively. A future extension could\r\ncreate semantics for these addreses, but that is not called out in the\r\ntext at this time.\r\n\r\nCloses: #25",
+      "createdAt": "2021-10-12T17:49:46Z",
+      "updatedAt": "2021-10-20T15:13:24Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "9a55555079bc75f5b7ec82963a78d3d441ec0afc",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "achernya/routes",
+      "headRefOid": "9bd4d6d5fb5e7ecb48cda57aeb1a95405083d84a",
+      "closedAt": "2021-10-18T15:15:03Z",
+      "mergedAt": "2021-10-18T15:15:03Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "f6a8e303ffaa088f534f1008f6041f82f5b4d78a"
+      },
+      "comments": [
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'm know I'm late looking at this but thanks as this small clarification is really helpful",
+          "createdAt": "2021-10-20T15:13:24Z",
+          "updatedAt": "2021-10-20T15:13:24Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF_gakc4uWquV",
+          "commit": {
+            "abbreviatedOid": "882a532"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T17:56:30Z",
+          "updatedAt": "2021-10-12T17:57:00Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "\"this endpoint\" is ambiguous\r\n```suggestion\r\nas the source address on IP packets originated by the receiver of this capsule. This capsule\r\n```",
+              "createdAt": "2021-10-12T17:56:30Z",
+              "updatedAt": "2021-10-12T17:57:01Z"
+            },
+            {
+              "originalPosition": 21,
+              "body": "Similarly\r\n```suggestion\r\non IP packets originated by the receiver of this capsule. This capsule uses a Capsule Type of\r\n```",
+              "createdAt": "2021-10-12T17:56:49Z",
+              "updatedAt": "2021-10-12T17:57:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uWr1h",
+          "commit": {
+            "abbreviatedOid": "60b5c39"
+          },
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T18:01:28Z",
+          "updatedAt": "2021-10-12T18:01:28Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "Done.",
+              "createdAt": "2021-10-12T18:01:28Z",
+              "updatedAt": "2021-10-12T18:01:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uWr4P",
+          "commit": {
+            "abbreviatedOid": "60b5c39"
+          },
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T18:01:40Z",
+          "updatedAt": "2021-10-12T18:01:40Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "Done, I also caught another \"this endpoint\" and fixed it too.",
+              "createdAt": "2021-10-12T18:01:40Z",
+              "updatedAt": "2021-10-12T18:01:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uWtR8",
+          "commit": {
+            "abbreviatedOid": "60b5c39"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thanks!",
+          "createdAt": "2021-10-12T18:08:12Z",
+          "updatedAt": "2021-10-12T18:08:12Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uWzu9",
+          "commit": {
+            "abbreviatedOid": "60b5c39"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-12T18:38:57Z",
+          "updatedAt": "2021-10-12T18:38:57Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uYrdm",
+          "commit": {
+            "abbreviatedOid": "60b5c39"
+          },
+          "author": "gloinul",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-13T07:59:30Z",
+          "updatedAt": "2021-10-13T08:01:50Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "I would propose that the first sentence already makes it explicit that it is one or an range of IP addresses. ",
+              "createdAt": "2021-10-13T07:59:30Z",
+              "updatedAt": "2021-10-13T08:01:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4un6_e",
+          "commit": {
+            "abbreviatedOid": "7e17609"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-18T15:14:02Z",
+          "updatedAt": "2021-10-18T15:14:03Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "```suggestion\r\nassigned an IP address or prefix to it. The ADDRESS_ASSIGN capsule allows assigning a\r\n```",
+              "createdAt": "2021-10-18T15:14:02Z",
+              "updatedAt": "2021-10-18T15:14:03Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "id": "PR_kwDOF_gakc4tKMhg",
+      "title": "Mention multiple capsules are allowed",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/33",
+      "state": "MERGED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #32 ",
+      "createdAt": "2021-10-13T18:01:12Z",
+      "updatedAt": "2021-10-14T23:22:10Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "1dc28e5bfb31a156009f92c04858ed3df2200d08",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "multi_capsule",
+      "headRefOid": "4f138a1accd3ed1245b8af61795eb8b5f5b99736",
+      "closedAt": "2021-10-14T23:22:05Z",
+      "mergedAt": "2021-10-14T23:22:05Z",
+      "mergedBy": "DavidSchinazi",
+      "mergeCommit": {
+        "oid": "acb42f14a8c58ddc259666f3eddb13723bfb7c40"
+      },
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Good point, added. Note that I've also added an important note about how ROUTE_ADVERTISEMENT and ROUTE_WITHDRAWAL coexist, please take a look @tfpauly and @achernya .",
+          "createdAt": "2021-10-13T21:57:55Z",
+          "updatedAt": "2021-10-13T21:57:55Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF_gakc4ub22N",
+          "commit": {
+            "abbreviatedOid": "e007335"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "This initial paragraph is good! However, I think we could drop a bit more text in, either for each capsule, or in this summary. Just a very simple explanation of what multiple means (that they don't replace each other, but add):\r\n\r\n`If an endpoint receives multiple ADDRESS_ASSIGN capsules, all of the assigned addresses or prefixes can be used. For example, multiple ADDRESS_ASSIGN capsules are necessary to assign both IPv4 and IPv6 addresses.`\r\n\r\n`If an endpoint receives multiple ROUTE_ADVERTISEMENT capsules, all of the advertised routes can be used. For example, multiple ROUTE_ADVERTISEMENT capsules are necessary to provide routing to both IPv4 and IPv6 hosts. Routes are removed using ROUTE_WITHDRAWAL capsules. `",
+          "createdAt": "2021-10-13T20:24:57Z",
+          "updatedAt": "2021-10-13T20:24:57Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF_gakc4ub71f",
+          "commit": {
+            "abbreviatedOid": "e007335"
+          },
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-13T20:48:34Z",
+          "updatedAt": "2021-10-13T20:48:34Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF_gakc4ucJab",
+          "commit": {
+            "abbreviatedOid": "4f138a1"
+          },
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-13T22:04:10Z",
+          "updatedAt": "2021-10-13T22:04:11Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "This text is a bit confusing as written. Maybe rephrase this as \"ROUTE_ADVERTISEMENT and ROUTE_WITHDRAWAL for a specific prefix [...]\"?",
+              "createdAt": "2021-10-13T22:04:10Z",
+              "updatedAt": "2021-10-13T22:04:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4ucZ-I",
+          "commit": {
+            "abbreviatedOid": "4f138a1"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-14T00:28:26Z",
+          "updatedAt": "2021-10-14T00:28:26Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "That would mean something different. I phrased this specifically to cover the scenario of one route containing another.\r\n\r\nFor example if we have the following sequence:\r\n* ROUTE_ADVERTISEMENT 2001:DB8::/32\r\n* ROUTE_WITHDRAWAL 2001:DB8:1111:2222/64\r\n\r\nThen the recipient has routes in the tunnel for 2001:DB8:0000:0000-2001:DB8:1111:2221 and 2001:DB8:1111:2223-2001:DB8:FFFF:FFFF.",
+              "createdAt": "2021-10-14T00:28:26Z",
+              "updatedAt": "2021-10-14T00:28:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4ucsdg",
+          "commit": {
+            "abbreviatedOid": "4f138a1"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-14T03:22:54Z",
+          "updatedAt": "2021-10-14T03:22:54Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uenaU",
+          "commit": {
+            "abbreviatedOid": "4f138a1"
+          },
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-14T13:36:54Z",
+          "updatedAt": "2021-10-14T13:36:54Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "My point was that right now you have to read the sentence 1.5 times to understand it, because the qualifier for what \"last received update applies\" is at the very end. This is an editorial nit, but I think the current sentence structure is confusing.",
+              "createdAt": "2021-10-14T13:36:54Z",
+              "updatedAt": "2021-10-14T13:36:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4ufohd",
+          "commit": {
+            "abbreviatedOid": "4f138a1"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-14T17:17:25Z",
+          "updatedAt": "2021-10-14T17:17:26Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "That's fair. Can you propose text that accounts for the scenario when one prefix is included in another?",
+              "createdAt": "2021-10-14T17:17:25Z",
+              "updatedAt": "2021-10-14T17:17:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4ufxLb",
+          "commit": {
+            "abbreviatedOid": "4f138a1"
+          },
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-14T17:54:36Z",
+          "updatedAt": "2021-10-14T17:54:36Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "In attempting to suggest text that I find more clear, I actually think I found a bug in these semantics.\r\n\r\nWe've overloaded WITHDRAWAL to mean two things in this setup:\r\n1. Undo a previous ADVERTISEMENT\r\n2. Create an entry in the routing table that means no-route\r\n\r\nThese are actually slightly different operations, even though it sounds like they should produce the same effect, because of the processing of overlap.\r\n\r\nThe in-order logic simply means whenever you get a new ADVERTISEMENT, you append it to your table -- pretty simple. But WITHDRAWAL has to first scan for an exact match in the table, and if it finds one, delete it. If it does not, then it needs to add an entry for no-route. But that implies the ADVERTISEMENT logic is similarly wrong: it has to also delete any no-route entries that may already exist.\r\n\r\nPerhaps ADVERTISEMENT should grow another field in the capsule indicating if the range is routable or not, and WITHDRAW is simply an inverse of ADVERTISEMENT? That way a positive route and null route are represented without overload.",
+              "createdAt": "2021-10-14T17:54:36Z",
+              "updatedAt": "2021-10-14T17:54:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4ugwVR",
+          "commit": {
+            "abbreviatedOid": "4f138a1"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-14T23:21:53Z",
+          "updatedAt": "2021-10-14T23:21:53Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "In order to facilitate progress, I'm going to merge this as-is and continue the discussion in #34. That way I can write a PR based off main that can attempt to resolve #34 and we can discuss there.",
+              "createdAt": "2021-10-14T23:21:53Z",
+              "updatedAt": "2021-10-14T23:21:53Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 35,
+      "id": "PR_kwDOF_gakc4tOjoG",
+      "title": "Replace route prefixes with atomic route ranges",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/35",
+      "state": "MERGED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR is one potential way to resolve #34. It simplifies route exchanges by going with @mirjak 's suggestion of sending the entire routing table each time something changes. It could be somewhat inefficient in some cases, but it becomes easier to reason about than what's currently in the draft when overlapping prefixes are involved.\r\n\r\nFixes #34 ",
+      "createdAt": "2021-10-15T00:13:32Z",
+      "updatedAt": "2021-10-21T15:41:56Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "7eb727339f4633a4fe0d72bfd25d6eba58fb0a71",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "simplify_routes",
+      "headRefOid": "41b961b9710907b0a4499e3b380a8a3f99822217",
+      "closedAt": "2021-10-21T15:41:56Z",
+      "mergedAt": "2021-10-21T15:41:55Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "d3fca199708c08356eeb7844c579dcf367a88c2f"
+      },
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This is interesting, but I'd prefer to wait to do this until after we post a -00 version. @DavidSchinazi is that OK with you?",
+          "createdAt": "2021-10-18T15:13:18Z",
+          "updatedAt": "2021-10-18T15:13:18Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'd prefer we figure this out before -00, because this would be a pretty significant non-compatible change and I'd like to implement -00",
+          "createdAt": "2021-10-18T15:42:34Z",
+          "updatedAt": "2021-10-18T15:42:34Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@tfpauly you nearly convinced me in the call that we rather want to announce ranges separately but I forgot why. Can you outline your reasoning again?",
+          "createdAt": "2021-10-20T13:56:03Z",
+          "updatedAt": "2021-10-20T13:56:03Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@mirjak my argument was that we shouldn't have two different ways to set routes, one that gives a table and one that gives a single route. If we go to only have a table, then it's fine.",
+          "createdAt": "2021-10-20T14:04:28Z",
+          "updatedAt": "2021-10-20T14:04:28Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I know saw the discussion in #33 and support this approach. Also if we agree on this approach, I also think we should merge it before we submit -00",
+          "createdAt": "2021-10-20T15:11:29Z",
+          "updatedAt": "2021-10-20T15:11:29Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@tfpauly I think we're ready to merge this PR",
+          "createdAt": "2021-10-21T15:28:51Z",
+          "updatedAt": "2021-10-21T15:28:51Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF_gakc4uoN21",
+          "commit": {
+            "abbreviatedOid": "a3ede39"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-18T16:13:59Z",
+          "updatedAt": "2021-10-18T16:13:59Z",
+          "comments": [
+            {
+              "originalPosition": 134,
+              "body": "We should specify what a receiver does if these requirements are not met (ignore the routes, or close the stream?)",
+              "createdAt": "2021-10-18T16:13:59Z",
+              "updatedAt": "2021-10-18T16:13:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uoN-k",
+          "commit": {
+            "abbreviatedOid": "a3ede39"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-18T16:14:26Z",
+          "updatedAt": "2021-10-18T16:14:27Z",
+          "comments": [
+            {
+              "originalPosition": 178,
+              "body": "Why are we switching this to IPv4??",
+              "createdAt": "2021-10-18T16:14:27Z",
+              "updatedAt": "2021-10-18T16:14:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uoOID",
+          "commit": {
+            "abbreviatedOid": "a3ede39"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-18T16:15:01Z",
+          "updatedAt": "2021-10-18T16:15:01Z",
+          "comments": [
+            {
+              "originalPosition": 178,
+              "body": "Oh, you don't want to have FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF =)",
+              "createdAt": "2021-10-18T16:15:01Z",
+              "updatedAt": "2021-10-18T16:15:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uoO1O",
+          "commit": {
+            "abbreviatedOid": "990293f"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-18T16:17:42Z",
+          "updatedAt": "2021-10-18T16:17:42Z",
+          "comments": [
+            {
+              "originalPosition": 178,
+              "body": "That's correct :P The diagram didn't fit with FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF",
+              "createdAt": "2021-10-18T16:17:42Z",
+              "updatedAt": "2021-10-18T16:17:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uoPUx",
+          "commit": {
+            "abbreviatedOid": "b0b7e57"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-18T16:19:37Z",
+          "updatedAt": "2021-10-18T16:19:37Z",
+          "comments": [
+            {
+              "originalPosition": 134,
+              "body": "Done",
+              "createdAt": "2021-10-18T16:19:37Z",
+              "updatedAt": "2021-10-18T16:19:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uoRfm",
+          "commit": {
+            "abbreviatedOid": "b0b7e57"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-18T16:27:45Z",
+          "updatedAt": "2021-10-18T16:27:45Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uwr0r",
+          "commit": {
+            "abbreviatedOid": "b0b7e57"
+          },
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "Thanks this looks good to me beside some questions, but maybe these part are just not clear to me.",
+          "createdAt": "2021-10-20T13:47:44Z",
+          "updatedAt": "2021-10-20T13:54:41Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "I assume the idea here is to have multiple IP Address Range fields in one capsule? I believe you need to use [] for a vector then.",
+              "createdAt": "2021-10-20T13:47:44Z",
+              "updatedAt": "2021-10-20T13:54:41Z"
+            },
+            {
+              "originalPosition": 99,
+              "body": "Do we need a sequence number then? Or we should maybe explicitly require that all ROUTE_ADVERTISEMENT capsules are send on the same stream as these are then delivered in order.",
+              "createdAt": "2021-10-20T13:49:09Z",
+              "updatedAt": "2021-10-20T13:54:42Z"
+            },
+            {
+              "originalPosition": 104,
+              "body": "Do we need this? Is it not possible to announce support for multiple IP Protocols on the same range?",
+              "createdAt": "2021-10-20T13:52:24Z",
+              "updatedAt": "2021-10-20T13:54:42Z"
+            },
+            {
+              "originalPosition": 124,
+              "body": "How can ranges from different IP version overlap? These use a different address space? Or am I misunderstanding?",
+              "createdAt": "2021-10-20T13:53:21Z",
+              "updatedAt": "2021-10-20T13:54:42Z"
+            },
+            {
+              "originalPosition": 120,
+              "body": "This seems actually rather arbitrary.",
+              "createdAt": "2021-10-20T13:53:36Z",
+              "updatedAt": "2021-10-20T13:54:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uwx3D",
+          "commit": {
+            "abbreviatedOid": "b0b7e57"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-20T14:04:55Z",
+          "updatedAt": "2021-10-20T14:04:56Z",
+          "comments": [
+            {
+              "originalPosition": 120,
+              "body": "Agreed, but I think it just needs to be an arbitrary choice if you want a consistent order.",
+              "createdAt": "2021-10-20T14:04:55Z",
+              "updatedAt": "2021-10-20T14:04:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uwzoA",
+          "commit": {
+            "abbreviatedOid": "b0b7e57"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-20T14:10:02Z",
+          "updatedAt": "2021-10-20T14:10:03Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "I think the correct QUIC semantics are:\r\n\r\n```suggestion\r\n  IP Address Range (..) ...,\r\n```",
+              "createdAt": "2021-10-20T14:10:03Z",
+              "updatedAt": "2021-10-20T14:10:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uwz6x",
+          "commit": {
+            "abbreviatedOid": "b0b7e57"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-20T14:10:42Z",
+          "updatedAt": "2021-10-20T14:10:43Z",
+          "comments": [
+            {
+              "originalPosition": 99,
+              "body": "By definition, all capsules are on a single reliable stream, and therefore are in order.",
+              "createdAt": "2021-10-20T14:10:42Z",
+              "updatedAt": "2021-10-20T14:10:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uxAzg",
+          "commit": {
+            "abbreviatedOid": "36a5ccb"
+          },
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-20T14:47:07Z",
+          "updatedAt": "2021-10-20T14:49:58Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "From the text it is unclear if the intent is a single ROUTE_ADVERTISEMENT capsule with multiple ranges in it, or multiple capsules each of which has a range. Although presumably it's the former because otherwise it would not be atomic under current capsule semantics.",
+              "createdAt": "2021-10-20T14:47:07Z",
+              "updatedAt": "2021-10-20T14:49:58Z"
+            },
+            {
+              "originalPosition": 99,
+              "body": "Agree with Tommy. I don't think there's any benefit to the sequence number.",
+              "createdAt": "2021-10-20T14:47:32Z",
+              "updatedAt": "2021-10-20T14:49:58Z"
+            },
+            {
+              "originalPosition": 104,
+              "body": "I believe there are two issues here: one, the definition of overlap should be extended to include the IP protocols. i.e., it is OK to announce  both 10/8 UDP and 10/8 TCP, but one should not announce 10/8 UDP and 10/9 UDP.\r\n\r\nSecond, the requirement ranges be ordered seems too strong to me. Can we loosen it to ranges must be non-overlapping, and then write that sorting is recommended?",
+              "createdAt": "2021-10-20T14:49:06Z",
+              "updatedAt": "2021-10-20T14:49:58Z"
+            },
+            {
+              "originalPosition": 124,
+              "body": "I believe this section is saying different IP versions cannot, and is saying that the IP protocols must also be sorted, per the overlap definition I was suggesting above.",
+              "createdAt": "2021-10-20T14:49:49Z",
+              "updatedAt": "2021-10-20T14:49:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4ux92_",
+          "commit": {
+            "abbreviatedOid": "dce8377"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-20T18:25:34Z",
+          "updatedAt": "2021-10-20T18:25:34Z",
+          "comments": [
+            {
+              "originalPosition": 99,
+              "body": "+1, there is a single stream here",
+              "createdAt": "2021-10-20T18:25:34Z",
+              "updatedAt": "2021-10-20T18:25:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4ux-Vt",
+          "commit": {
+            "abbreviatedOid": "dce8377"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-20T18:26:35Z",
+          "updatedAt": "2021-10-20T18:26:35Z",
+          "comments": [
+            {
+              "originalPosition": 104,
+              "body": "Sorting puts the burden on the sender and makes verification on the receiver a lot easier. If we don't do that, receivers won't bother checking and we could end up with subtle bugs",
+              "createdAt": "2021-10-20T18:26:35Z",
+              "updatedAt": "2021-10-20T18:26:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4ux-4g",
+          "commit": {
+            "abbreviatedOid": "dce8377"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-20T18:27:36Z",
+          "updatedAt": "2021-10-20T18:27:36Z",
+          "comments": [
+            {
+              "originalPosition": 120,
+              "body": "Yes we could have sorted in the other order, sorting ascending or descending is arbitrary",
+              "createdAt": "2021-10-20T18:27:36Z",
+              "updatedAt": "2021-10-20T18:27:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uyCke",
+          "commit": {
+            "abbreviatedOid": "dce8377"
+          },
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-20T18:43:38Z",
+          "updatedAt": "2021-10-20T18:43:38Z",
+          "comments": [
+            {
+              "originalPosition": 104,
+              "body": "Perhaps the \"burden on sender\" argument should be in the text? It feels much less arbitrary then.",
+              "createdAt": "2021-10-20T18:43:38Z",
+              "updatedAt": "2021-10-20T18:43:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uyDv_",
+          "commit": {
+            "abbreviatedOid": "3ba9db4"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-20T18:48:58Z",
+          "updatedAt": "2021-10-20T18:48:58Z",
+          "comments": [
+            {
+              "originalPosition": 104,
+              "body": "Agreed, added text.",
+              "createdAt": "2021-10-20T18:48:58Z",
+              "updatedAt": "2021-10-20T18:48:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uyEx1",
+          "commit": {
+            "abbreviatedOid": "3ba9db4"
+          },
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-20T18:53:29Z",
+          "updatedAt": "2021-10-20T18:53:29Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uz1A0",
+          "commit": {
+            "abbreviatedOid": "3ba9db4"
+          },
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-21T08:00:23Z",
+          "updatedAt": "2021-10-21T08:00:24Z",
+          "comments": [
+            {
+              "originalPosition": 99,
+              "body": "Is this requirement spell out somewhere? Just to be sure...",
+              "createdAt": "2021-10-21T08:00:23Z",
+              "updatedAt": "2021-10-21T08:00:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4uz1gT",
+          "commit": {
+            "abbreviatedOid": "3ba9db4"
+          },
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-21T08:02:18Z",
+          "updatedAt": "2021-10-21T08:02:19Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "Semantics looks still not straight forward to me... Should we also add a sentence to the text to make this more clear?",
+              "createdAt": "2021-10-21T08:02:18Z",
+              "updatedAt": "2021-10-21T08:02:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4u1DSu",
+          "commit": {
+            "abbreviatedOid": "3ba9db4"
+          },
+          "author": "gloinul",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "I think this looks good enough to include in the -00. ",
+          "createdAt": "2021-10-21T12:59:50Z",
+          "updatedAt": "2021-10-21T12:59:50Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF_gakc4u11Tf",
+          "commit": {
+            "abbreviatedOid": "3ba9db4"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-21T15:26:48Z",
+          "updatedAt": "2021-10-21T15:26:48Z",
+          "comments": [
+            {
+              "originalPosition": 99,
+              "body": "The definition of the Capsule Protocol in the HTTP Datagrams draft is pretty clear about capsules being sent on a stream",
+              "createdAt": "2021-10-21T15:26:48Z",
+              "updatedAt": "2021-10-21T15:26:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF_gakc4u11rr",
+          "commit": {
+            "abbreviatedOid": "41b961b"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-21T15:28:01Z",
+          "updatedAt": "2021-10-21T15:28:02Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "I added a sentence",
+              "createdAt": "2021-10-21T15:28:02Z",
+              "updatedAt": "2021-10-21T15:28:02Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "id": "PR_kwDOF_gakc4tVmmE",
+      "title": "Editorial capsule diagram fix",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/36",
+      "state": "MERGED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #31.",
+      "createdAt": "2021-10-18T16:10:27Z",
+      "updatedAt": "2021-10-18T16:11:34Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "f6a8e303ffaa088f534f1008f6041f82f5b4d78a",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "capsule_diagram",
+      "headRefOid": "81c1780049c1ec7fb52c52d383bc125e4c5d17ab",
+      "closedAt": "2021-10-18T16:11:31Z",
+      "mergedAt": "2021-10-18T16:11:31Z",
+      "mergedBy": "DavidSchinazi",
+      "mergeCommit": {
+        "oid": "7eb727339f4633a4fe0d72bfd25d6eba58fb0a71"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 39,
+      "id": "PR_kwDOF_gakc4tjyLI",
+      "title": "Fix typo reported by MT",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/39",
+      "state": "MERGED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #38 ",
+      "createdAt": "2021-10-22T16:35:59Z",
+      "updatedAt": "2021-10-22T16:37:27Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "185e18999c70c81aca040690b49885956da7af35",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "port_typo",
+      "headRefOid": "e9813f3dde03cc951cb8c0c9e45a1189f6474bb3",
+      "closedAt": "2021-10-22T16:37:23Z",
+      "mergedAt": "2021-10-22T16:37:23Z",
+      "mergedBy": "DavidSchinazi",
+      "mergeCommit": {
+        "oid": "6057b4c4eca529d32ab9542aaa6f255815fd668b"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 40,
+      "id": "PR_kwDOF_gakc4tkRGH",
+      "title": "Proxies provide all resolved addresses in routes",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/40",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #37",
+      "createdAt": "2021-10-22T20:13:53Z",
+      "updatedAt": "2021-10-22T22:30:54Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "6057b4c4eca529d32ab9542aaa6f255815fd668b",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "tfpauly-patch-2",
+      "headRefOid": "72b3ab0122d10eabb6d3bf8501df166c8320a7f1",
+      "closedAt": "2021-10-22T22:30:54Z",
+      "mergedAt": "2021-10-22T22:30:54Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "ddbf4efbd5c9eb86e8f9b5a3dce49eec288133b3"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF_gakc4u7ROD",
+          "commit": {
+            "abbreviatedOid": "72b3ab0"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thanks!",
+          "createdAt": "2021-10-22T21:40:20Z",
+          "updatedAt": "2021-10-22T21:40:20Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF_gakc4u7SBr",
+          "commit": {
+            "abbreviatedOid": "72b3ab0"
+          },
+          "author": "achernya",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-22T21:47:21Z",
+          "updatedAt": "2021-10-22T21:47:21Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "id": "PR_kwDOF_gakc4uGk-t",
+      "title": "Update examples to correct route capsules",
+      "url": "https://github.com/ietf-wg-masque/draft-ietf-masque-connect-ip/pull/41",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "I realized that our example for the connection racing still had split route capsules. This updates the route advertisement capsule examples to show how they contain multiple \"IP Address Range\" structs",
+      "createdAt": "2021-11-04T16:24:33Z",
+      "updatedAt": "2021-11-04T19:58:27Z",
+      "baseRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "baseRefName": "main",
+      "baseRefOid": "dde806fcda4d0506745435b1d646b5c186ab3aa4",
+      "headRepository": "ietf-wg-masque/draft-ietf-masque-connect-ip",
+      "headRefName": "tfp/example-routes",
+      "headRefOid": "bac968da266a9653148daee0d2891410ea3fd490",
+      "closedAt": "2021-11-04T19:58:27Z",
+      "mergedAt": "2021-11-04T19:58:27Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "fcf4415efd68534e16d5a9b141f6bbddd9455a31"
+      },
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yeah, it's not too critical, but we could",
+          "createdAt": "2021-11-04T16:37:11Z",
+          "updatedAt": "2021-11-04T16:37:11Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF_gakc4vkFL0",
+          "commit": {
+            "abbreviatedOid": "b9e5d6e"
+          },
+          "author": "mirjak",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Ups. Maybe a reason to resubmit on Monday to avoid confusion.",
+          "createdAt": "2021-11-04T16:35:09Z",
+          "updatedAt": "2021-11-04T16:35:09Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF_gakc4vkl0u",
+          "commit": {
+            "abbreviatedOid": "b9e5d6e"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Approved - ideally with the comma but OK if you prefer without it",
+          "createdAt": "2021-11-04T18:34:40Z",
+          "updatedAt": "2021-11-04T18:35:12Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "```suggestion\r\n                               IP Protocol = 17),\r\n```",
+              "createdAt": "2021-11-04T18:34:40Z",
+              "updatedAt": "2021-11-04T18:35:12Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
