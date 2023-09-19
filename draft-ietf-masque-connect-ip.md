@@ -1469,11 +1469,11 @@ on-path observer between the IP proxying endpoints. This can potentially expose
 a single end-to-end flow. Because of this, such use of DSCPs in
 privacy-sensitive contexts is NOT RECOMMENDED.
 
-Opportunistic sending of IP packets (see {{link-operation}}) is only allowed in
-versions of HTTP that are greater or equal to 2, because, in HTTP/1.1, a server
-that does not implement this specification could reject the HTTP Upgrade and
-attempt to parse the IP packets as HTTP message content or as a subsequent HTTP
-request, allowing request smuggling attacks; see
+Opportunistic sending of IP packets (see {{link-operation}}) is not allowed in
+version prior to HTTP/2 because, in HTTP/1.1, a server that does not implement
+this specification could reject the HTTP Upgrade and attempt to parse the IP
+packets as HTTP message content or as a subsequent HTTP request, allowing
+request smuggling attacks; see
 {{?OPTIMISTIC=I-D.schwartz-httpbis-optimistic-upgrade}}.
 
 # IANA Considerations
