@@ -1470,10 +1470,9 @@ a single end-to-end flow. Because of this, such use of DSCPs in
 privacy-sensitive contexts is NOT RECOMMENDED.
 
 Opportunistic sending of IP packets (see {{link-operation}}) is not allowed in
-HTTP/1.x because a server could
-reject the HTTP Upgrade and attempt to parse the IP packets as a subsequent
-HTTP request, allowing request smuggling attacks; see
-{{?OPTIMISTIC=I-D.schwartz-httpbis-optimistic-upgrade}}.
+HTTP/1.x because a server could reject the HTTP Upgrade and attempt to parse
+the IP packets as a subsequent HTTP request, allowing request smuggling
+attacks; see {{?OPTIMISTIC=I-D.schwartz-httpbis-optimistic-upgrade}}.
 
 # IANA Considerations
 
