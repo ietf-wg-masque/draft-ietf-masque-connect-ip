@@ -3045,7 +3045,10 @@ privacy-sensitive contexts is <span class="bcp14">NOT RECOMMENDED</span>.<a href
 <p id="section-11-7">Opportunistic sending of IP packets (see <a href="#link-operation" class="auto internal xref">Section 7.1</a>) is not allowed in
 HTTP/1.x because a server could reject the HTTP Upgrade and attempt to parse
 the IP packets as a subsequent HTTP request, allowing request smuggling
-attacks; see <span>[<a href="#OPTIMISTIC" class="cite xref">OPTIMISTIC</a>]</span>.<a href="#section-11-7" class="pilcrow">¶</a></p>
+attacks; see <span>[<a href="#OPTIMISTIC" class="cite xref">OPTIMISTIC</a>]</span>. In
+particular, an intermediary that re-encode a request from HTTP/2 or 3 to
+HTTP/1.1 <span class="bcp14">MUST</span> not forward any received capsules until it has parsed a
+successful response.<a href="#section-11-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
