@@ -1541,7 +1541,7 @@ Table of Contents
    attempt to parse the IP packets as a subsequent HTTP request,
    allowing request smuggling attacks; see [OPTIMISTIC].  In particular,
    an intermediary that re-encode a request from HTTP/2 or 3 to HTTP/1.1
-   MUST not forward any received capsules until it has parsed a
+   MUST NOT forward any received capsules until it has parsed a
    successful response.
 
 12.  IANA Considerations
