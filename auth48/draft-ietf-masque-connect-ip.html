@@ -666,7 +666,7 @@ sub, sup {
 }
 #toc nav li {
   line-height: 1.3em;
-  margin: 0.75em 0;
+  margin: 2px 0;
   padding-left: 1.2em;
   text-indent: -1.2em;
 }
@@ -759,7 +759,7 @@ hr.addr {
     z-index: 2;
     top: 0;
     right: 0;
-    padding: 0;
+    padding: 1px 0 0 0;
     margin: 0;
     border-bottom: 1px solid #ccc;
     opacity: 0.6;
@@ -883,16 +883,13 @@ hr.addr {
     border-top: none;
     padding-top: 0;
   }
-  figure, pre {
+  figure, pre, .vcard {
     page-break-inside: avoid;
-  }
-  figure {
-    overflow: scroll;
   }
   h1, h2, h3, h4, h5, h6 {
     page-break-after: avoid;
   }
-  h2+*, h3+*, h4+*, h5+*, h6+* {
+  :is(h2, h3, h4, h5, h6)+*, dd {
     page-break-before: avoid;
   }
   pre {
@@ -905,6 +902,9 @@ hr.addr {
   }
   td {
     border-top: 1px solid #ddd;
+  }
+  .toplink {
+    display: none;
   }
 }
 
@@ -1004,28 +1004,6 @@ address div.left {
 }
 address div.right {
   text-align: right;
-}
-
-/* Give the table caption label the same styling as the figcaption */
-
-@media print {
-  .toplink {
-    display: none;
-  }
-
-  /* avoid overwriting the top border line with the ToC header */
-  #toc {
-    padding-top: 1px;
-  }
-
-  /* Avoid page breaks inside dl and author address entries */
-  dd {
-    page-break-before: avoid;
-  }
-  .vcard {
-    page-break-inside: avoid;
-  }
-
 }
 
 /* Dark mode. */
@@ -2194,7 +2172,7 @@ them to another implementation, such as a kernel.<a href="#section-7-1" class="p
 In particular, they do not necessarily have IPv6 link-local addresses.
 Additionally, IPv6 stateless autoconfiguration or router advertisement messages
 are not used in such interfaces, and neither is neighbor discovery.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.1-2">Clients <span class="bcp14">MAY</span> optimistically start sending proxied IP packets before receiving
+<p id="section-7.1-2">When using HTTP/2 or HTTP/3, a client <span class="bcp14">MAY</span> optimistically start sending proxied IP packets before receiving
 the response to its IP proxying request, noting however that those may not be
 processed by the IP proxy if it responds to the request with a failure or if
 the datagrams are received by the IP proxy before the request. Since receiving
@@ -3042,6 +3020,13 @@ the latest guidance regarding handling of IPv6 extension headers.<a href="#secti
 on-path observer between the IP proxying endpoints. This can potentially expose
 a single end-to-end flow. Because of this, such use of DSCPs in
 privacy-sensitive contexts is <span class="bcp14">NOT RECOMMENDED</span>.<a href="#section-11-6" class="pilcrow">¶</a></p>
+<p id="section-11-7">Opportunistic sending of IP packets (see <a href="#link-operation" class="auto internal xref">Section 7.1</a>) is not allowed in
+HTTP/1.x because a server could reject the HTTP Upgrade and attempt to parse
+the IP packets as a subsequent HTTP request, allowing request smuggling
+attacks; see <span>[<a href="#OPTIMISTIC" class="cite xref">OPTIMISTIC</a>]</span>. In
+particular, an intermediary that re-encode a request from HTTP/2 or 3 to
+HTTP/1.1 <span class="bcp14">MUST NOT</span> forward any received capsules until it has parsed a
+successful response.<a href="#section-11-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
@@ -3367,6 +3352,10 @@ Types" registry maintained at
 <dt id="IPv6-ADDR">[IPv6-ADDR]</dt>
         <dd>
 <span class="refAuthor">Hinden, R.</span> and <span class="refAuthor">S. Deering</span>, <span class="refTitle">"IP Version 6 Addressing Architecture"</span>, <span class="seriesInfo">RFC 4291</span>, <span class="seriesInfo">DOI 10.17487/RFC4291</span>, <time datetime="2006-02" class="refDate">February 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4291">https://www.rfc-editor.org/rfc/rfc4291</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OPTIMISTIC">[OPTIMISTIC]</dt>
+        <dd>
+<span class="refAuthor">Schwartz, B. M.</span>, <span class="refTitle">"Security Considerations for Optimistic Use of HTTP Upgrade"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-schwartz-httpbis-optimistic-upgrade-00</span>, <time datetime="2023-08-21" class="refDate">21 August 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-schwartz-httpbis-optimistic-upgrade-00">https://datatracker.ietf.org/doc/html/draft-schwartz-httpbis-optimistic-upgrade-00</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="PROXY-REQS">[PROXY-REQS]</dt>
         <dd>

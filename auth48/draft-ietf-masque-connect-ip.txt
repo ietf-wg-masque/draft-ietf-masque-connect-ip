@@ -877,15 +877,15 @@ Table of Contents
    router advertisement messages are not used in such interfaces, and
    neither is neighbor discovery.
 
-   Clients MAY optimistically start sending proxied IP packets before
-   receiving the response to its IP proxying request, noting however
-   that those may not be processed by the IP proxy if it responds to the
-   request with a failure or if the datagrams are received by the IP
-   proxy before the request.  Since receiving addresses and routes is
-   required in order to know that a packet can be sent through the
-   tunnel, such optimistic packets might be dropped by the IP proxy if
-   it chooses to provide different addressing or routing information
-   than what the client assumed.
+   When using HTTP/2 or HTTP/3, a client MAY optimistically start
+   sending proxied IP packets before receiving the response to its IP
+   proxying request, noting however that those may not be processed by
+   the IP proxy if it responds to the request with a failure or if the
+   datagrams are received by the IP proxy before the request.  Since
+   receiving addresses and routes is required in order to know that a
+   packet can be sent through the tunnel, such optimistic packets might
+   be dropped by the IP proxy if it chooses to provide different
+   addressing or routing information than what the client assumed.
 
    Note that it is possible for multiple proxied IP packets to be
    encapsulated in the same outer packet, for example, because a QUIC
@@ -1536,6 +1536,14 @@ Table of Contents
    expose a single end-to-end flow.  Because of this, such use of DSCPs
    in privacy-sensitive contexts is NOT RECOMMENDED.
 
+   Opportunistic sending of IP packets (see Section 7.1) is not allowed
+   in HTTP/1.x because a server could reject the HTTP Upgrade and
+   attempt to parse the IP packets as a subsequent HTTP request,
+   allowing request smuggling attacks; see [OPTIMISTIC].  In particular,
+   an intermediary that re-encode a request from HTTP/2 or 3 to HTTP/1.1
+   MUST NOT forward any received capsules until it has parsed a
+   successful response.
+
 12.  IANA Considerations
 
 12.1.  HTTP Upgrade Token Registration
@@ -1774,6 +1782,13 @@ Table of Contents
               Hinden, R. and S. Deering, "IP Version 6 Addressing
               Architecture", RFC 4291, DOI 10.17487/RFC4291, February
               2006, <https://www.rfc-editor.org/rfc/rfc4291>.
+
+   [OPTIMISTIC]
+              Schwartz, B. M., "Security Considerations for Optimistic
+              Use of HTTP Upgrade", Work in Progress, Internet-Draft,
+              draft-schwartz-httpbis-optimistic-upgrade-00, 21 August
+              2023, <https://datatracker.ietf.org/doc/html/draft-
+              schwartz-httpbis-optimistic-upgrade-00>.
 
    [PROXY-REQS]
               Chernyakhovsky, A., McCall, D., and D. Schinazi,
