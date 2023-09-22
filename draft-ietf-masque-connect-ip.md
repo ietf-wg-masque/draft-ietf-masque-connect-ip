@@ -248,12 +248,12 @@ associated with the IP forwarding tunnel while the request stream is open. IP
 proxies MAY choose to tear down the tunnel due to a period of inactivity, but
 they MUST close the request stream when doing so.
 
-A successful response (as defined in Sections {{<resp1}} and {{<resp23}})
+A successful IP proxying response (as defined in Sections {{<resp1}} and {{<resp23}})
 indicates that the IP proxy has established an IP tunnel and is willing to
-proxy IP payloads. Any response other than a successful response indicates that
+proxy IP payloads. Any response other than a successful IP proxying response indicates that
 the request has failed; thus, the client MUST abort the request.
 
-Along with a successful response, the IP proxy can send capsules to assign
+Along with a successful IP proxying response, the IP proxy can send capsules to assign
 addresses and advertise routes to the client ({{capsules}}). The client can
 also assign addresses and advertise routes to the IP proxy for
 network-to-network routing.
@@ -294,7 +294,7 @@ Capsule-Protocol: ?1
 
 ## HTTP/1.1 Response {#resp1}
 
-The server indicates a successful response by replying with the following
+The server indicates a successful IP proxying response by replying with the following
 requirements:
 
 * The HTTP status code on the response SHALL be 101 (Switching Protocols).
@@ -364,7 +364,7 @@ capsule-protocol = ?1
 
 ## HTTP/2 and HTTP/3 Responses {#resp23}
 
-The server indicates a successful response by replying with the following
+The server indicates a successful IP proxying response by replying with the following
 requirements:
 
 * The HTTP status code on the response SHALL be in the 2xx (Successful) range.
@@ -1475,7 +1475,7 @@ the IP packets as a subsequent HTTP request, allowing request smuggling
 attacks; see {{?OPTIMISTIC=I-D.schwartz-httpbis-optimistic-upgrade}}. In
 particular, an intermediary that re-encode a request from HTTP/2 or 3 to
 HTTP/1.1 MUST NOT forward any received capsules until it has parsed a
-successful response.
+successful IP proxying response.
 
 # IANA Considerations
 
