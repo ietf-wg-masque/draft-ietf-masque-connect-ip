@@ -835,7 +835,7 @@ In particular, they do not necessarily have IPv6 link-local addresses.
 Additionally, IPv6 stateless autoconfiguration or router advertisement messages
 are not used in such interfaces, and neither is neighbor discovery.
 
-Clients MAY optimistically start sending proxied IP packets before receiving
+When using HTTP/2 or HTTP/3, a client MAY optimistically start sending proxied IP packets before receiving
 the response to its IP proxying request, noting however that those may not be
 processed by the IP proxy if it responds to the request with a failure or if
 the datagrams are received by the IP proxy before the request. Since receiving
@@ -1468,6 +1468,14 @@ Transferring DSCP markings from inner to outer packets (see
 on-path observer between the IP proxying endpoints. This can potentially expose
 a single end-to-end flow. Because of this, such use of DSCPs in
 privacy-sensitive contexts is NOT RECOMMENDED.
+
+Opportunistic sending of IP packets (see {{link-operation}}) is not allowed in
+HTTP/1.x because a server could reject the HTTP Upgrade and attempt to parse
+the IP packets as a subsequent HTTP request, allowing request smuggling
+attacks; see {{?OPTIMISTIC=I-D.schwartz-httpbis-optimistic-upgrade}}. In
+particular, an intermediary that re-encode a request from HTTP/2 or 3 to
+HTTP/1.1 MUST NOT forward any received capsules until it has parsed a
+successful response.
 
 # IANA Considerations
 
