@@ -275,16 +275,16 @@ Table of Contents
    tunnel due to a period of inactivity, but they MUST close the request
    stream when doing so.
 
-   A successful response (as defined in Sections 4.3 and 4.5) indicates
-   that the IP proxy has established an IP tunnel and is willing to
-   proxy IP payloads.  Any response other than a successful response
-   indicates that the request has failed; thus, the client MUST abort
-   the request.
+   A successful IP proxying response (as defined in Sections 4.3 and
+   4.5) indicates that the IP proxy has established an IP tunnel and is
+   willing to proxy IP payloads.  Any response other than a successful
+   IP proxying response indicates that the request has failed; thus, the
+   client MUST abort the request.
 
-   Along with a successful response, the IP proxy can send capsules to
-   assign addresses and advertise routes to the client (Section 4.7).
-   The client can also assign addresses and advertise routes to the IP
-   proxy for network-to-network routing.
+   Along with a successful IP proxying response, the IP proxy can send
+   capsules to assign addresses and advertise routes to the client
+   (Section 4.7).  The client can also assign addresses and advertise
+   routes to the IP proxy for network-to-network routing.
 
 4.2.  HTTP/1.1 Request
 
@@ -322,8 +322,8 @@ Table of Contents
 
 4.3.  HTTP/1.1 Response
 
-   The server indicates a successful response by replying with the
-   following requirements:
+   The server indicates a successful IP proxying response by replying
+   with the following requirements:
 
    *  The HTTP status code on the response SHALL be 101 (Switching
       Protocols).
@@ -393,8 +393,8 @@ Table of Contents
 
 4.5.  HTTP/2 and HTTP/3 Responses
 
-   The server indicates a successful response by replying with the
-   following requirements:
+   The server indicates a successful IP proxying response by replying
+   with the following requirements:
 
    *  The HTTP status code on the response SHALL be in the 2xx
       (Successful) range.
@@ -1542,7 +1542,7 @@ Table of Contents
    allowing request smuggling attacks; see [OPTIMISTIC].  In particular,
    an intermediary that re-encodes a request from HTTP/2 or 3 to
    HTTP/1.1 MUST NOT forward any received capsules until it has parsed a
-   successful response.
+   successful IP proxying response.
 
 12.  IANA Considerations
 

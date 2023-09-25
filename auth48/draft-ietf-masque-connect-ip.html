@@ -1468,11 +1468,11 @@ stream. The IP proxy <span class="bcp14">MUST</span> maintain all IP address and
 associated with the IP forwarding tunnel while the request stream is open. IP
 proxies <span class="bcp14">MAY</span> choose to tear down the tunnel due to a period of inactivity, but
 they <span class="bcp14">MUST</span> close the request stream when doing so.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
-<p id="section-4.1-5">A successful response (as defined in Sections <a href="#resp1" class="auto internal xref">4.3</a> and <a href="#resp23" class="auto internal xref">4.5</a>)
+<p id="section-4.1-5">A successful IP proxying response (as defined in Sections <a href="#resp1" class="auto internal xref">4.3</a> and <a href="#resp23" class="auto internal xref">4.5</a>)
 indicates that the IP proxy has established an IP tunnel and is willing to
-proxy IP payloads. Any response other than a successful response indicates that
+proxy IP payloads. Any response other than a successful IP proxying response indicates that
 the request has failed; thus, the client <span class="bcp14">MUST</span> abort the request.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
-<p id="section-4.1-6">Along with a successful response, the IP proxy can send capsules to assign
+<p id="section-4.1-6">Along with a successful IP proxying response, the IP proxy can send capsules to assign
 addresses and advertise routes to the client (<a href="#capsules" class="auto internal xref">Section 4.7</a>). The client can
 also assign addresses and advertise routes to the IP proxy for
 network-to-network routing.<a href="#section-4.1-6" class="pilcrow">¶</a></p>
@@ -1526,7 +1526,7 @@ Capsule-Protocol: ?1
         <h3 id="name-http-11-response">
 <a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-http-11-response" class="section-name selfRef">HTTP/1.1 Response</a>
         </h3>
-<p id="section-4.3-1">The server indicates a successful response by replying with the following
+<p id="section-4.3-1">The server indicates a successful IP proxying response by replying with the following
 requirements:<a href="#section-4.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.3-2.1">The HTTP status code on the response <span class="bcp14">SHALL</span> be 101 (Switching Protocols).<a href="#section-4.3-2.1" class="pilcrow">¶</a>
@@ -1615,7 +1615,7 @@ capsule-protocol = ?1
         <h3 id="name-http-2-and-http-3-responses">
 <a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-http-2-and-http-3-responses" class="section-name selfRef">HTTP/2 and HTTP/3 Responses</a>
         </h3>
-<p id="section-4.5-1">The server indicates a successful response by replying with the following
+<p id="section-4.5-1">The server indicates a successful IP proxying response by replying with the following
 requirements:<a href="#section-4.5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.5-2.1">The HTTP status code on the response <span class="bcp14">SHALL</span> be in the 2xx (Successful) range.<a href="#section-4.5-2.1" class="pilcrow">¶</a>
@@ -3026,7 +3026,7 @@ the IP packets as a subsequent HTTP request, allowing request smuggling
 attacks; see <span>[<a href="#OPTIMISTIC" class="cite xref">OPTIMISTIC</a>]</span>. In
 particular, an intermediary that re-encodes a request from HTTP/2 or 3 to
 HTTP/1.1 <span class="bcp14">MUST NOT</span> forward any received capsules until it has parsed a
-successful response.<a href="#section-11-7" class="pilcrow">¶</a></p>
+successful IP proxying response.<a href="#section-11-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
