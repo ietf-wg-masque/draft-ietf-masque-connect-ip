@@ -459,7 +459,7 @@ ipproto = 1*3DIGIT / "*"
 
 IP proxies MAY perform access control using the scoping information provided by
 the client, i.e., if the client is not authorized to access any of the destinations
-included in the scope, then the IP proxy can immediately fail the request.
+included in the scope, then the IP proxy can immediately reject the request.
 
 ## Capsules
 
