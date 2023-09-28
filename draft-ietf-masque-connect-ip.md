@@ -845,7 +845,7 @@ it chooses to provide different addressing or routing information than what the
 client assumed.
 
 Note that it is possible for multiple proxied IP packets to be encapsulated in
-the same outer packet, for example, because a QUIC packet can carry two QUIC
+the same outer packet, for example, because a QUIC packet can carry more than one QUIC
 DATAGRAM frames. It is also possible for a proxied IP packet to span multiple
 outer packets, because a DATAGRAM capsule can be split across multiple QUIC or
 TCP packets.
