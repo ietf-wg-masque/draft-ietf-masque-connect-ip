@@ -2181,8 +2181,8 @@ through the tunnel, such optimistic packets might be dropped by the IP proxy if
 it chooses to provide different addressing or routing information than what the
 client assumed.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3">Note that it is possible for multiple proxied IP packets to be encapsulated in
-the same outer packet, for example, because a QUIC packet can carry two QUIC
-DATAGRAM frames. It is also possible for a proxied IP packet to span multiple
+the same outer packet, for example, because a QUIC packet can carry more than one QUIC
+DATAGRAM frame. It is also possible for a proxied IP packet to span multiple
 outer packets, because a DATAGRAM capsule can be split across multiple QUIC or
 TCP packets.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
 </section>
@@ -3217,6 +3217,7 @@ Types" registry maintained at
       <h2 id="name-references">
 <a href="#section-13" class="section-number selfRef">13. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
+<div id="sec-normative-references">
 <section id="section-13.1">
         <h3 id="name-normative-references">
 <a href="#section-13.1" class="section-number selfRef">13.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
@@ -3320,6 +3321,8 @@ Types" registry maintained at
 <dd class="break"></dd>
 </dl>
 </section>
+</div>
+<div id="sec-informative-references">
 <section id="section-13.2">
         <h3 id="name-informative-references">
 <a href="#section-13.2" class="section-number selfRef">13.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
@@ -3375,6 +3378,7 @@ Types" registry maintained at
 <dd class="break"></dd>
 </dl>
 </section>
+</div>
 </section>
 <div id="acknowledgments">
 <section id="appendix-A">
