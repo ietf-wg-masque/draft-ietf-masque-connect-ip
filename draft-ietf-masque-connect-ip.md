@@ -220,8 +220,8 @@ authentication.
 
 Upon receiving an IP proxying request:
 
- * If the recipient is configured to use another HTTP proxy, it will act as an
-   intermediary by forwarding the request to another HTTP server. Note that
+ * If the recipient is configured to use another HTTP server, it will act as an
+   intermediary by forwarding the request to the other HTTP server. Note that
    such intermediaries may need to re-encode the request if they forward it
    using a version of HTTP that is different from the one used to receive it,
    as the request encoding differs by version (see below).
