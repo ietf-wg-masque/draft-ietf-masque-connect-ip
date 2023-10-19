@@ -7,10 +7,10 @@ Request for Comments: 9484                                    Apple Inc.
 Updates: 9298                                                D. Schinazi
 Category: Standards Track                              A. Chernyakhovsky
 ISSN: 2070-1721                                               Google LLC
-                                                           M. Kuehlewind
+                                                            M. Kühlewind
                                                            M. Westerlund
                                                                 Ericsson
-                                                          September 2023
+                                                            October 2023
 
 
                           Proxying IP in HTTP
@@ -1847,7 +1847,7 @@ Authors' Addresses
    Email: achernya@google.com
 
 
-   Mirja Kuehlewind
+   Mirja Kühlewind
    Ericsson
    Email: mirja.kuehlewind@ericsson.com
 
