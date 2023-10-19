@@ -7,7 +7,7 @@ category: std
 area: tsv
 wg: masque
 number: 9484
-date: 2023-09
+date: 2023-10
 consensus: true
 updates: 9298
 venue:
@@ -51,8 +51,8 @@ author:
     organization: Google LLC
     email: achernya@google.com
   -
-    ins: M. Kuehlewind
-    name: Mirja Kuehlewind
+    ins: M. Kühlewind
+    name: Mirja Kühlewind
     organization: Ericsson
     email: mirja.kuehlewind@ericsson.com
   -
